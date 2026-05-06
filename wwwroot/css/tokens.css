@@ -1,0 +1,176 @@
+/*
+ * ╔══════════════════════════════════════════════════════╗
+ * ║           KATACHI — Design Tokens                   ║
+ * ║           形 · 重訓訓練百科                           ║
+ * ╠══════════════════════════════════════════════════════╣
+ * ║  所有頁面都必須在 <head> 最先引入這個檔案               ║
+ * ║  使用方式：var(--token名稱)                            ║
+ * ║  禁止在各自頁面寫死顏色、字體、間距數值                  ║
+ * ╚══════════════════════════════════════════════════════╝
+ *
+ * 引入方式（每個 HTML 的 <head> 最上面）：
+ *   <link rel="stylesheet" href="styles/tokens.css">
+ *
+ * Google Fonts（也統一在每頁引入）：
+ *   <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Noto+Sans+JP:wght@100;200;300&display=swap" rel="stylesheet">
+ */
+
+:root {
+
+  /* ──────────────────────────────
+     COLOR  顏色
+  ────────────────────────────── */
+
+  --color-bg:        #F2F2F0;   /* 頁面底色，純白 */
+  --color-bg-off:    #f7f6f3;   /* 輕微暖白，用於 section 交替背景 */
+
+  --color-black:     #181818;   /* 主要黑色，文字 / 線條 / 條碼 */
+  --color-ink:       #333333;   /* 次要深色，副標題 */
+  --color-grey:      #555555;   /* 中灰，英文副標題 */
+  --color-grey-mid:  #888888;   /* 中灰，中文副標題 / 說明文字 */
+  --color-grey-mute: #aaaaaa;   /* 淺灰，次要說明 */
+  --color-grey-hint: #c0c0c0;   /* 最淡，scroll down / 提示文字 */
+
+  --color-line:      #e6e3de;   /* 分隔線、border */
+  --color-line-dark: rgba(24,24,24,.15); /* cursor ring、淡邊框 */
+
+  --color-white:       #ffffff;              /* 純白，深色背景主文字 */
+  --color-white-mute:  rgba(255,255,255,0.6);  /* 深色背景副文字 */
+  --color-white-faint: rgba(255,255,255,0.2);  /* 深色背景 border、分隔線 */
+  --color-white-ghost: rgba(255,255,255,0.08); /* 深色背景裝飾數字 */
+
+
+  /* ──────────────────────────────
+     TYPOGRAPHY  字體
+  ────────────────────────────── */
+
+  /* 字族 */
+  --font-brand:  'Big Shoulders Display', sans-serif;  /* KATACHI logo 專用，美式工業感 */
+  --font-sans:   'Noto Sans JP', sans-serif;            /* 所有內文、UI 文字，日系極簡 */
+  --font-serif:  'Noto Serif JP', serif;                /* 強調文字、引言，日系有襯線 */
+  --font-mincho: 'Zen Old Mincho', serif;               /* 傳統明朝體，用於肌群列表等強調文字 */
+
+  /* 字重 */
+  --weight-black:  800;   /* 品牌 logo KATACHI */
+  --weight-bold:   700;   /* 強調標題 */
+  --weight-medium: 300;   /* 副標題、導覽 */
+  --weight-light:  200;   /* 一般內文 */
+  --weight-thin:   100;   /* 最細，裝飾性文字 */
+
+  /* 字級（rem） */
+  --text-logo:   7rem;   /* KATACHI 主標 */
+  --text-h1:      3.2rem;   /* 各頁大標題 */
+  --text-h2:      2rem;     /* 區塊標題 */
+  --text-h3:      1.2rem;   /* 小標題 */
+  --text-body:    1rem;   /* 內文 */
+  --text-sub:     0.85rem;  /* 副標題（英文） */
+  --text-sub-jp:  0.78rem;  /* 副標題（中日文） */
+  --text-label:   1rem;   /* 標籤、nav 文字 */
+  --text-hint:    0.46rem;  /* 最小提示文字（scroll down 等） */
+
+  /* 字距 */
+  --tracking-logo:  0.1em;   /* KATACHI */
+  --tracking-wide:  8px;     /* 英文副標題 */
+  --tracking-mid:   6px;     /* 中文副標題 */
+  --tracking-nav:   5px;     /* 導覽列 */
+  --tracking-label: 3px;     /* 標籤類 */
+
+
+  /* ──────────────────────────────
+     SPACING  間距
+  ────────────────────────────── */
+
+  --space-2:    2px;
+  --space-4:    4px;
+  --space-8:    8px;
+  --space-12:   12px;
+  --space-16:   16px;
+  --space-20:   20px;
+  --space-24:   24px;
+  --space-32:   32px;
+  --space-40:   40px;
+  --space-48:   48px;
+  --space-64:   64px;
+  --space-80:   80px;
+  --space-120:  120px;
+
+  /* 頁面邊距 */
+  --page-gutter-lg: 80px;    /* 桌機左右邊距 */
+  --page-gutter-md: 48px;    /* 平板 */
+  --page-gutter-sm: 24px;    /* 手機 */
+
+  /* section 上下 padding */
+  --section-padding: 110px;
+
+
+  /* ──────────────────────────────
+     ANIMATION  動畫
+  ────────────────────────────── */
+
+  /* Easing */
+  --ease-expo:   cubic-bezier(0.16, 1, 0.3, 1);   /* 彈出，品牌動畫主要用這個 */
+  --ease-inout:  cubic-bezier(0.76, 0, 0.24, 1);  /* 屏風選單開關 */
+  --ease-out:    cubic-bezier(0.0, 0, 0.2, 1);    /* 一般滑出 */
+
+  /* Duration */
+  --dur-instant: 0.15s;   /* hover 微互動 */
+  --dur-fast:    0.3s;    /* 快速過渡 */
+  --dur-normal:  0.55s;   /* 一般動畫 */
+  --dur-slow:    0.85s;   /* 線條延伸、頁面進場 */
+  --dur-logo:    0.65s;   /* KATACHI 字母動畫 */
+
+  /* 字母 stagger 間距 */
+  --stagger-letter: 0.1s;  /* 每個字母延遲差距 */
+
+
+  /* ──────────────────────────────
+     Z-INDEX  層級
+  ────────────────────────────── */
+
+  --z-cursor:  9999;
+  --z-cursorR: 9998;
+  --z-menu:     750;
+  --z-byobu:    700;
+  --z-drawer:   600;
+  --z-nav:      500;
+  --z-base:       1;
+
+
+  /* ──────────────────────────────
+     BORDER  邊框
+  ────────────────────────────── */
+
+  --border-default: 1px solid var(--color-line);
+  --border-dark:    1px solid var(--color-line-dark);
+
+}
+
+
+/*
+ * ══════════════════════════════
+ *  使用範例 USAGE EXAMPLES
+ * ══════════════════════════════
+ *
+ * 顏色：
+ *   color: var(--color-grey-mid);
+ *   background: var(--color-bg);
+ *   border-bottom: var(--border-default);
+ *
+ * 字體：
+ *   font-family: var(--font-brand);
+ *   font-weight: var(--weight-black);
+ *   font-size: var(--text-logo);
+ *   letter-spacing: var(--tracking-wide);
+ *
+ * 間距：
+ *   padding: var(--section-padding) var(--page-gutter-lg);
+ *   gap: var(--space-20);
+ *   margin-bottom: var(--space-32);
+ *
+ * 動畫：
+ *   transition: var(--dur-fast) var(--ease-expo);
+ *   animation: fadeIn var(--dur-normal) var(--ease-expo) forwards;
+ *
+ * Z-index：
+ *   z-index: var(--z-nav);
+ */

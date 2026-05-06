@@ -1,0 +1,252 @@
+﻿@{
+    ViewBag.Title = "訓練計畫";
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/css/Program.css" />
+}
+
+<header id="programs-hero">
+    <div class="ph-inner">
+        <p class="ph-eyebrow">Personal Training Program</p>
+        <h1 class="ph-title">PROGRAM<br />GENERATOR</h1>
+        <p class="ph-sub">為你的目標 · 科學化週期訓練</p>
+    </div>
+    <div class="ph-scroll">
+        <span class="scroll-text">Scroll</span>
+        <div class="scroll-line">
+            <div class="scroll-dot"></div>
+        </div>
+    </div>
+</header>
+
+<!-- ══════ MAIN CONTENT ══════ -->
+<div id="main-content">
+    <!-- ══════ STEP 1 — 條件輸入 ══════ -->
+    <section id="sec-form">
+        <div class="form-layout">
+            <!-- 左側標題 -->
+            <div class="form-intro">
+                <p class="form-eyebrow">Step 01</p>
+                <h2 class="form-title">
+                    <span>填寫你的訓練條件</span>BUILD<br />YOUR<br />PLAN
+                </h2>
+                <p class="form-desc">
+                    根據你的目標、程度與可用資源，系統將依據<br>科學化的週期訓練原則，產生一份專屬週課表。
+                </p>
+
+            </div>
+
+            <!-- 右側表單 -->
+            <div class="form-fields">
+                <!-- 訓練目標 -->
+                <div class="field-group">
+                    <p class="field-label">訓練目標</p>
+                    <div class="field-cards" id="goal-cards">
+                        <button class="field-card active" data-val="hypertrophy" onclick="selectCard('goal', this)">
+                            <span class="card-en">Hypertrophy</span>
+                            <span class="card-zh">增肌</span>
+                            <span class="card-desc">8–12 次 · 高容量</span>
+                        </button>
+                        <button class="field-card" data-val="strength" onclick="selectCard('goal', this)">
+                            <span class="card-en">Strength</span>
+                            <span class="card-zh">增力</span>
+                            <span class="card-desc">3–5 次 · 大重量</span>
+                        </button>
+                        <button class="field-card" data-val="fatloss" onclick="selectCard('goal', this)">
+                            <span class="card-en">Fat Loss</span>
+                            <span class="card-zh">減脂</span>
+                            <span class="card-desc">15–20 次 · 超組</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 訓練程度 -->
+                <!-- <div class="field-group">
+              <p class="field-label">訓練程度</p>
+              <div class="field-cards" id="level-cards">
+                <button
+                  class="field-card active"
+                  data-val="beginner"
+                  onclick="selectCard('level', this)"
+                >
+                  <span class="card-en">Beginner</span>
+                  <span class="card-zh">初學者</span>
+                  <span class="card-desc">訓練 &lt; 1 年</span>
+                </button>
+                <button
+                  class="field-card"
+                  data-val="intermediate"
+                  onclick="selectCard('level', this)"
+                >
+                  <span class="card-en">Intermediate</span>
+                  <span class="card-zh">中階</span>
+                  <span class="card-desc">訓練 1–3 年</span>
+                </button>
+                <button
+                  class="field-card"
+                  data-val="advanced"
+                  onclick="selectCard('level', this)"
+                >
+                  <span class="card-en">Advanced</span>
+                  <span class="card-zh">進階</span>
+                  <span class="card-desc">訓練 3 年以上</span>
+                </button>
+              </div>
+            </div> -->
+                <!-- 每週天數 + 每次時間 -->
+                <div class="field-row-2">
+                    <div class="field-group">
+                        <p class="field-label">每週訓練天數</p>
+                        <div class="field-stepper">
+                            <button class="stepper-btn" onclick="stepperChange('days', -1)">
+                                −
+                            </button>
+                            <span class="stepper-val" id="days-val">4</span>
+                            <span class="stepper-unit">天 / 週</span>
+                            <button class="stepper-btn" onclick="stepperChange('days', 1)">
+                                +
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- 可用器材 -->
+                <div class="field-group">
+                    <p class="field-label">
+                        可用器材 <span class="field-label-hint">（可複選）</span>
+                    </p>
+                    <div class="field-equipment" id="equipment-chips">
+                        <!-- 槓鈴 -->
+                        <button class="equip-btn active" data-val="barbell" onclick="toggleEquip(this)">
+                            <span class="equip-icon">
+                                <svg viewBox="0 0 48 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="0" y="9" width="5" height="6" rx="1" stroke="currentColor" stroke-width="1.5" />
+                                    <rect x="5" y="7" width="4" height="10" rx="1" stroke="currentColor" stroke-width="1.5" />
+                                    <rect x="9" y="10" width="30" height="4" rx="1" stroke="currentColor" stroke-width="1.5" />
+                                    <rect x="39" y="7" width="4" height="10" rx="1" stroke="currentColor" stroke-width="1.5" />
+                                    <rect x="43" y="9" width="5" height="6" rx="1" stroke="currentColor" stroke-width="1.5" />
+                                </svg>
+                            </span>
+                            <span class="equip-name">槓鈴</span>
+                            <span class="equip-en">Barbell</span>
+                        </button>
+                        <!-- 啞鈴 -->
+                        <button class="equip-btn active" data-val="dumbbell" onclick="toggleEquip(this)">
+                            <span class="equip-icon">
+                                <svg viewBox="0 0 56 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- 左啞鈴 -->
+                                    <rect x="0" y="9" width="4" height="6" rx="1" stroke="currentColor" stroke-width="1.5" />
+                                    <rect x="4" y="7" width="3" height="10" rx="1" stroke="currentColor" stroke-width="1.5" />
+                                    <rect x="7" y="10.5" width="10" height="3" rx="1" stroke="currentColor" stroke-width="1.5" />
+                                    <rect x="17" y="7" width="3" height="10" rx="1" stroke="currentColor" stroke-width="1.5" />
+                                    <rect x="20" y="9" width="4" height="6" rx="1" stroke="currentColor" stroke-width="1.5" />
+                                    <!-- 右啞鈴 -->
+                                    <rect x="32" y="9" width="4" height="6" rx="1" stroke="currentColor" stroke-width="1.5" />
+                                    <rect x="36" y="7" width="3" height="10" rx="1" stroke="currentColor" stroke-width="1.5" />
+                                    <rect x="39" y="10.5" width="10" height="3" rx="1" stroke="currentColor" stroke-width="1.5" />
+                                    <rect x="49" y="7" width="3" height="10" rx="1" stroke="currentColor" stroke-width="1.5" />
+                                    <rect x="52" y="9" width="4" height="6" rx="1" stroke="currentColor" stroke-width="1.5" />
+                                </svg>
+                            </span>
+                            <span class="equip-name">啞鈴</span>
+                            <span class="equip-en">Dumbbell</span>
+                        </button>
+                        <!-- 機械式 -->
+                        <button class="equip-btn" data-val="machine" onclick="toggleEquip(this)">
+                            <span class="equip-icon">
+                                <svg viewBox="0 0 48 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- 重量疊片 -->
+                                    <rect x="16" y="2" width="16" height="4" rx="1" stroke="currentColor" stroke-width="1.5" />
+                                    <rect x="16" y="8" width="16" height="4" rx="1" stroke="currentColor" stroke-width="1.5" />
+                                    <rect x="16" y="14" width="16" height="4" rx="1" stroke="currentColor" stroke-width="1.5" />
+                                    <!-- 中柱 -->
+                                    <line x1="24" y1="2" x2="24" y2="30" stroke="currentColor" stroke-width="1.5"
+                                          stroke-linecap="round" />
+                                    <!-- 底座 -->
+                                    <line x1="8" y1="30" x2="40" y2="30" stroke="currentColor" stroke-width="1.5"
+                                          stroke-linecap="round" />
+                                </svg>
+                            </span>
+                            <span class="equip-name">機械式</span>
+                            <span class="equip-en">Machine</span>
+                        </button>
+                        <!-- 徒手 -->
+                        <button class="equip-btn" data-val="bodyweight" onclick="toggleEquip(this)">
+                            <span class="equip-icon">
+                                <svg viewBox="0 0 40 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- 手掌 -->
+                                    <path d="M8 28 C8 28 6 24 6 20 L6 12 C6 10.3 7.3 9 9 9 C10.7 9 12 10.3 12 12 L12 20"
+                                          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                                    <path d="M12 18 L12 10 C12 8.3 13.3 7 15 7 C16.7 7 18 8.3 18 10 L18 18" stroke="currentColor"
+                                          stroke-width="1.5" stroke-linecap="round" />
+                                    <path d="M18 18 L18 10 C18 8.3 19.3 7 21 7 C22.7 7 24 8.3 24 10 L24 18" stroke="currentColor"
+                                          stroke-width="1.5" stroke-linecap="round" />
+                                    <path d="M24 18 L24 12 C24 10.3 25.3 9 27 9 C28.7 9 30 10.3 30 12 L30 20" stroke="currentColor"
+                                          stroke-width="1.5" stroke-linecap="round" />
+                                    <path d="M6 20 C6 20 4 22 4 26 C4 30 6 32 8 33 L28 33 C31 33 34 30 34 26 L34 22 C34 20.3 32.7 19 31 19 C29.3 19 28 20.3 28 22"
+                                          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    <!-- 手腕 -->
+                                    <line x1="10" y1="33" x2="10" y2="40" stroke="currentColor" stroke-width="1.5"
+                                          stroke-linecap="round" />
+                                    <line x1="26" y1="33" x2="26" y2="40" stroke="currentColor" stroke-width="1.5"
+                                          stroke-linecap="round" />
+                                    <line x1="10" y1="40" x2="26" y2="40" stroke="currentColor" stroke-width="1.5"
+                                          stroke-linecap="round" />
+                                </svg>
+                            </span>
+                            <span class="equip-name">徒手</span>
+                            <span class="equip-en">Bodyweight</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 產生按鈕 -->
+                <button class="generate-btn" onclick="generatePlan()">
+                    <span class="generate-btn-text">產生訓練計畫</span>
+                    <span class="generate-btn-arrow"></span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════ STEP 2 — 計畫結果 ══════ -->
+    <section id="sec-result" class="hidden">
+        <!-- 結果標題列 -->
+        <div class="result-header">
+            <div>
+                <p class="result-eyebrow" id="result-eyebrow">Personal Program</p>
+                <h2 class="result-title" id="result-title">—</h2>
+            </div>
+            <div class="result-meta" id="result-meta"></div>
+            <button class="result-reset-btn" onclick="resetPlan()">
+                重新設定
+                <span class="result-reset-arrow"></span>
+            </button>
+        </div>
+
+        <!-- 週課表 -->
+        <div class="week-schedule" id="week-schedule"></div>
+
+        <!-- 每日動作明細 -->
+        <div class="daily-detail" id="daily-detail"></div>
+    </section>
+</div>
+
+<!-- 跑馬燈 -->
+<div class="marquee-wrap">
+    <div class="marquee-track">
+        <span class="marquee-item">Hypertrophy <span class="marquee-dot"></span></span>
+        <span class="marquee-item">Strength <span class="marquee-dot"></span></span>
+        <span class="marquee-item">Fat Loss <span class="marquee-dot"></span></span>
+        <span class="marquee-item">Programs <span class="marquee-dot"></span></span>
+        <span class="marquee-item">Hypertrophy <span class="marquee-dot"></span></span>
+        <span class="marquee-item">Strength <span class="marquee-dot"></span></span>
+        <span class="marquee-item">Fat Loss <span class="marquee-dot"></span></span>
+        <span class="marquee-item">Programs <span class="marquee-dot"></span></span>
+    </div>
+</div>
+@section scripts {
+    <script src="~/js/Program.js"></script>
+}
