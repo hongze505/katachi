@@ -20,6 +20,6 @@ app.UseRouting();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Program}/{action=Index}/{id?}");
+    pattern: "{controller=Plan}/{action=Index}/{id?}");
 
 app.Run();
