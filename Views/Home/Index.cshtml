@@ -1,317 +1,345 @@
 ﻿@{
-    ViewBag.Title = "KATACHI";
+    ViewBag.Title = "KATACHI首頁";
 }
 
 @section styles {
-    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Cormorant+Garamond:ital,wght@0,300;1,200;1,300&family=Noto+Sans+JP:wght@100;200;300&family=Noto+Serif+JP:wght@200;300;400&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/index.css" />
+	<script src="~/js/index.js" defer></script>
 }
 
-<!-- ══════ INTRO SCREEN ══════ -->
-<div id="intro-screen">
-    <div class="logo-wrap">
-        <div class="brand-name">
-            <span class="letter">K</span>
-            <span class="letter">A</span>
-            <span class="letter">T</span>
-            <span class="letter">A</span>
-            <span class="letter">C</span>
-            <span class="letter">H</span>
-            <span class="letter dumbbell-i">
-                <svg viewBox="0 0 28 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="2" y="0" width="24" height="7" rx="1.5" fill="currentColor" />
-                    <rect x="0" y="9" width="28" height="9" rx="2" fill="currentColor" />
-                    <rect x="11" y="20" width="6" height="40" rx="0" fill="currentColor" />
-                    <rect x="0" y="62" width="28" height="9" rx="2" fill="currentColor" />
-                    <rect x="2" y="73" width="24" height="7" rx="1.5" fill="currentColor" />
-                </svg>
-            </span>
-        </div>
-        <div class="brand-sub">Training Encyclopedia</div>
-        <div class="brand-jp">形 · 重訓訓練百科</div>
-    </div>
-</div>
+<!-- G 過場遮罩：上下兩半，動畫結束後分開 -->
+    <div id="transition-top"></div>
+    <div id="transition-bot"></div>
 
-<!-- ══════ HOME CONTENT ══════ -->
+
+    <!-- ══════════════════════
+       INTRO SCREEN
+       動畫跑完前蓋住畫面
+  ══════════════════════ -->
+    <div id="intro-screen">
+        <div class="logo-wrap">
+
+            <!-- KATACHI 字母動畫 -->
+            <div class="brand-name">
+                <span class="letter">K</span>
+                <span class="letter">A</span>
+                <span class="letter">T</span>
+                <span class="letter">A</span>
+                <span class="letter">C</span>
+                <span class="letter">H</span>
+                <span class="letter dumbbell-i">
+                    <svg viewBox="0 0 31 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="2" y="0" width="24" height="7" rx="1.5" fill="currentColor" />
+                        <rect x="0" y="9" width="28" height="9" rx="2" fill="currentColor" />
+                        <rect x="11" y="20" width="6" height="40" rx="0" fill="currentColor" />
+                        <rect x="0" y="62" width="28" height="9" rx="2" fill="currentColor" />
+                        <rect x="2" y="73" width="24" height="7" rx="1.5" fill="currentColor" />
+                    </svg>
+                </span>
+            </div>
+
+            <!-- 副標題 -->
+            <div class="brand-sub">Training Encyclopedia</div>
+            <div class="brand-jp">形 · 重訓訓練百科</div>
+
+        </div>
+    </div>
+
+<!-- ══════════════════════
+       首頁內容
+       intro 結束後淡入
+  ══════════════════════ -->
 <div id="home-content">
 
     <!-- HERO -->
     <section id="hero">
+        <!-- <p class="hero-kicker">重訓訓練百科</p> -->
         <h1 class="hero-title">
             KATACH<span class="dumbbell-i">
-                <svg viewBox="0 0 28 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="2" y="0" width="24" height="7" rx="1.5" fill="currentColor" />
-                    <rect x="0" y="9" width="28" height="9" rx="2" fill="currentColor" />
-                    <rect x="11" y="20" width="6" height="40" fill="currentColor" />
-                    <rect x="0" y="62" width="28" height="9" rx="2" fill="currentColor" />
-                    <rect x="2" y="73" width="24" height="7" rx="1.5" fill="currentColor" />
-                </svg>
-            </span>
-        </h1>
-        <p class="hero-sub">形 · Training Encyclopedia</p>
-        <div class="scroll-indicator">
-            <span class="scroll-text">Scroll</span>
-            <div class="scroll-line">
-                <div class="scroll-dot"></div>
-            </div>
-        </div>
-    </section>
+            <svg viewBox="0 0 31 90" fill="none"
+                 xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="0" width="24" height="7" rx="1.5" fill="currentColor" />
+                <rect x="0" y="9" width="28" height="9" rx="2" fill="currentColor" />
+                <rect x="11" y="20" width="6" height="40" fill="currentColor" />
+                <rect x="0" y="62" width="28" height="9" rx="2" fill="currentColor" />
+                <rect x="2" y="73" width="24" height="7" rx="1.5" fill="currentColor" />
+            </svg>
+        </span>
+    </h1>
+    <p class="hero-sub">形 · Training Encyclopedia</p>
 
-    <!-- 01 肌肉百科 -->
-    <section id="sec-muscle">
-        <div class="muscle-body">
-            <div class="muscle-left">
-                <div>
-                    <p class="muscle-eyebrow">Muscle Wiki</p>
-                    <h2 class="muscle-headline">
-                        <span>了解你的身體</span>
-                        MUSCLE<br>ATLAS
-                    </h2>
-                    <p class="muscle-desc">
-                        從胸到腿，每個肌群的解剖位置、訓練功能、常見弱點，都有完整的圖解說明。訓練之前，先認識自己的身體。
-                    </p>
-                </div>
-                <a href="#" class="muscle-cta">
-                    查看人體地圖
-                    <span class="muscle-cta-arrow"></span>
-                </a>
-            </div>
-            <div class="muscle-right">
-                <a href="#" class="muscle-part">
-                    <span class="muscle-part-name">胸大肌</span>
-                    <span class="muscle-part-en">Pectoralis Major</span>
-                    <span class="muscle-part-num">04 個動作</span>
-                </a>
-                <a href="#" class="muscle-part">
-                    <span class="muscle-part-name">背闊肌</span>
-                    <span class="muscle-part-en">Latissimus Dorsi</span>
-                    <span class="muscle-part-num">03 個動作</span>
-                </a>
-                <a href="#" class="muscle-part">
-                    <span class="muscle-part-name">股四頭肌</span>
-                    <span class="muscle-part-en">Quadriceps</span>
-                    <span class="muscle-part-num">03 個動作</span>
-                </a>
-                <a href="#" class="muscle-part">
-                    <span class="muscle-part-name">三角肌</span>
-                    <span class="muscle-part-en">Deltoid</span>
-                    <span class="muscle-part-num">03 個動作</span>
-                </a>
-                <a href="#" class="muscle-part">
-                    <span class="muscle-part-name">臀大肌</span>
-                    <span class="muscle-part-en">Gluteus Maximus</span>
-                    <span class="muscle-part-num">02 個動作</span>
-                </a>
-                <a href="#" class="muscle-part">
-                    <span class="muscle-part-name">腹直肌</span>
-                    <span class="muscle-part-en">Rectus Abdominis</span>
-                    <span class="muscle-part-num">03 個動作</span>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- 02 動作教學 -->
-    <section id="sec-exercise">
-        <div class="sec-header">
-            <span class="sec-num"></span>
-            <span class="sec-title"></span>
-        </div>
-        <div class="exercise-body">
-            <a href="#" class="exercise-card">
-                <div class="ex-card-top">
-                    <span class="ex-tag">複合動作 · 下肢</span>
-                    <div class="ex-num-v">01</div>
-                </div>
-                <div class="ex-card-info">
-                    <h3 class="ex-title">槓鈴深蹲</h3>
-                    <p class="ex-desc">下肢訓練之王</p>
-                    <div class="ex-tags">
-                        <span class="ex-pill">槓鈴</span>
-                        <span class="ex-pill">中階</span>
-                        <span class="ex-pill">下肢</span>
-                    </div>
-                    <div class="ex-view-btn">查看動作 →</div>
-                    <div class="ex-card-bottom-line"></div>
-                </div>
-            </a>
-            <a href="#" class="exercise-card">
-                <div class="ex-card-top">
-                    <span class="ex-tag">複合動作 · 上肢</span>
-                    <div class="ex-num-v">02</div>
-                </div>
-                <div class="ex-card-info">
-                    <h3 class="ex-title">槓鈴臥推</h3>
-                    <p class="ex-desc">胸部訓練的基礎動作，胸大肌是上肢推系統的代表</p>
-                    <div class="ex-tags">
-                        <span class="ex-pill">槓鈴</span>
-                        <span class="ex-pill">初學</span>
-                        <span class="ex-pill">上肢</span>
-                    </div>
-                    <div class="ex-view-btn">查看動作 →</div>
-                    <div class="ex-card-bottom-line"></div>
-                </div>
-            </a>
-            <a href="#" class="exercise-card">
-                <div class="ex-card-top">
-                    <span class="ex-tag">複合動作 · 全身</span>
-                    <div class="ex-num-v">03</div>
-                </div>
-                <div class="ex-card-info">
-                    <h3 class="ex-title">硬拉</h3>
-                    <p class="ex-desc">全身性力量動作</p>
-                    <div class="ex-tags">
-                        <span class="ex-pill">槓鈴</span>
-                        <span class="ex-pill">進階</span>
-                        <span class="ex-pill">全身</span>
-                    </div>
-                    <div class="ex-view-btn">查看動作 →</div>
-                    <div class="ex-card-bottom-line"></div>
-                </div>
-            </a>
-            <a href="#" class="exercise-card">
-                <div class="ex-card-top">
-                    <span class="ex-tag">複合動作 · 推</span>
-                    <div class="ex-num-v">04</div>
-                </div>
-                <div class="ex-card-info">
-                    <h3 class="ex-title">肩推</h3>
-                    <p class="ex-desc">上肢推系列的垂直動作代表，主攻三角肌前束與中束</p>
-                    <div class="ex-tags">
-                        <span class="ex-pill">槓鈴</span>
-                        <span class="ex-pill">中階</span>
-                        <span class="ex-pill">上肢</span>
-                    </div>
-                    <div class="ex-view-btn">查看動作 →</div>
-                    <div class="ex-card-bottom-line"></div>
-                </div>
-            </a>
-        </div>
-    </section>
-
-    <!-- 03 訓練計畫 -->
-    <section id="sec-program">
-        <div class="program-body">
-            <div class="program-intro">
-                <div>
-                    <p class="program-intro-label">Personal Training Program</p>
-                    <h2 class="program-intro-title">為目標而生<br>己を、超える</h2>
-                    <p class="program-intro-desc">
-                        輸入你的訓練目標、程度、每週天數與器材條件，系統自動根據科學化的週期化訓練原則，產生一份專屬週課表。
-                    </p>
-                </div>
-                <a href="/Plan/Index" class="muscle-cta" style="width:fit-content">
-                    立即產生計畫
-                    <span class="muscle-cta-arrow"></span>
-                </a>
-            </div>
-            <a href="/Plan/Index" class="program-card dark">
-                <div>
-                    <span class="program-type">目標 01</span>
-                    <h3 class="program-name">增肌</h3>
-                    <p class="program-jp">Hypertrophy</p>
-                    <p class="program-detail">8–12 次 × 4 組<br>中等重量 · 高容量<br>週 4 天訓練</p>
-                </div>
-                <div class="program-arrow">
-                    <span class="program-arrow-line"></span>
-                    查看計畫
-                </div>
-            </a>
-            <a href="/Plan/Index" class="program-card dark">
-                <div>
-                    <span class="program-type">目標 02</span>
-                    <h3 class="program-name">增力</h3>
-                    <p class="program-jp">Strength</p>
-                    <p class="program-detail">3–5 次 × 5 組<br>大重量 · 低容量<br>週 3 天訓練</p>
-                </div>
-                <div class="program-arrow">
-                    <span class="program-arrow-line"></span>
-                    查看計畫
-                </div>
-            </a>
-            <a href="/Plan/Index" class="program-card dark">
-                <div>
-                    <span class="program-type">目標 03</span>
-                    <h3 class="program-name">減脂</h3>
-                    <p class="program-jp">Fat Loss</p>
-                    <p class="program-detail">15–20 次 × 3 組<br>輕重量 · 超高容量<br>週 5 天訓練</p>
-                </div>
-                <div class="program-arrow">
-                    <span class="program-arrow-line"></span>
-                    查看計畫
-                </div>
-            </a>
-        </div>
-    </section>
-
-    <!-- 04 飲食計算 -->
-    <section id="sec-nutrition">
-        <div class="nutrition-body">
-            <div class="nutrition-left">
-                <div>
-                    <p class="nutrition-eyebrow">Nutrition Tracking</p>
-                    <h2 class="nutrition-headline">
-                        <em>精準飲食</em>
-                        NUTRITION<br>SCIENCE
-                    </h2>
-                    <p class="nutrition-desc">
-                        搜尋食物資料庫、記錄今日攝取、追蹤三大巨量營養素與微量元素。搭配 TDEE 計算器，讓每一口都符合你的目標。
-                    </p>
-                </div>
-                <a href="#" class="nutrition-cta">
-                    記錄今日飲食
-                    <span class="nutrition-cta-arrow"></span>
-                </a>
-            </div>
-            <div class="nutrition-right">
-                <div class="nutrition-stat">
-                    <div>
-                        <span class="nutrition-stat-num">15</span>
-                        <span class="nutrition-stat-unit">種食物</span>
-                    </div>
-                    <span class="nutrition-stat-desc">常見食物資料庫</span>
-                </div>
-                <div class="nutrition-stat">
-                    <div>
-                        <span class="nutrition-stat-num">7</span>
-                        <span class="nutrition-stat-unit">項指標</span>
-                    </div>
-                    <span class="nutrition-stat-desc">熱量 · 蛋白質 · 碳水 · 脂肪 · 纖維 · 鈉 · 鐵</span>
-                </div>
-                <div class="nutrition-stat">
-                    <div>
-                        <span class="nutrition-stat-num">5</span>
-                        <span class="nutrition-stat-unit">餐</span>
-                    </div>
-                    <span class="nutrition-stat-desc">預設標準訓練飲食計畫</span>
-                </div>
-                <div class="nutrition-stat">
-                    <div>
-                        <span class="nutrition-stat-num">BMI</span>
-                    </div>
-                    <span class="nutrition-stat-desc">+ TDEE 每日熱量計算器</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 跑馬燈 -->
-    <div class="marquee-wrap">
-        <div class="marquee-track">
-            <span class="marquee-item">Muscle Wiki <span class="marquee-dot"></span></span>
-            <span class="marquee-item">Exercises <span class="marquee-dot"></span></span>
-            <span class="marquee-item">Programs <span class="marquee-dot"></span></span>
-            <span class="marquee-item">Nutrition <span class="marquee-dot"></span></span>
-            <span class="marquee-item">Muscle Wiki <span class="marquee-dot"></span></span>
-            <span class="marquee-item">Exercises <span class="marquee-dot"></span></span>
-            <span class="marquee-item">Programs <span class="marquee-dot"></span></span>
-            <span class="marquee-item">Nutrition <span class="marquee-dot"></span></span>
+    <div class="scroll-indicator">
+        <span class="scroll-text">Scroll</span>
+        <div class="scroll-line">
+            <div class="scroll-dot"></div>
         </div>
     </div>
+</section>
 
+
+<!-- 後續 section 佔位（之後一步步加入） -->
+<!-- ══════════════════
+     01 — 肌肉百科
+══════════════════ -->
+
+<section id="sec-muscle">
+    <div class="muscle-body">
+        <div class="muscle-left">
+            <div>
+                <p class="muscle-eyebrow">Muscle Wiki</p>
+                <h2 class="muscle-headline">
+                    <span>了解你的身體</span>
+                    MUSCLE<br>ATLAS
+                </h2>
+                <p class="muscle-desc">
+                    從胸到腿，每個肌群的解剖位置、訓練功能、常見弱點，都有完整的圖解說明。訓練之前，先認識自己的身體。
+                </p>
+            </div>
+            <a href="../muscle-map/index.html" class="muscle-cta">
+                查看人體地圖
+                <span class="muscle-cta-arrow"></span>
+            </a>
+        </div>
+        <div class="muscle-right">
+            <a href="#" class="muscle-part">
+                <span class="muscle-part-name">胸大肌</span>
+                <span class="muscle-part-en">Pectoralis Major</span>
+                <span class="muscle-part-num">04 個動作</span>
+            </a>
+            <a href="#" class="muscle-part">
+                <span class="muscle-part-name">背闊肌</span>
+                <span class="muscle-part-en">Latissimus Dorsi</span>
+                <span class="muscle-part-num">03 個動作</span>
+            </a>
+            <a href="#" class="muscle-part">
+                <span class="muscle-part-name">股四頭肌</span>
+                <span class="muscle-part-en">Quadriceps</span>
+                <span class="muscle-part-num">03 個動作</span>
+            </a>
+            <a href="#" class="muscle-part">
+                <span class="muscle-part-name">三角肌</span>
+                <span class="muscle-part-en">Deltoid</span>
+                <span class="muscle-part-num">03 個動作</span>
+            </a>
+            <a href="#" class="muscle-part">
+                <span class="muscle-part-name">臀大肌</span>
+                <span class="muscle-part-en">Gluteus Maximus</span>
+                <span class="muscle-part-num">02 個動作</span>
+            </a>
+            <a href="#" class="muscle-part">
+                <span class="muscle-part-name">腹直肌</span>
+                <span class="muscle-part-en">Rectus Abdominis</span>
+                <span class="muscle-part-num">03 個動作</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════
+     02 — 動作教學
+══════════════════ -->
+<section id="sec-exercise">
+    <div class="sec-header">
+        <span class="sec-num"></span>
+        <span class="sec-title"></span>
+    </div>
+    <div class="exercise-body">
+        <a href="#" class="exercise-card">
+            <div class="ex-card-top">
+                <span class="ex-tag">複合動作 · 下肢</span>
+                <div class="ex-num-v">01</div>
+            </div>
+            <div class="ex-card-info">
+                <h3 class="ex-title">槓鈴深蹲</h3>
+                <p class="ex-desc">下肢訓練之王</p>
+                <div class="ex-tags">
+                    <span class="ex-pill">槓鈴</span>
+                    <span class="ex-pill">中階</span>
+                    <span class="ex-pill">下肢</span>
+                </div>
+                <div class="ex-view-btn">查看動作 →</div>
+                <div class="ex-card-bottom-line"></div>
+            </div>
+        </a>
+        <a href="#" class="exercise-card">
+            <div class="ex-card-top">
+                <span class="ex-tag">複合動作 · 上肢</span>
+                <div class="ex-num-v">02</div>
+            </div>
+            <div class="ex-card-info">
+                <h3 class="ex-title">槓鈴臥推</h3>
+                <p class="ex-desc">胸部訓練的基礎動作,胸大肌是上肢推系統的代表</p>
+                <div class="ex-tags">
+                    <span class="ex-pill">槓鈴</span>
+                    <span class="ex-pill">初學</span>
+                    <span class="ex-pill">上肢</span>
+                </div>
+                <div class="ex-view-btn">查看動作 →</div>
+                <div class="ex-card-bottom-line"></div>
+            </div>
+        </a>
+        <a href="#" class="exercise-card">
+            <div class="ex-card-top">
+                <span class="ex-tag">複合動作 · 全身</span>
+                <div class="ex-num-v">03</div>
+            </div>
+            <div class="ex-card-info">
+                <h3 class="ex-title">硬拉</h3>
+                <p class="ex-desc">全身性力量動作</p>
+                <div class="ex-tags">
+                    <span class="ex-pill">槓鈴</span>
+                    <span class="ex-pill">進階</span>
+                    <span class="ex-pill">全身</span>
+                </div>
+                <div class="ex-view-btn">查看動作 →</div>
+                <div class="ex-card-bottom-line"></div>
+            </div>
+        </a>
+        <a href="#" class="exercise-card">
+            <div class="ex-card-top">
+                <span class="ex-tag">複合動作 · 推</span>
+                <div class="ex-num-v">04</div>
+            </div>
+            <div class="ex-card-info">
+                <h3 class="ex-title">肩推</h3>
+                <p class="ex-desc">上肢推系列的垂直動作代表,主攻三角肌前束與中束</p>
+                <div class="ex-tags">
+                    <span class="ex-pill">槓鈴</span>
+                    <span class="ex-pill">中階</span>
+                    <span class="ex-pill">上肢</span>
+                </div>
+                <div class="ex-view-btn">查看動作 →</div>
+                <div class="ex-card-bottom-line"></div>
+            </div>
+        </a>
+    </div>
+</section>
+
+<!-- ══════════════════
+     03 — 訓練計畫
+══════════════════ -->
+<section id="sec-program">
+    <div class="program-body">
+        <div class="program-intro">
+            <div>
+                <p class="program-intro-label">Personal Training Program</p>
+                <h2 class="program-intro-title">為目標而生<br>己を、超える</h2>
+                <p class="program-intro-desc">
+                    輸入你的訓練目標、程度、每週天數與器材條件，系統自動根據科學化的週期化訓練原則，產生一份專屬週課表。
+                </p>
+            </div>
+            <a href="../program/programs.html" class="muscle-cta" style="width:fit-content">
+                立即產生計畫
+                <span class="muscle-cta-arrow"></span>
+            </a>
+        </div>
+        <a href="#" class="program-card dark">
+            <div>
+                <span class="program-type">目標 01</span>
+                <h3 class="program-name">增肌</h3>
+                <p class="program-jp">Hypertrophy</p>
+                <p class="program-detail">8–12 次 × 4 組<br>中等重量 · 高容量<br>週 4 天訓練</p>
+            </div>
+            <div class="program-arrow">
+                <span class="program-arrow-line"></span>
+                查看計畫
+            </div>
+        </a>
+        <a href="#" class="program-card dark">
+            <div>
+                <span class="program-type">目標 02</span>
+                <h3 class="program-name">增力</h3>
+                <p class="program-jp">Strength</p>
+                <p class="program-detail">3–5 次 × 5 組<br>大重量 · 低容量<br>週 3 天訓練</p>
+            </div>
+            <div class="program-arrow">
+                <span class="program-arrow-line"></span>
+                查看計畫
+            </div>
+        </a>
+        <a href="#" class="program-card dark">
+            <div>
+                <span class="program-type">目標 03</span>
+                <h3 class="program-name">減脂</h3>
+                <p class="program-jp">Fat Loss</p>
+                <p class="program-detail">15–20 次 × 3 組<br>輕重量 · 超高容量<br>週 5 天訓練</p>
+            </div>
+            <div class="program-arrow">
+                <span class="program-arrow-line"></span>
+                查看計畫
+            </div>
+        </a>
+    </div>
+</section>
+
+<!-- ══════════════════
+     04 — 飲食計算
+══════════════════ -->
+<section id="sec-nutrition">
+    <div class="sec-header">
+        <span class="sec-title"></span>
+    </div>
+    <div class="nutrition-body">
+        <div class="nutrition-left">
+            <div>
+                <p class="nutrition-eyebrow">Nutrition Tracking</p>
+                <h2 class="nutrition-headline">
+                    <em>精準飲食</em>
+                    NUTRITION<br>SCIENCE
+                </h2>
+                <p class="nutrition-desc">
+                    搜尋食物資料庫、記錄今日攝取、追蹤三大巨量營養素與微量元素。搭配 TDEE 計算器，讓每一口都符合你的目標。
+                </p>
+            </div>
+            <a href="../nutrition/nutrition.html" class="nutrition-cta">
+                記錄今日飲食
+                <span class="nutrition-cta-arrow"></span>
+            </a>
+        </div>
+        <div class="nutrition-right">
+            <div class="nutrition-stat">
+                <div>
+                    <span class="nutrition-stat-num">15</span>
+                    <span class="nutrition-stat-unit">種食物</span>
+                </div>
+                <span class="nutrition-stat-desc">常見食物資料庫</span>
+            </div>
+            <div class="nutrition-stat">
+                <div>
+                    <span class="nutrition-stat-num">7</span>
+                    <span class="nutrition-stat-unit">項指標</span>
+                </div>
+                <span class="nutrition-stat-desc">熱量 · 蛋白質 · 碳水 · 脂肪 · 纖維 · 鈉 · 鐵</span>
+            </div>
+            <div class="nutrition-stat">
+                <div>
+                    <span class="nutrition-stat-num">5</span>
+                    <span class="nutrition-stat-unit">餐</span>
+                </div>
+                <span class="nutrition-stat-desc">預設標準訓練飲食計畫</span>
+            </div>
+            <div class="nutrition-stat">
+                <div>
+                    <span class="nutrition-stat-num">BMI</span>
+                </div>
+                <span class="nutrition-stat-desc">+ TDEE 每日熱量計算器</span>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- 跑馬燈 -->
+<div class="marquee-wrap">
+    <div class="marquee-track">
+
+        <span class="marquee-item">Muscle Wiki <span class="marquee-dot"></span></span>
+        <span class="marquee-item">Exercises <span class="marquee-dot"></span></span>
+        <span class="marquee-item">Programs <span class="marquee-dot"></span></span>
+        <span class="marquee-item">Nutrition <span class="marquee-dot"></span></span>
+
+        <span class="marquee-item">Muscle Wiki <span class="marquee-dot"></span></span>
+        <span class="marquee-item">Exercises <span class="marquee-dot"></span></span>
+        <span class="marquee-item">Programs <span class="marquee-dot"></span></span>
+        <span class="marquee-item">Nutrition <span class="marquee-dot"></span></span>
+    </div>
 </div>
-
-@section scripts {
-    <script src="~/js/index.js"></script>
-}
+</div>

@@ -1,0 +1,1501 @@
+/*
+ * KATACHI — nutrition1.css  (Tab 版 v3)
+ */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+}
+body {
+  background: var(--color-black);
+  color: var(--color-black);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  overflow-x: hidden;
+}
+
+
+
+/* ══════ HERO ══════ */
+#nutrition-hero {
+  height: 100vh;
+  background: var(--color-black);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  padding-top: 52px;
+}
+.nh-eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.25);
+  margin-bottom: 24px;
+}
+.nh-title {
+  font-family: var(--font-brand);
+  font-weight: 800;
+  font-size: clamp(4rem, 10vw, 8rem);
+  letter-spacing: 8px;
+  color: #fff;
+  line-height: 0.9;
+  margin-bottom: 28px;
+}
+.nh-sub {
+  font-family: var(--font-serif);
+  font-weight: 200;
+  font-size: 1rem;
+  letter-spacing: 6px;
+  color: rgba(255, 255, 255, 0.35);
+}
+.nh-scroll {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.scroll-text {
+  font-size: 0.45rem;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+.scroll-line {
+  width: 1px;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+.scroll-dot {
+  width: 1px;
+  height: 24px;
+  background: #fff;
+  position: absolute;
+  top: -24px;
+  left: 0;
+  animation: scrollFlow 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes scrollFlow {
+  0% {
+    top: -24px;
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    top: 64px;
+    opacity: 0;
+  }
+}
+
+/* ══════ MAIN CONTENT ══════ */
+#main-content {
+  background: var(--color-bg);
+  border-radius: 20px;
+}
+
+/* ══════ TAB BAR ══════ */
+#tab-bar {
+  border-radius: 20px 20px 0 0;
+  position: sticky;
+  top: 52px;
+  z-index: 100;
+  background: var(--color-bg);
+  border-bottom: 0.5px solid var(--color-line);
+}
+.tab-bar-inner {
+  display: flex;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--page-gutter-lg);
+}
+.tab-btn {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 22px 0;
+  margin-right: 48px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition:
+    border-color 0.25s,
+    opacity 0.25s;
+  position: relative;
+  bottom: -0.5px;
+}
+.tab-btn:hover {
+  opacity: 0.7;
+}
+.tab-btn.active {
+  border-bottom-color: var(--color-black);
+}
+.tab-num {
+  font-family: var(--font-italic);
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  color: var(--color-grey);
+}
+.tab-label {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 300;
+  letter-spacing: 2px;
+  color: var(--color-black);
+}
+.tab-en {
+  font-family: var(--font-italic);
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  color: var(--color-grey);
+}
+
+/* ══════ TAB PANELS ══════ */
+.tab-panel {
+  display: none;
+}
+.tab-panel.active {
+  display: block;
+}
+
+/* ══════════════════════════════
+   左下角裝飾（絕對定位）
+══════════════════════════════ */
+#tab-food {
+  position: relative;
+}
+
+.food-deco {
+  position: absolute;
+  bottom: 60px;
+  left: 32px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 半透明大圓圈 */
+.food-deco-circle {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  border: 1px solid rgba(212, 132, 90, 0.12);
+  position: absolute;
+  bottom: -20px;
+  left: -60px;
+}
+
+/* 座標文字（垂直） */
+.food-deco-coords {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transform: rotate(-90deg);
+  transform-origin: left bottom;
+  position: absolute;
+  bottom: 48px;
+  left: 20px;
+}
+.food-deco-line {
+  display: block;
+  width: 40px;
+  height: 1px;
+  background: #d4845a;
+  opacity: 0.5;
+}
+.food-deco-numbers {
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--color-grey-mute);
+  white-space: nowrap;
+}
+
+/* SCANNING 文字 */
+.food-deco-scanning {
+  font-family: "Courier New", monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: #d4845a;
+  opacity: 0.5;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  white-space: nowrap;
+}
+
+.food-title-block {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 64px var(--page-gutter-lg) 0;
+}
+
+/* ══════ FOOD LAYOUT ══════ */
+.food-layout {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0;
+  padding: 48px var(--page-gutter-lg) 100px;
+  max-width: 1400px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+/* ══════ PANEL LABEL（加深） ══════ */
+.panel-label {
+  font-size: 0.8rem;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--color-grey); /* 原 grey-mute → grey，更清晰 */
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 0.5px solid var(--color-line);
+}
+.panel-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 0.5px solid var(--color-line);
+}
+.panel-label-row .panel-label {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+/* ══════ 儲存 / 清除按鈕 ══════ */
+.log-actions {
+  display: flex;
+  gap: 8px;
+}
+.log-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  letter-spacing: 2px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+}
+.save-btn {
+  background: var(--color-black);
+  color: #fff;
+  border: 1px solid var(--color-black);
+}
+.save-btn:hover {
+  background: #333;
+  border-color: #333;
+}
+.clear-btn {
+  background: none;
+  color: var(--color-grey);
+  border: 1px solid var(--color-line);
+}
+.clear-btn:hover {
+  border-color: #c0544a;
+  color: #c0544a;
+}
+
+/* ══════ 搜尋面板 ══════ */
+.food-search-panel {
+  padding-right: 40px;
+  border-right: 0.5px solid var(--color-line);
+}
+.food-search-wrap {
+  position: relative;
+  margin-bottom: 16px;
+}
+.food-search-input {
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--color-line);
+  outline: none;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--color-black);
+  padding: 10px 32px 10px 0;
+  transition: border-color 0.2s;
+}
+.food-search-input:focus {
+  border-color: var(--color-black);
+}
+.food-search-input::placeholder {
+  color: var(--color-grey-hint);
+}
+.food-search-icon {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-grey);
+  pointer-events: none;
+}
+.food-list {
+  max-height: 520px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line) transparent;
+}
+.food-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 8px;
+  border-bottom: 0.5px solid var(--color-line);
+  transition: background 0.15s;
+  border-radius: 4px;
+}
+.food-item:hover {
+  background: var(--color-bg-off);
+}
+.food-item-info {
+  flex: 1;
+  min-width: 0;
+}
+.food-item-name {
+  display: block;
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--color-black);
+  margin-bottom: 2px;
+}
+.food-item-en {
+  display: block;
+  font-family: var(--font-italic);
+  font-size: 0.82rem;
+  letter-spacing: 1px;
+  color: var(--color-grey);
+}
+.food-item-meta {
+  text-align: right;
+  flex-shrink: 0;
+}
+.food-item-cal {
+  font-family: var(--font-brand);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--color-black);
+  display: block;
+}
+.food-item-unit {
+  font-size: 0.72rem;
+  letter-spacing: 1px;
+  color: var(--color-grey);
+}
+.food-add-btn {
+  width: 30px;
+  height: 30px;
+  border: 0.5px solid var(--color-line);
+  background: none;
+  cursor: pointer;
+  font-size: 1.3rem;
+  color: var(--color-grey);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+  flex-shrink: 0;
+}
+.food-add-btn:hover {
+  background: var(--color-black);
+  color: #fff;
+  border-color: var(--color-black);
+}
+
+/* ══════ 記錄面板 ══════ */
+.food-log-panel {
+  padding: 0 40px;
+  border-right: 0.5px solid var(--color-line);
+}
+.food-log-list {
+  min-height: 280px;
+  max-height: 420px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line) transparent;
+}
+.food-log-empty {
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.food-log-empty span {
+  font-size: 0.9rem;
+  letter-spacing: 3px;
+  color: var(--color-grey-mid);
+  text-align: center;
+}
+.log-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 0.5px solid var(--color-line);
+}
+.log-item-left {
+  flex: 1;
+  min-width: 0;
+}
+.log-item-name {
+  display: block;
+  font-size: 1rem;
+  color: var(--color-black);
+  margin-bottom: 4px;
+}
+.log-item-detail {
+  display: block;
+  font-size: 0.82rem;
+  letter-spacing: 1px;
+  color: var(--color-grey);
+}
+
+/* ══════ 公克數輸入(新增) ══════ */
+.log-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+.log-item-grams {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.log-grams-input {
+  width: 56px;
+  background: var(--color-bg-off, #f5f3ee);
+  border: 0.5px solid var(--color-line);
+  border-radius: 4px;
+  outline: none;
+  font-family: var(--font-brand);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-black);
+  padding: 4px 8px;
+  text-align: right;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+}
+.log-grams-input:hover {
+  border-color: var(--color-grey-mid);
+}
+.log-grams-input:focus {
+  border-color: var(--color-black);
+  background: #fff;
+}
+.log-grams-input::-webkit-inner-spin-button,
+.log-grams-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.log-grams-input[type="number"] {
+  -moz-appearance: textfield;
+}
+.log-grams-unit {
+  font-size: 0.82rem;
+  letter-spacing: 1px;
+  color: var(--color-grey);
+}
+.log-remove-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: var(--color-grey-mid);
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition:
+    background 0.2s,
+    color 0.2s;
+  flex-shrink: 0;
+}
+.log-remove-btn:hover {
+  background: #fee;
+  color: #c0544a;
+}
+.food-log-total {
+  padding: 16px 0;
+  border-top: 1px solid var(--color-black);
+  margin-top: 8px;
+}
+.food-log-total.hidden {
+  display: none;
+}
+.log-total-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.log-total-label {
+  font-size: 0.82rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--color-grey);
+  flex: 1;
+}
+.log-total-val {
+  font-family: var(--font-brand);
+  font-weight: 800;
+  font-size: 2rem;
+  color: var(--color-black);
+}
+.log-total-unit {
+  font-size: 0.82rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-grey);
+}
+.log-total-macros {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.log-total-macros span {
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  color: var(--color-grey);
+}
+
+/* ══════ 圖表面板 ══════ */
+.food-chart-panel {
+  padding-left: 40px;
+}
+.donut-wrap {
+  position: relative;
+  width: 160px;
+  margin: 0 auto 28px;
+}
+.donut-svg {
+  width: 100%;
+  display: block;
+}
+.donut-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.donut-cal {
+  font-family: var(--font-brand);
+  font-weight: 800;
+  font-size: 1.6rem;
+  color: var(--color-black);
+  line-height: 1;
+}
+.donut-unit-sm {
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-grey);
+  margin-top: 2px;
+}
+.donut-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 24px;
+}
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 0.5px solid var(--color-line);
+}
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.legend-label {
+  font-size: 0.9rem;
+  color: var(--color-ink);
+  flex: 1;
+} /* 加深 */
+.legend-val {
+  font-family: var(--font-brand);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--color-black);
+}
+
+/* ══════════════════════════════
+   TDEE 目標切換器
+══════════════════════════════ */
+.goal-switcher {
+  margin-bottom: 20px;
+}
+.goal-switcher-label {
+  font-size: 0.78rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--color-grey);
+  margin-bottom: 10px;
+}
+.goal-btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+.goal-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 6px;
+  background: none;
+  border: 0.5px solid var(--color-line);
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.goal-btn:hover {
+  border-color: var(--color-grey-mid);
+  transform: translateY(-1px);
+}
+.goal-btn.active {
+  background: var(--color-black);
+  border-color: var(--color-black);
+}
+.goal-btn-name {
+  font-size: 0.72rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--color-grey);
+  transition: color 0.2s;
+}
+.goal-btn-val {
+  font-family: var(--font-brand);
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--color-black);
+  transition: color 0.2s;
+}
+.goal-btn-unit {
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-grey-mute);
+  transition: color 0.2s;
+}
+.goal-btn.active .goal-btn-name,
+.goal-btn.active .goal-btn-val,
+.goal-btn.active .goal-btn-unit {
+  color: #fff;
+}
+
+/* ══════ 進度條 ══════ */
+.progress-section {
+  margin-bottom: 24px;
+}
+.progress-title {
+  font-size: 0.82rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--color-grey);
+  margin-bottom: 12px;
+}
+.progress-track {
+  height: 4px;
+  background: var(--color-line);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.progress-bar {
+  height: 100%;
+  background: var(--color-black);
+  border-radius: 2px;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.progress-labels span {
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  color: var(--color-ink);
+} /* 加深 */
+.progress-hint {
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  color: var(--color-grey-mid);
+  font-style: italic;
+}
+
+/* ══════ 近日記錄 ══════ */
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.history-empty {
+  font-size: 0.85rem;
+  color: var(--color-grey-mid);
+  letter-spacing: 2px;
+  padding: 16px 0;
+}
+.history-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 0;
+  border-bottom: 0.5px solid var(--color-line);
+}
+.history-date {
+  font-size: 0.78rem;
+  letter-spacing: 2px;
+  color: var(--color-grey);
+}
+.history-cal {
+  font-family: var(--font-brand);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--color-black);
+}
+.history-macros {
+  font-size: 0.82rem;
+  letter-spacing: 1px;
+  color: var(--color-grey);
+}
+
+/* ══════ CALC 共用 ══════ */
+.calc-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 520px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 64px var(--page-gutter-lg) 80px;
+  gap: 80px;
+  align-items: start;
+}
+.calc-layout.reverse {
+  direction: rtl;
+}
+.calc-layout.reverse > * {
+  direction: ltr;
+}
+.calc-eyebrow {
+  font-size: 0.82rem;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--color-grey);
+  margin-bottom: 20px;
+}
+.calc-headline {
+  font-family: var(--font-brand);
+  font-weight: 800;
+  font-size: clamp(2.8rem, 5vw, 4.5rem);
+  letter-spacing: 2px;
+  line-height: 0.95;
+  color: var(--color-black);
+  margin-bottom: 28px;
+}
+.calc-headline span {
+  font-family: var(--font-serif);
+  font-weight: 200;
+  font-size: 0.45em;
+  letter-spacing: 4px;
+  color: var(--color-grey-mid);
+  display: block;
+  margin-bottom: 4px;
+}
+.calc-desc {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 200;
+  line-height: 2;
+  color: var(--color-grey);
+  max-width: 360px;
+  margin-bottom: 40px;
+}
+.calc-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.calc-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.calc-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.calc-label {
+  font-size: 0.82rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--color-grey);
+}
+.calc-input-wrap {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--color-line);
+  transition: border-color 0.2s;
+}
+.calc-input-wrap:focus-within {
+  border-color: var(--color-black);
+}
+.calc-input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font-family: var(--font-brand);
+  font-weight: 700;
+  font-size: 1.8rem;
+  letter-spacing: 2px;
+  color: var(--color-black);
+  padding: 8px 0;
+  width: 100%;
+}
+.calc-input::placeholder {
+  color: var(--color-grey-hint);
+}
+.calc-input::-webkit-inner-spin-button,
+.calc-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+.calc-input[type="number"] {
+  -moz-appearance: textfield;
+}
+.calc-unit {
+  font-size: 0.85rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--color-grey);
+  padding-left: 8px;
+  flex-shrink: 0;
+}
+.calc-select {
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--color-line);
+  outline: none;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--color-black);
+  padding: 10px 0;
+  width: 100%;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23888888' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 4px center;
+}
+.calc-select:focus {
+  border-color: var(--color-black);
+}
+.calc-radio-group {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+}
+.calc-radio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  color: var(--color-grey);
+  cursor: pointer;
+  user-select: none;
+}
+.calc-radio input[type="radio"] {
+  display: none;
+}
+.calc-radio span {
+  padding: 6px 20px;
+  border: 0.5px solid var(--color-line);
+  border-radius: 2px;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+}
+.calc-radio input:checked + span {
+  background: var(--color-black);
+  color: #fff;
+  border-color: var(--color-black);
+}
+.calc-btn {
+  align-self: flex-start;
+  padding: 13px 40px;
+  background: var(--color-black);
+  color: #fff;
+  border: none;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.25s;
+  border-radius: 2px;
+  margin-top: 8px;
+}
+.calc-btn:hover {
+  background: var(--color-grey);
+}
+
+/* ══════ BMI 卡片 ══════ */
+.bmi-result-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding-top: 16px;
+}
+.bmi-display-block {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+.bmi-val {
+  font-family: var(--font-brand);
+  font-weight: 800;
+  font-size: 6rem;
+  line-height: 1;
+  letter-spacing: -2px;
+  color: var(--color-black);
+  transition: color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.bmi-val-unit {
+  font-family: var(--font-brand);
+  font-weight: 800;
+  font-size: 1.2rem;
+  letter-spacing: 4px;
+  color: var(--color-grey);
+}
+.bmi-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.bmi-card {
+  display: flex;
+  align-items: stretch;
+  border: 0.5px solid var(--color-line);
+  border-radius: 10px;
+  overflow: hidden;
+  transition:
+    border-color 0.3s,
+    box-shadow 0.3s,
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.bmi-card.active {
+  border-color: transparent;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+.bmi-card-bar {
+  width: 5px;
+  flex-shrink: 0;
+}
+.bmi-card-body {
+  flex: 1;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.bmi-card-label {
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--color-black);
+  letter-spacing: 2px;
+}
+.bmi-card-range {
+  font-family: var(--font-italic);
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  color: var(--color-grey);
+}
+.bmi-card.active .bmi-card-body {
+  background: var(--color-bg-off);
+}
+.bmi-card.active .bmi-card-label {
+  font-weight: 500;
+}
+.bmi-card.active .bmi-card-range {
+  color: var(--color-ink);
+}
+
+/* ══════ TDEE 結果面板 ══════ */
+.tdee-result-panel {
+  background: var(--color-black);
+  border-radius: 16px;
+  padding: 48px 52px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+.tdee-empty {
+  text-align: center;
+}
+.tdee-empty-text {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 200;
+  line-height: 2;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.2);
+}
+.hidden {
+  display: none !important;
+}
+.tdee-result {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.tdee-label-sm {
+  font-size: 0.82rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  display: block;
+  margin-bottom: 8px;
+}
+.tdee-num-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.tdee-num-lg {
+  font-family: var(--font-brand);
+  font-weight: 800;
+  font-size: 2.4rem;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.6);
+}
+.tdee-num-xl {
+  font-family: var(--font-brand);
+  font-weight: 800;
+  font-size: 3.6rem;
+  letter-spacing: 2px;
+  color: #fff;
+}
+.tdee-unit {
+  font-size: 0.85rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+}
+.tdee-divider {
+  height: 0.5px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 20px 0;
+}
+.tdee-bmr-block,
+.tdee-main-block {
+  display: flex;
+  flex-direction: column;
+}
+.tdee-goals {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 24px;
+}
+.tdee-goal-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.06);
+}
+.tdee-goal-label {
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.5);
+}
+.tdee-goal-val {
+  font-family: var(--font-brand);
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: 1px;
+  color: #fff;
+}
+.tdee-goal-unit {
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  margin-left: 4px;
+}
+/* ══════ TDEE 兩顆按鈕並排 ══════ */
+.tdee-action-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+/* 儲存按鈕(描邊版) */
+.tdee-save-btn {
+  padding: 14px 12px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  border: 0.5px solid rgba(255, 255, 255, 0.2);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+}
+.tdee-save-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* 套用按鈕(原本的,微調讓兩顆一致) */
+.tdee-apply-btn {
+  padding: 14px 12px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 4px;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.tdee-apply-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+/* ══════ TOAST ══════ */
+#toast {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--color-black);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  padding: 12px 28px;
+  border-radius: 4px;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.3s,
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 9999;
+  white-space: nowrap;
+}
+#toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ══════ 跑馬燈 ══════ */
+.marquee-wrap {
+  overflow: hidden;
+  background: var(--color-black);
+  padding: 0;
+  line-height: 1;
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 20s linear infinite;
+}
+.marquee-item {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  padding: 24px 48px;
+  font-family: var(--font-brand);
+  font-weight: 800;
+  font-size: clamp(4rem, 8vw, 7rem);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.12);
+  white-space: nowrap;
+  line-height: 1;
+}
+.marquee-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+}
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+
+
+/* ══════ 時間戳 ══════ */
+.log-item-time {
+  font-style: italic;
+  font-size: 0.72rem;
+  letter-spacing: 1px;
+  color: var(--color-grey-mute);
+  margin-left: 8px;
+}
+
+/* ══════ 近日記錄標題列 ══════ */
+.history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 28px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 0.5px solid var(--color-line);
+}
+.history-header .panel-label {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+/* ══════ 日期選擇器 ══════ */
+.history-date-picker {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px 6px;
+  background: var(--color-bg-off);
+  border: 0.5px solid var(--color-line);
+  border-radius: 4px;
+}
+.history-date-picker button {
+  width: 20px;
+  height: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-grey);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  padding: 0;
+  line-height: 1;
+  transition: background 0.15s, color 0.15s;
+}
+.history-date-picker button:hover {
+  background: var(--color-black);
+  color: #fff;
+}
+.history-date-picker input[type="date"] {
+  background: none;
+  border: none;
+  outline: none;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--color-black);
+  padding: 2px 3px;
+  cursor: pointer;
+  width: 100px;
+}
+
+/* ══════ 近日記錄 hover + active ══════ */
+.history-item {
+  cursor: pointer;
+  padding: 12px 8px;
+  border-radius: 4px;
+  transition: background 0.15s, padding-left 0.15s;
+}
+.history-item:hover {
+  background: var(--color-bg-off);
+  padding-left: 12px;
+}
+.history-item.active {
+  background: var(--color-black);
+}
+.history-item.active .history-date,
+.history-item.active .history-cal,
+.history-item.active .history-macros {
+  color: #fff;
+}
+
+/* ══════ 最新加入的食物 ══════ */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.log-item-new {
+  border-radius: 4px;
+  animation: slideInLeft 0.4s  cubic-bezier(0.16, 1, 0.3, 1);
+}
+/* ══════ RESPONSIVE ══════ */
+@media (max-width: 1024px) {
+  #nav {
+    padding: 0 48px;
+  }
+  #nav.shrink {
+    left: 20%;
+    right: 20%;
+  }
+  .tab-bar-inner {
+    padding: 0 48px;
+  }
+  .food-layout {
+    padding: 48px 48px 100px;
+  }
+  .calc-layout {
+    padding: 64px 48px 80px;
+    gap: 48px;
+  }
+}
+@media (max-width: 768px) {
+  #nav {
+    padding: 0 24px;
+    height: 48px;
+  }
+  .nav-links {
+    display: none;
+  }
+  #nav.shrink {
+    left: 8%;
+    right: 8%;
+    padding: 8px 20px;
+  }
+  .tab-bar-inner {
+    padding: 0 24px;
+  }
+  .tab-btn {
+    margin-right: 24px;
+    padding: 16px 0;
+  }
+  .tab-en {
+    display: none;
+  }
+  .food-layout {
+    grid-template-columns: 1fr;
+    padding: 32px 24px 80px;
+  }
+  .food-deco {
+    display: none;
+  }
+  .food-search-panel {
+    padding-right: 0;
+    border-right: none;
+    border-bottom: 0.5px solid var(--color-line);
+    padding-bottom: 40px;
+    margin-bottom: 40px;
+  }
+  .food-log-panel {
+    padding: 0 0 40px;
+    border-right: none;
+    border-bottom: 0.5px solid var(--color-line);
+    margin-bottom: 40px;
+  }
+  .food-chart-panel {
+    padding-left: 0;
+  }
+  .calc-layout {
+    grid-template-columns: 1fr;
+    padding: 40px 24px 60px;
+    gap: 40px;
+  }
+  .calc-layout.reverse {
+    direction: ltr;
+  }
+  .bmi-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+  footer {
+    padding: 48px 24px 32px;
+  }
+  .footer-top {
+    grid-template-columns: 1fr 1fr;
+  }
+}

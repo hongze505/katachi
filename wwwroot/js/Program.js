@@ -1,35 +1,4 @@
-﻿/* ════════ NAV ════════ */
-const byobu = document.getElementById("byobu");
-const menuContent = document.getElementById("menu-content");
-function openMenu() {
-    byobu.style.pointerEvents = "all";
-    byobu.classList.remove("closing");
-    byobu.classList.add("open");
-    setTimeout(() => menuContent.classList.add("open"), 400);
-    document.body.style.overflow = "hidden";
-}
-function closeMenu() {
-    const closeBtn = document.querySelector(".mc-close");
-    if (closeBtn) {
-        closeBtn.classList.add("spinning");
-        setTimeout(() => closeBtn.classList.remove("spinning"), 400);
-    }
-    menuContent.classList.remove("open");
-    byobu.classList.remove("open");
-    byobu.classList.add("closing");
-    setTimeout(() => {
-        byobu.style.pointerEvents = "none";
-        byobu.classList.remove("closing");
-        document.body.style.overflow = "";
-    }, 800);
-}
-document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeMenu();
-});
-const navbar = document.getElementById("nav");
-window.addEventListener("scroll", () => {
-    navbar.classList.toggle("shrink", window.scrollY > 50);
-});
+﻿
 
 /* ════════ 表單狀態 ════════ */
 const form = {
