@@ -248,7 +248,7 @@ html.intro-active {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-image: url(../images/首頁圖.jpg); /* 加這行 */
+    background-image: url("/images/hero.jpg"); /* 加這行 */
 }
 
 
@@ -275,13 +275,13 @@ html.intro-active {
     font-family: var(--font-brand);
     font-weight: var(--weight-black);
     font-size: 8rem;
-    ;
     letter-spacing: 12px;
     color: var(--color-bg);
     line-height: 1;
 }
 
 .hero-sub {
+    font-family: var( --font-mincho);
     font-size: var(--text-label);
     letter-spacing: 5px;
     color: var(--color-grey-mute);
