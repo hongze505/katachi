@@ -10,8 +10,8 @@ namespace katachi.Models.Entities
         [Column("day_template_id")]
         public int DayTemplateId { get; set; }
 
-        [Column("exercise_id")]
-        public int ExerciseId { get; set; }
+        [Column("ex_key")]
+        public string ExKey { get; set; }
 
         [Column("sort_order")]
         public int SortOrder { get; set; }

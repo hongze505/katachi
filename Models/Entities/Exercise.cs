@@ -1,24 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace katachi.Models.Entities
 {
     [Table("exercises")]
     public class Exercise
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        [Key]
+        [Column("ex_key")]
+        public string ExKey { get; set; }
 
-        [Column("muscle_group")]
-        public string MuscleGroup { get; set; }
+        [Column("name_zh")]
+        public string NameZh { get; set; }
 
-        [Column("movement_type")]
-        public string MovementType { get; set; }
-
-        public string Equipment { get; set; }
-
-        [Column("is_compound")]
-        public bool IsCompound { get; set; }
-
-        public List<ExerciseGoal> Goals { get; set; }
+        // 導航屬性
+        public ExerciseEquipment? ExerciseEquipment { get; set; }
+        public ICollection<ExerciseGroupPct> ExerciseGroupPcts { get; set; }
+        public ICollection<ExerciseGoal> Goals { get; set; }
     }
 }

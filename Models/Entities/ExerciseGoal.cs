@@ -7,16 +7,17 @@ namespace katachi.Models.Entities
     {
         public int Id { get; set; }
 
-        [Column("exercise_id")]
-        public int ExerciseId { get; set; }
+        [Column("ex_key")]
+        public string ExKey { get; set; }
 
         public string Goal { get; set; }
         public int Sets { get; set; }
-        public string Reps { get; set; }          // ⭐ 合併後的欄位
+        public string Reps { get; set; }
 
         [Column("rest_seconds")]
         public string RestSeconds { get; set; }
 
+        // 導航屬性
         public Exercise Exercise { get; set; }
     }
 }

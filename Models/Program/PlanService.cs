@@ -29,27 +29,34 @@ namespace katachi.Models.Program
             // Step 2: 迴圈每一天
             foreach (var template in templates)
             {
-                // Step 3: 透過 day_template_exercises JOIN exercises JOIN exercise_goals
+                // Step 3: 透過新結構 JOIN
                 var exercises = _db.DayTemplateExercises
+                    .Include(dte => dte.Exercise)
+                        .ThenInclude(e => e.ExerciseEquipment)
+                            .ThenInclude(ee => ee.Equipment)
                     .Include(dte => dte.Exercise)
                         .ThenInclude(e => e.Goals)
                     .Where(dte =>
                         dte.DayTemplateId == template.Id &&
-                        req.Equipment.Contains(dte.Exercise.Equipment) &&
+                        dte.Exercise.ExerciseEquipment != null &&
+                        req.Equipment.Contains(dte.Exercise.ExerciseEquipment.Equipment.Name) &&
                         dte.Exercise.Goals.Any(g => g.Goal == req.Goal)
                     )
                     .OrderBy(dte => dte.SortOrder)
                     .Select(dte => new ExerciseItem
                     {
-                        Name = dte.Exercise.Name,
-                        MuscleGroup = dte.Exercise.MuscleGroup,
-                        Equipment = dte.Exercise.Equipment,
+                        Name = dte.Exercise.NameZh,
+                        MuscleGroup = string.Join(",",
+                            dte.Exercise.ExerciseGroupPcts
+                                .OrderByDescending(p => p.Pct)
+                                .Select(p => p.GroupKey)),
+                        Equipment = dte.Exercise.ExerciseEquipment.Equipment.Name,
                         Sets = dte.Exercise.Goals
-                                        .First(g => g.Goal == req.Goal).Sets,
+                            .First(g => g.Goal == req.Goal).Sets,
                         Reps = dte.Exercise.Goals
-                                        .First(g => g.Goal == req.Goal).Reps,
+                            .First(g => g.Goal == req.Goal).Reps,
                         RestSeconds = dte.Exercise.Goals
-                                        .First(g => g.Goal == req.Goal).RestSeconds
+                            .First(g => g.Goal == req.Goal).RestSeconds
                     })
                     .ToList();
 
@@ -63,7 +70,6 @@ namespace katachi.Models.Program
 
             return result;
         }
-
         private Prescription GetPrescription(string goal)
         {
             return goal switch
