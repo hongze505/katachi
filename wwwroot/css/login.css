@@ -24,24 +24,7 @@ body {
     height: 100vh;
 }
 
-/* ══ 左側：圖片 ══ */
-.auth-left {
-    position: relative;
-    overflow: hidden;
-}
 
-.auth-left-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    filter: brightness(0.75);
-    transition: transform 8s ease;
-}
-
-.auth-left:hover .auth-left-img {
-    transform: scale(1.04);
-}
 
 /* 左側漸層遮罩 */
 .auth-left::after {
@@ -71,11 +54,11 @@ body {
 }
 
 .auth-brand-sub {
-    font-family: var(--font-serif);
+    font-family: var(--font-mincho);
     font-weight: 200;
     font-size: 0.65rem;
     letter-spacing: 4px;
-    color: rgba(255,255,255,0.4);
+    color: var(--color-bg);
 }
 
 /* 左側底部 slogan */
@@ -88,30 +71,46 @@ body {
 }
 
 .auth-slogan-text {
-    font-family: var(--font-serif);
-    font-weight: 200;
+    writing-mode: vertical-rl; /* 直排 */
+    text-orientation: mixed;
+    font-family: var(--font-mincho);
     font-size: 1.1rem;
     line-height: 1.8;
     color: rgba(255,255,255,0.55);
-    letter-spacing: 2px;
+    letter-spacing: 4px;
 }
 
 .auth-slogan-line {
-    width: 40px;
-    height: 0.5px;
+    width: 0.5px;
+    height: 40px; /* 直排改成高度 */
     background: rgba(255,255,255,0.3);
     margin-bottom: 20px;
+    display: block;
 }
 
+
+@keyframes sloganFadeUp {
+    0% {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
 /* ══ 右側：表單 ══ */
 .auth-right {
-    background: var(--color-black);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 64px 72px;
+    width: 500px;
+    background: rgba(8, 8, 8, 0.55); /* 降低不透明度，讓背景透出來 */
+    backdrop-filter: blur(24px); /* 加強模糊，讓邊緣更柔和 */
+    -webkit-backdrop-filter: blur(24px);
+    border: 0.5px solid rgba(255, 255, 255, 0.06); /* 邊框更淡 */
+    border-radius: 20px; /* 圓角更小，更硬朗 */
+    padding: 48px 40px;
     position: relative;
-    border-left: 0.5px solid rgba(255,255,255,0.06);
+    animation: slideInFromRight 1.2s 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 /* 關閉按鈕 */
@@ -224,11 +223,12 @@ body {
 
 /* 標題 */
 .auth-title {
+    padding-bottom: 32px;
     font-family: var(--font-brand);
     font-weight: 800;
     font-size: 2.6rem;
     letter-spacing: 3px;
-    color: #ffffff;
+    color: var(--color-bg);
     line-height: 1;
     margin-bottom: 8px;
 }
@@ -249,11 +249,12 @@ body {
 }
 
 .form-label {
+    font-family: var(--font-serif);
     display: block;
     font-size: 0.8rem;
     letter-spacing: 4px;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.3);
+    color: var(--color-bg-off);
     margin-bottom: 8px;
 }
 
@@ -261,6 +262,7 @@ body {
     width: 100%;
     background: rgba(255,255,255,0.04);
     border: none;
+    border-radius:5px;
     border-bottom: 0.5px solid rgba(255,255,255,0.12);
     color: #ffffff;
     font-family: var(--font-sans);
@@ -426,42 +428,70 @@ body {
         color: rgba(255,255,255,0.3);
         text-decoration: underline;
     }
-/* ══ 進場屏風 ══ */
-#auth-enter-left,
-#auth-enter-right {
-    position: fixed;
+
+
+/* 整體版面改成全螢幕背景+右側表單 */
+.auth-layout {
+    position: relative;
+    min-height: 100vh;
+    background-image: url('/images/login2.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 5%
+}
+
+/* 左側圖片區塊隱藏，改用背景圖 */
+.auth-left {
+    display: none;
+}
+
+
+
+@keyframes slideInFromRight {
+    0% {
+        transform: translateX(60px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.auth-left-overlay {
+    position: absolute;
     top: 0;
+    left: 0;
     bottom: 0;
     width: 50%;
-    background: #0a0a0a;
-    z-index: 10;
-    transition: transform 0.75s cubic-bezier(0.76, 0, 0.24, 1);
+    z-index: 1;
+    pointer-events: none;
 }
 
-#auth-enter-left {
-    left: 0;
-    transform: translateX(0);
+    .auth-left-overlay .auth-brand {
+        position: absolute;
+        top: 48px;
+        left: 48px;
+    }
+
+    .auth-left-overlay .auth-slogan {
+        position: absolute;
+        bottom: 48px;
+        left: 48px;
+        opacity: 0;
+        animation: sloganFadeUp 0.8s 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+/* ── I → 啞鈴 SVG ── */
+.dumbbell-i {
+    display: inline-flex;
+    align-items: flex-end;
 }
 
-#auth-enter-right {
-    right: 0;
-    transform: translateX(0);
-}
-
-#auth-enter-left.enter {
-    transform: translateX(-100%);
-}
-
-#auth-enter-right.enter {
-    transform: translateX(100%);
-}
-
-/* 表單內容預設隱藏，屏風展開後才出現 */
-#auth-form-wrap {
-    opacity: 0;
-    transition: opacity 0.4s ease;
-}
-
-    #auth-form-wrap.visible {
-        opacity: 1;
+    .dumbbell-i svg {
+        height: 0.78em;
+        width: auto;
     }

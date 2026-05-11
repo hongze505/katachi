@@ -7,7 +7,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const left = document.getElementById("auth-enter-left");
     const right = document.getElementById("auth-enter-right");
-    const form = document.getElementById("auth-form-wrap");
+   
 
     // 用 setTimeout 確保瀏覽器渲染完才加 class
     setTimeout(() => {

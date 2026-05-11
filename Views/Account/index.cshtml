@@ -9,7 +9,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KATACHI — 會員登入</title>
-    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Noto+Sans+JP:wght@100;200;300&family=Noto+Serif+JP:wght@200;300&family=Cormorant+Garamond:ital,wght@0,300;1,200;1,300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Cormorant+Garamond:ital,wght@0,300;1,200;1,300&family=Noto+Sans+JP:wght@100;200;300&family=Noto+Serif+JP:wght@200;300;400&display=swap"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/login.css" />
     <script src="~/js/login.js" defer></script>
@@ -17,13 +21,23 @@
 <body>
     <div id="auth-enter-left"></div>
     <div id="auth-enter-right"></div>
-    <div class="auth-layout">
+    <div id="auth-form-wrap" class="auth-layout">
 
         <!-- 左側：圖片 -->
-        <div class="auth-left">
-            <img class="auth-left-img" src="~/images/login.jpg" alt="KATACHI background" />
+        <div class="auth-left-overlay">
             <div class="auth-brand">
-                <a class="auth-brand-logo" href="/">KATACHI</a>
+                <a class="auth-brand-logo" href="/">
+                    KATACH<span class="dumbbell-i">
+                    <svg viewBox="0 0 28 80" fill="none"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <rect x="2" y="0" width="24" height="7" rx="1.5" fill="currentColor" />
+                        <rect x="0" y="9" width="28" height="9" rx="2" fill="currentColor" />
+                        <rect x="11" y="20" width="6" height="40" fill="currentColor" />
+                        <rect x="0" y="62" width="28" height="9" rx="2" fill="currentColor" />
+                        <rect x="2" y="73" width="24" height="7" rx="1.5" fill="currentColor" />
+                    </svg>
+                </span>
+            </a>
                 <span class="auth-brand-sub">形 · Training Encyclopedia</span>
             </div>
             <div class="auth-slogan">
@@ -57,22 +71,22 @@
 
             <!-- 登入面板 -->
             <div class="auth-panel @(Model.ActiveTab == "login" ? "show" : "")" id="panel-login">
-                <div class="auth-title">Welcome Back</div>
-                <div class="auth-subtitle">登入你的 KATACHI 帳號</div>
+                <div class="auth-title">Sign In</div>
+                
 
                 <form asp-controller="Account" asp-action="Login" method="post">
                     <div asp-validation-summary="ModelOnly" class="auth-error"
                          style="color:#c17f5a;font-size:0.7rem;margin-bottom:16px;"></div>
 
                     <div class="form-group">
-                        <label class="form-label">電子郵件</label>
-                        <input asp-for="Login.Email" class="form-input" placeholder="example@email.com" />
+                    <label class="form-label">Email</label>
+                        <input asp-for="Login.Email" class="form-input"  />
                         <span asp-validation-for="Login.Email" style="color:#c17f5a;font-size:0.7rem;"></span>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">密碼</label>
-                        <input asp-for="Login.Password" class="form-input" type="password" placeholder="••••••••" />
+                    <label class="form-label">password</label>
+                        <input asp-for="Login.Password" class="form-input" type="password"  />
                         <span asp-validation-for="Login.Password" style="color:#c17f5a;font-size:0.7rem;"></span>
                         <div class="form-row-extra">
                             <a class="form-link" href="#">忘記密碼？</a>
@@ -104,7 +118,7 @@
                          style="color:#c17f5a;font-size:0.7rem;margin-bottom:16px;"></div>
 
                     <div class="form-group">
-                        <label class="form-label">姓名</label>
+                        <label class="form-label">Name</label>
                         <input asp-for="Register.Name" class="form-input" placeholder="Your Name" />
                         <span asp-validation-for="Register.Name" style="color:#c17f5a;font-size:0.7rem;"></span>
                     </div>
