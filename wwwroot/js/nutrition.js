@@ -15,158 +15,29 @@ function switchTab(name) {
 }
 
 /* ════════ 假資料 TODO: fetch('/api/foods') ════════ */
-const FOOD_DB = [
-  {
-    id: 1,
-    name: "雞胸肉",
-    en: "Chicken Breast",
-    cal: 165,
-    protein: 31,
-    carbs: 0,
-    fat: 3.6,
-    unit: "100g",
-  },
-  {
-    id: 2,
-    name: "白飯",
-    en: "White Rice",
-    cal: 130,
-    protein: 2.7,
-    carbs: 28,
-    fat: 0.3,
-    unit: "100g",
-  },
-  {
-    id: 3,
-    name: "水煮蛋",
-    en: "Boiled Egg",
-    cal: 155,
-    protein: 13,
-    carbs: 1.1,
-    fat: 11,
-    unit: "100g",
-  },
-  {
-    id: 4,
-    name: "花椰菜",
-    en: "Broccoli",
-    cal: 34,
-    protein: 2.8,
-    carbs: 7,
-    fat: 0.4,
-    unit: "100g",
-  },
-  {
-    id: 5,
-    name: "燕麥片",
-    en: "Oats",
-    cal: 389,
-    protein: 17,
-    carbs: 66,
-    fat: 7,
-    unit: "100g",
-  },
-  {
-    id: 6,
-    name: "牛奶",
-    en: "Whole Milk",
-    cal: 61,
-    protein: 3.2,
-    carbs: 4.8,
-    fat: 3.3,
-    unit: "100ml",
-  },
-  {
-    id: 7,
-    name: "鮭魚",
-    en: "Salmon",
-    cal: 208,
-    protein: 20,
-    carbs: 0,
-    fat: 13,
-    unit: "100g",
-  },
-  {
-    id: 8,
-    name: "地瓜",
-    en: "Sweet Potato",
-    cal: 86,
-    protein: 1.6,
-    carbs: 20,
-    fat: 0.1,
-    unit: "100g",
-  },
-  {
-    id: 9,
-    name: "希臘優格",
-    en: "Greek Yogurt",
-    cal: 59,
-    protein: 10,
-    carbs: 3.6,
-    fat: 0.4,
-    unit: "100g",
-  },
-  {
-    id: 10,
-    name: "花生醬",
-    en: "Peanut Butter",
-    cal: 588,
-    protein: 25,
-    carbs: 20,
-    fat: 50,
-    unit: "100g",
-  },
-  {
-    id: 11,
-    name: "香蕉",
-    en: "Banana",
-    cal: 89,
-    protein: 1.1,
-    carbs: 23,
-    fat: 0.3,
-    unit: "100g",
-  },
-  {
-    id: 12,
-    name: "豆腐",
-    en: "Tofu",
-    cal: 76,
-    protein: 8,
-    carbs: 1.9,
-    fat: 4.8,
-    unit: "100g",
-  },
-  {
-    id: 13,
-    name: "全麥吐司",
-    en: "Whole Wheat Toast",
-    cal: 247,
-    protein: 13,
-    carbs: 41,
-    fat: 4.2,
-    unit: "100g",
-  },
-  {
-    id: 14,
-    name: "酪梨",
-    en: "Avocado",
-    cal: 160,
-    protein: 2,
-    carbs: 9,
-    fat: 15,
-    unit: "100g",
-  },
-  {
-    id: 15,
-    name: "蛋白粉",
-    en: "Whey Protein",
-    cal: 382,
-    protein: 80,
-    carbs: 8,
-    fat: 4,
-    unit: "100g",
-  },
-];
+let FOOD_DB = [];
+
+async function loadFoods() {
+    try {
+        const res = await fetch('/Nutrition/GetFoods');
+        FOOD_DB = await res.json();
+        // 欄位名稱對應後端回傳的 camelCase
+        FOOD_DB = FOOD_DB.map(f => ({
+            id: f.id,
+            name: f.name,
+            en: f.nameEn ?? "",
+            cal: f.calories,
+            protein: f.protein,
+            carbs: f.carbs,
+            fat: f.fat,
+            unit: f.unit
+        }));
+        renderFoodList(FOOD_DB);
+    } catch (err) {
+        console.error(err);
+        showToast("食物資料載入失敗");
+    }
+}
 
 let foodLog = [];
 let tdeeBase = 0; // TDEE 維持值
@@ -252,14 +123,40 @@ async function saveLog() {
     fat: Math.round(t.fat),
     savedAt: Date.now(),
   };
-  if (isLoggedIn()) {
-    // TODO: fetch('/api/nutrition/history', { method:'POST', ... })
-  } else {
-    const history = getHistory();
-    const filtered = history.filter((h) => h.date !== entry.date);
-    filtered.unshift(entry);
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(filtered.slice(0, 7)));
-  }
+    try {
+        const dateKey = document.getElementById("history-date-picker")?.value
+            || _fmtDate(new Date());
+
+        const items = foodLog.map(e => ({
+            foodId: e.id,
+            grams: e.grams
+        }));
+
+        const res = await fetch('/Nutrition/SaveRecords', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                userId: 1,  // 之後換成登入的 user_id
+                date: dateKey,
+                items: items
+            })
+        });
+
+        if (!res.ok) {
+            showToast("雲端儲存失敗，改存本機");
+            const history = getHistory();
+            const filtered = history.filter((h) => h.date !== entry.date);
+            filtered.unshift(entry);
+            localStorage.setItem(HISTORY_KEY, JSON.stringify(filtered.slice(0, 7)));
+        }
+    } catch (err) {
+        console.error(err);
+        // 網路失敗就存 localStorage
+        const history = getHistory();
+        const filtered = history.filter((h) => h.date !== entry.date);
+        filtered.unshift(entry);
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(filtered.slice(0, 7)));
+    }
   _saveTodayLog();
   showToast("今日記錄已儲存 ✓");
   renderHistory();
@@ -683,9 +580,44 @@ function applyTDEETarget() {
   showToast(`已套用 TDEE，請選擇目標`);
 }
 
-/* ════════ 初始化 ════════ */
-renderFoodList(FOOD_DB);
-renderHistory();
+async function saveTDEEToProfile() {
+    if (!tdeeBase) {
+        showToast("請先計算 TDEE");
+        return;
+    }
+    const gender = document.querySelector('input[name="tdee-gender"]:checked').value;
+    const age = parseFloat(document.getElementById("tdee-age").value);
+    const height = parseFloat(document.getElementById("tdee-height").value);
+    const weight = parseFloat(document.getElementById("tdee-weight").value);
+    const activity = document.getElementById("tdee-activity").value;
 
-const _picker = document.getElementById("history-date-picker");
-if (_picker) _picker.value = _fmtDate(new Date());
+    try {
+        const res = await fetch('/Nutrition/SaveProfile', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                gender, age,
+                heightCm: height,
+                weightKg: weight,
+                activity
+            })
+        });
+        if (res.ok) {
+            showToast("已儲存至會員資料 ✓");
+        } else {
+            showToast("儲存失敗，請稍後再試");
+        }
+    } catch (err) {
+        console.error(err);
+        showToast("網路錯誤");
+    }
+}
+
+/* ════════ 初始化 ════════ */
+// 改成 async 初始化
+(async () => {
+    await loadFoods();
+    renderHistory();
+    const _picker = document.getElementById("history-date-picker");
+    if (_picker) _picker.value = _fmtDate(new Date());
+})();

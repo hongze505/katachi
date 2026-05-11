@@ -1,5 +1,7 @@
-using Microsoft.EntityFrameworkCore;
 using katachi.Models;
+using katachi.Models.Nutrition;
+using katachi.Models.Program;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,8 @@ builder.Services.AddDbContext<KatachiDbContext>(options =>
         builder.Configuration.GetConnectionString("KatachiDB")
     )
 );
+builder.Services.AddScoped<NutritionService>();
+builder.Services.AddScoped<PlanService>();
 
 var app = builder.Build();
 

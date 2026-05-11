@@ -1,0 +1,467 @@
+﻿/*
+ * KATACHI — login.css
+ * 使用前請確認已引入 tokens.css
+ */
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--color-black);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* ── 整體版面 ── */
+.auth-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 100vh;
+}
+
+/* ══ 左側：圖片 ══ */
+.auth-left {
+    position: relative;
+    overflow: hidden;
+}
+
+.auth-left-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: brightness(0.75);
+    transition: transform 8s ease;
+}
+
+.auth-left:hover .auth-left-img {
+    transform: scale(1.04);
+}
+
+/* 左側漸層遮罩 */
+.auth-left::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient( 135deg, rgba(24,24,24,0.3) 0%, transparent 50%, rgba(24,24,24,0.6) 100% );
+}
+
+/* 左側品牌覆蓋 */
+.auth-brand {
+    position: absolute;
+    top: 48px;
+    left: 48px;
+    z-index: 2;
+}
+
+.auth-brand-logo {
+    font-family: var(--font-brand);
+    font-weight: 800;
+    font-size: 1.6rem;
+    letter-spacing: 6px;
+    color: #ffffff;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.auth-brand-sub {
+    font-family: var(--font-serif);
+    font-weight: 200;
+    font-size: 0.65rem;
+    letter-spacing: 4px;
+    color: rgba(255,255,255,0.4);
+}
+
+/* 左側底部 slogan */
+.auth-slogan {
+    position: absolute;
+    bottom: 48px;
+    left: 48px;
+    z-index: 2;
+    max-width: 320px;
+}
+
+.auth-slogan-text {
+    font-family: var(--font-serif);
+    font-weight: 200;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 2px;
+}
+
+.auth-slogan-line {
+    width: 40px;
+    height: 0.5px;
+    background: rgba(255,255,255,0.3);
+    margin-bottom: 20px;
+}
+
+/* ══ 右側：表單 ══ */
+.auth-right {
+    background: var(--color-black);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 64px 72px;
+    position: relative;
+    border-left: 0.5px solid rgba(255,255,255,0.06);
+}
+
+/* 關閉按鈕 */
+.auth-close {
+    position: absolute;
+    top: 28px;
+    left: 48px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-sans);
+    font-size: 0.58rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+    .auth-close:hover {
+        color: #ffffff;
+    }
+
+.auth-close-x {
+    width: 18px;
+    height: 18px;
+    position: relative;
+}
+
+    .auth-close-x::before,
+    .auth-close-x::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        height: 1.5px;
+        background: currentColor;
+        transform-origin: center;
+    }
+
+    .auth-close-x::before {
+        transform: rotate(45deg);
+    }
+
+    .auth-close-x::after {
+        transform: rotate(-45deg);
+    }
+
+/* 右側頂部裝飾文字 */
+.auth-deco-num {
+    position: absolute;
+    top: 40px;
+    right: 56px;
+    font-family: var(--font-brand);
+    font-weight: 800;
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+    color: rgba(255,255,255,0.08);
+}
+
+/* ── Tab 切換 ── */
+.auth-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 48px;
+    border-bottom: 0.5px solid rgba(255,255,255,0.08);
+}
+
+.auth-tab {
+    background: transparent;
+    border: none;
+    padding: 10px 0;
+    margin-right: 36px;
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: 0.78rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    cursor: pointer;
+    border-bottom: 1.5px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.25s, border-color 0.25s;
+}
+
+    .auth-tab.active {
+        color: #ffffff;
+        border-bottom-color: var(--orange, #c17f5a);
+    }
+
+/* ── 表單面板 ── */
+.auth-panel {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.35s cubic-bezier(0.16,1,0.3,1), transform 0.35s cubic-bezier(0.16,1,0.3,1);
+    pointer-events: none;
+    display: block;
+    position: absolute;
+    width: calc(100% - 144px);
+}
+
+    .auth-panel.show {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: all;
+        position: relative;
+        width: 100%;
+    }
+
+/* 標題 */
+.auth-title {
+    font-family: var(--font-brand);
+    font-weight: 800;
+    font-size: 2.6rem;
+    letter-spacing: 3px;
+    color: #ffffff;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.auth-subtitle {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 200;
+    font-size: 0.78rem;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.25);
+    margin-bottom: 40px;
+}
+
+/* 輸入框 */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.8rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 8px;
+}
+
+.form-input {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: none;
+    border-bottom: 0.5px solid rgba(255,255,255,0.12);
+    color: #ffffff;
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    padding: 12px 0;
+    outline: none;
+    transition: border-color 0.25s;
+    -webkit-appearance: none;
+}
+
+    .form-input::placeholder {
+        color: rgba(255,255,255,0.15);
+    }
+
+    .form-input:focus {
+        border-bottom-color: #c17f5a;
+    }
+
+/* 輔助文字行 */
+.form-row-extra {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 6px;
+}
+
+.form-link {
+    font-size: 0.55rem;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.25);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+    .form-link:hover {
+        color: rgba(255,255,255,0.6);
+    }
+
+/* 主按鈕 */
+.btn-auth {
+    width: 100%;
+    margin-top: 32px;
+    padding: 16px;
+    background: transparent;
+    border: 0.5px solid rgba(255,255,255,0.3);
+    color: #ffffff;
+    font-family: var(--font-brand);
+    font-weight: 800;
+    font-size: 1rem;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, color 0.3s;
+}
+
+    .btn-auth::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: #ffffff;
+        transform: translateX(-101%);
+        transition: transform 0.45s cubic-bezier(0.76,0,0.24,1);
+    }
+
+    .btn-auth:hover {
+        border-color: #ffffff;
+        color: var(--color-black, #181818);
+    }
+
+        .btn-auth:hover::before {
+            transform: translateX(0);
+        }
+
+    .btn-auth span {
+        position: relative;
+        z-index: 1;
+    }
+
+/* 分隔線 */
+.auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 24px 0;
+}
+
+.auth-divider-line {
+    flex: 1;
+    height: 0.5px;
+    background: rgba(255,255,255,0.08);
+}
+
+.auth-divider-text {
+    font-size: 0.55rem;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.2);
+}
+
+/* Google 按鈕 */
+.btn-google {
+    width: 100%;
+    padding: 13px;
+    background: transparent;
+    border: 0.5px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.4);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: 0.72rem;
+    letter-spacing: 3px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: border-color 0.2s, color 0.2s;
+}
+
+    .btn-google:hover {
+        border-color: rgba(255,255,255,0.3);
+        color: rgba(255,255,255,0.7);
+    }
+
+/* 底部切換文字 */
+.auth-switch {
+    margin-top: 32px;
+    font-size: 0.58rem;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.2);
+    text-align: center;
+}
+
+    .auth-switch button {
+        background: none;
+        border: none;
+        color: rgba(255,255,255,0.5);
+        cursor: pointer;
+        font-family: var(--font-sans);
+        font-size: 0.58rem;
+        letter-spacing: 2px;
+        text-decoration: underline;
+        padding: 0 4px;
+        transition: color 0.2s;
+    }
+
+        .auth-switch button:hover {
+            color: #ffffff;
+        }
+
+/* 條款文字 */
+.auth-terms {
+    margin-top: 16px;
+    font-size: 0.52rem;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.15);
+    line-height: 1.8;
+    text-align: center;
+}
+
+    .auth-terms a {
+        color: rgba(255,255,255,0.3);
+        text-decoration: underline;
+    }
+/* ══ 進場屏風 ══ */
+#auth-enter-left,
+#auth-enter-right {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    background: #0a0a0a;
+    z-index: 10;
+    transition: transform 0.75s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+#auth-enter-left {
+    left: 0;
+    transform: translateX(0);
+}
+
+#auth-enter-right {
+    right: 0;
+    transform: translateX(0);
+}
+
+#auth-enter-left.enter {
+    transform: translateX(-100%);
+}
+
+#auth-enter-right.enter {
+    transform: translateX(100%);
+}
+
+/* 表單內容預設隱藏，屏風展開後才出現 */
+#auth-form-wrap {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+    #auth-form-wrap.visible {
+        opacity: 1;
+    }

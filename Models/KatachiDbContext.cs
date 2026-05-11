@@ -19,6 +19,10 @@ namespace katachi.Models
         public DbSet<MuscleGroup> MuscleGroups { get; set; }
         public DbSet<Muscle> Muscles { get; set; }
 
+        public DbSet<User> Users { get; set; }
+        public DbSet<Food> Foods { get; set; }
+        public DbSet<NutritionRecord> NutritionRecords { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Exercise PK 是字串
@@ -80,6 +84,18 @@ namespace katachi.Models
                 .HasOne(dte => dte.DayTemplate)
                 .WithMany()
                 .HasForeignKey(dte => dte.DayTemplateId);
+
+            // NutritionRecord -> User
+            modelBuilder.Entity<NutritionRecord>()
+                .HasOne(r => r.User)
+                .WithMany(u => u.NutritionRecords)
+                .HasForeignKey(r => r.UserId);
+
+            // NutritionRecord -> Food
+            modelBuilder.Entity<NutritionRecord>()
+                .HasOne(r => r.Food)
+                .WithMany(f => f.NutritionRecords)
+                .HasForeignKey(r => r.FoodId);
         }
     }
 }

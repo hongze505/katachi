@@ -1,0 +1,154 @@
+﻿@model katachi.Models.Account.AuthViewModel
+@{
+    Layout = null;
+    ViewBag.Title = "KATACHI — 會員登入";
+}
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KATACHI — 會員登入</title>
+    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Noto+Sans+JP:wght@100;200;300&family=Noto+Serif+JP:wght@200;300&family=Cormorant+Garamond:ital,wght@0,300;1,200;1,300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/login.css" />
+    <script src="~/js/login.js" defer></script>
+</head>
+<body>
+    <div id="auth-enter-left"></div>
+    <div id="auth-enter-right"></div>
+    <div class="auth-layout">
+
+        <!-- 左側：圖片 -->
+        <div class="auth-left">
+            <img class="auth-left-img" src="~/images/login.jpg" alt="KATACHI background" />
+            <div class="auth-brand">
+                <a class="auth-brand-logo" href="/">KATACHI</a>
+                <span class="auth-brand-sub">形 · Training Encyclopedia</span>
+            </div>
+            <div class="auth-slogan">
+                <div class="auth-slogan-line"></div>
+                <p class="auth-slogan-text">
+                    精準的訓練，<br>始於對身體的理解。<br>每一組動作都應有其意義。
+                </p>
+            </div>
+        </div>
+
+        <!-- 右側：表單 -->
+        <div class="auth-right">
+            <div class="auth-deco-num">MEMBER · ACCESS</div>
+
+            <a class="auth-close" href="/" title="回到首頁">
+                <span class="auth-close-x"></span>
+                Close
+            </a>
+
+            <!-- Tab 切換 -->
+            <div class="auth-tabs">
+                <button class="auth-tab @(Model.ActiveTab == "login" ? "active" : "")"
+                        onclick="switchTab('login', this)">
+                    登入
+                </button>
+                <button class="auth-tab @(Model.ActiveTab == "register" ? "active" : "")"
+                        onclick="switchTab('register', this)">
+                    註冊
+                </button>
+            </div>
+
+            <!-- 登入面板 -->
+            <div class="auth-panel @(Model.ActiveTab == "login" ? "show" : "")" id="panel-login">
+                <div class="auth-title">Welcome Back</div>
+                <div class="auth-subtitle">登入你的 KATACHI 帳號</div>
+
+                <form asp-controller="Account" asp-action="Login" method="post">
+                    <div asp-validation-summary="ModelOnly" class="auth-error"
+                         style="color:#c17f5a;font-size:0.7rem;margin-bottom:16px;"></div>
+
+                    <div class="form-group">
+                        <label class="form-label">電子郵件</label>
+                        <input asp-for="Login.Email" class="form-input" placeholder="example@email.com" />
+                        <span asp-validation-for="Login.Email" style="color:#c17f5a;font-size:0.7rem;"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">密碼</label>
+                        <input asp-for="Login.Password" class="form-input" type="password" placeholder="••••••••" />
+                        <span asp-validation-for="Login.Password" style="color:#c17f5a;font-size:0.7rem;"></span>
+                        <div class="form-row-extra">
+                            <a class="form-link" href="#">忘記密碼？</a>
+                        </div>
+                    </div>
+
+                    <div style="display:flex;align-items:center;gap:8px;margin-top:8px;">
+                        <input asp-for="Login.RememberMe" type="checkbox" />
+                        <label asp-for="Login.RememberMe"
+                               style="color:rgba(255,255,255,0.3);font-size:0.7rem;letter-spacing:2px;">記住我</label>
+                    </div>
+
+                    <button type="submit" class="btn-auth"><span>登入</span></button>
+                </form>
+
+                <div class="auth-switch">
+                    還沒有帳號？
+                    <button onclick="switchTab('register', document.querySelectorAll('.auth-tab')[1])">立即註冊</button>
+                </div>
+            </div>
+
+            <!-- 註冊面板 -->
+            <div class="auth-panel @(Model.ActiveTab == "register" ? "show" : "")" id="panel-register">
+                <div class="auth-title">Join Us</div>
+           
+
+                <form asp-controller="Account" asp-action="Register" method="post">
+                    <div asp-validation-summary="ModelOnly" class="auth-error"
+                         style="color:#c17f5a;font-size:0.7rem;margin-bottom:16px;"></div>
+
+                    <div class="form-group">
+                        <label class="form-label">姓名</label>
+                        <input asp-for="Register.Name" class="form-input" placeholder="Your Name" />
+                        <span asp-validation-for="Register.Name" style="color:#c17f5a;font-size:0.7rem;"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">電子郵件</label>
+                        <input asp-for="Register.Email" class="form-input" placeholder="example@email.com" />
+                        <span asp-validation-for="Register.Email" style="color:#c17f5a;font-size:0.7rem;"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">帳號</label>
+                        <input asp-for="Register.Username" class="form-input" placeholder="username" />
+                        <span asp-validation-for="Register.Username" style="color:#c17f5a;font-size:0.7rem;"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">密碼</label>
+                        <input asp-for="Register.Password" class="form-input" type="password" placeholder="至少 6 位" />
+                        <span asp-validation-for="Register.Password" style="color:#c17f5a;font-size:0.7rem;"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">確認密碼</label>
+                        <input asp-for="Register.ConfirmPassword" class="form-input" type="password" placeholder="再輸入一次" />
+                        <span asp-validation-for="Register.ConfirmPassword" style="color:#c17f5a;font-size:0.7rem;"></span>
+                    </div>
+
+                    <button type="submit" class="btn-auth"><span>建立帳號</span></button>
+
+                    <div class="auth-terms">
+                        註冊即代表你同意 <a href="#">服務條款</a> 及 <a href="#">隱私政策</a>
+                    </div>
+                </form>
+
+                <div class="auth-switch">
+                    已有帳號？
+                    <button onclick="switchTab('login', document.querySelectorAll('.auth-tab')[0])">立即登入</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</body>
+</html>

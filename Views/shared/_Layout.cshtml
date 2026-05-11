@@ -41,14 +41,14 @@
                     </a>
                 </li>
                 <li class="mc-item">
-                    <a class="mc-link" href="/Plan/Index" onclick="closeMenu()">
+                    <a class="mc-link" asp-controller="Plan" asp-action="Index" onclick="closeMenu()">
                         <span class="mc-num">03</span>
                         <span class="mc-text-wrap"><span class="mc-text">訓練計畫</span></span>
                         <span class="mc-en">Programs</span>
                     </a>
                 </li>
                 <li class="mc-item">
-                    <a class="mc-link" href="/Nutrition/NutritionIndex" onclick="closeMenu()">
+                    <a class="mc-link" asp-controller="Nutrition" asp-action="Index" onclick="closeMenu()">
                         <span class="mc-num">04</span>
                         <span class="mc-text-wrap"><span class="mc-text">飲食計算</span></span>
                         <span class="mc-en">Nutrition</span>
@@ -76,7 +76,7 @@
 
 	<!-- ══════ NAV ══════ -->
     <nav id="nav">
-        <a class="nav-logo" href="#">
+        <a class="nav-logo" asp-controller="Home" asp-action="Index">
             KATACH<span class="dumbbell-i">
             <svg viewBox="0 0 28 80" fill="none"
                  xmlns="http://www.w3.org/2000/svg">
@@ -89,7 +89,7 @@
         </span>
     </a>
     <div class="nav-right">
-        <a class="nav-user" href="../login/Log_in.html" title="會員登入">
+        <a class="nav-user" asp-controller="Account" asp-action="Index" title="會員登入">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"
                  aria-label="會員登入">
                 <circle cx="9" cy="6" r="3.25" stroke="currentColor" stroke-width="2" />
