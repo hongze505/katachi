@@ -1,0 +1,278 @@
+/*
+trainingStats.css - 訓練統計（PAGE 2）
+
+包含：
+- 頁面控制列（月份 / 年份 / 指標 / 動作切換）
+- 分段控制器（月 / 年 / 重量 / 次數 / 訓練量）
+- 圖表雙欄布局（Chart.js）
+- 本月摘要對比表（三欄統計）
+- 趨勢比較（上升 / 下降箭頭）
+*/
+
+/* PAGE 2 */
+/* 控制列：三欄 grid — 左（動作選單）/ 中（指標切換，置中）/ 右（月年切換） */
+.p2-ctrl {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    background: var(--color-bg);
+}
+
+/* 右側按鈕群靠右對齊（justify-self 將元素推到欄位最右側） */
+.p2-ctrl-right {
+    justify-self: end;
+    display: flex;
+    gap: 8px;
+}
+
+/* 分段控制器（月 / 年 / 重量 / 次數 / 訓練量 切換） */
+.seg {
+    display: flex;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+/* 分段按鈕（月 / 年 / 重量 等選項） */
+.seg-btn {
+    padding: 9px 16px;
+    font-size: 17px;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: var(--text-muted);
+    transition: all var(--dur-instant) var(--ease-expo);
+}
+
+    /* 分段按鈕已選中：黑底白字 */
+    .seg-btn.active {
+        background: var(--accent);
+        color: var(--color-white);
+        font-weight: 700;
+    }
+
+/* 下拉選單（選擇動作 / 月份 / 年份）；月份與年份選單依檢視模式互相切換顯示 */
+.exsel,
+.msel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    padding: 9px 14px;
+    font-size: 17px;
+    font-family: var(--font-sans);
+    cursor: pointer;
+}
+
+/* 控制列內的動作選單：靠左不撐滿欄位，字級與間距放大為原本 1.5 倍 */
+.p2-ctrl .exsel {
+    justify-self: start;
+    font-size: 18px;
+    padding: 7px 21px;
+}
+
+/* 下拉選單 focus：移除預設外框，改顯示黑色邊框 */
+.exsel:focus,
+.msel:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+/* Page 2 雙欄圖表區域 */
+.p2-charts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--g);
+    margin-bottom: var(--g);
+}
+
+@media (max-width: 1000px) {
+    .p2-charts {
+        grid-template-columns: 1fr;
+    }
+
+    .p2-ctrl {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+    }
+
+    .p2-ctrl-right {
+        justify-self: start;
+    }
+}
+
+.chart-card {
+    padding: 20px 22px;
+    min-width: 0;
+}
+
+/* 比基底略緊 */
+
+/* 圖表卡片標題列（標題 + 月份選單） */
+.chart-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+/* 圖表卡片標題文字（大寫英文追蹤名稱） */
+.chart-card-title {
+    font-family: var(--font-sans);
+    font-size: 18px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+}
+
+/* 本月摘要表格（三欄對比：最高重量 / 上期比較 / 歷史最高） */
+.p2-summary {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+}
+
+/* 標題列（本月摘要 + 計算方式同行） */
+.p2-sum-topbar {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+/* 計算方式說明 */
+.p2-sum-formula {
+    flex: 1;
+    text-align: center;
+    font-size: 17px;
+    color: var(--text-dim);
+    font-family: var(--font-sans);
+    letter-spacing: 2px;
+}
+
+/* 摘要 2×2 grid（四個器材分組卡片） */
+.p2-sum-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* 單一器材分組卡片 */
+.p2-eq-group {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px 20px;
+}
+
+/* 器材標題（槓鈴 / 啞鈴 / 徒手 / 機械） */
+.p2-eq-header {
+    font-size: 15px;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+    margin-bottom: 6px;
+}
+
+/* 欄位標題列（上期 / 本期 / 歷史最高 小字） */
+.p2-eq-col-hdr {
+    display: grid;
+    grid-template-columns: 1fr 52px 60px 52px 80px;
+    gap: 40px;
+    padding: 4px 0 6px;
+    font-size: 14px;
+    color: var(--text-dim);
+    text-align: right;
+    font-family: var(--font-sans);
+    letter-spacing: 0.5px;
+}
+
+/* 單一動作列（5欄：名稱 | 上期 | 趨勢 | 本期 | 歷史最高） */
+.p2-eq-row {
+    display: grid;
+    grid-template-columns: 1fr 52px 60px 52px 80px;
+    align-items: center;
+    gap: 40px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 17px;
+}
+
+    .p2-eq-row:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+/* 動作名稱 */
+.p2-eq-name {
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 上期紀錄 */
+.p2-eq-prev {
+    text-align: right;
+    color: var(--text-dim);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+/* 趨勢箭頭區（置中） */
+.p2-eq-trend {
+    font-size: 15px;
+    text-align: center;
+}
+
+/* 本期紀錄 */
+.p2-eq-cur {
+    font-family: var(--font-sans);
+    color: var(--accent);
+    font-size: 17px;
+    font-weight: 600;
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* 歷史最高 */
+.p2-eq-pr {
+    font-family: var(--font-sans);
+    color: var(--text-dim);
+    font-size: 16px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* 單位（kg / 次 / 下） */
+.p2-eq-unit {
+    font-size: 14px;
+    color: var(--text-dim);
+    font-weight: 400;
+}
+
+/* 持平（無變化） */
+.p2-eq-neutral {
+    color: var(--text-dim);
+}
+
+/* 上升趨勢箭頭：綠色 */
+.arrow-up {
+    color: #3a8a5a;
+    font-size: 15px;
+}
+
+/* 下降趨勢箭頭：紅色 */
+.arrow-dn {
+    color: var(--danger);
+    font-size: 15px;
+}

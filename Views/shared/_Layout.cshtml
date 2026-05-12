@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" />
 	<script src="~/js/layout.js" defer></script>
-	@RenderSection("styles", required: false)
+    @await RenderSectionAsync("styles", required: false)
 </head>
 <body>
 
@@ -27,16 +27,16 @@
         <div class="mc-left">
             <ul class="mc-links">
                 <li class="mc-item">
-                    <a class="mc-link" href="~/muscle-map/exercise.html" onclick="closeMenu()">
+                    <a class="mc-link" asp-controller="MuscleMap" asp-action="Index" onclick="closeMenu()">
                         <span class="mc-num">01</span>
                         <span class="mc-text-wrap"><span class="mc-text">肌肉百科</span></span>
                         <span class="mc-en">Muscle Wiki</span>
                     </a>
                 </li>
                 <li class="mc-item">
-                    <a class="mc-link" href="#" onclick="closeMenu()">
+                    <a class="mc-link" asp-controller="TrainingLog" asp-action="Index" onclick="closeMenu()">
                         <span class="mc-num">02</span>
-                        <span class="mc-text-wrap"><span class="mc-text">動作教學</span></span>
+                        <span class="mc-text-wrap"><span class="mc-text">訓練日誌</span></span>
                         <span class="mc-en">Exercises</span>
                     </a>
                 </li>
@@ -160,6 +160,6 @@
     </div>  
 </footer>
 
-	@RenderSection("scripts", required: false)
+@await RenderSectionAsync("scripts", required: false)
 </body>
 </html>

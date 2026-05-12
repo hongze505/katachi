@@ -1,0 +1,364 @@
+/* 
+detail.css - 單日訓練詳情面板
+
+包含：
+- 詳情面板容器（卡片）
+- 頂部資訊列（日期 + 狀態）
+- 狀態徽章系統（done / partial / planned / missed / none）
+- 訓練項目列表（可點擊展開）
+- 勾選狀態（完成 / 未完成）
+- 空狀態提示
+- 新增訓練按鈕
+- 動作選擇 chips
+- Modal 操作按鈕
+*/
+
+/* ===== 面板容器 ===== */
+
+.detail-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    height: 260px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* 訓練列表區：固定高度內滾動 */
+#ex-wrap {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* ===== 頂部資訊列 ===== */
+
+/* 日期 + 狀態 */
+.detail-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+/* 日期文字 */
+.detail-date {
+    font-family: var(--font-sans);
+    font-size: 18px;
+    color: var(--accent);
+}
+
+/* ===== 狀態徽章 ===== */
+
+/* 基底 */
+.dbadge {
+    font-size: 15px;
+    padding: 3px 10px;
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    letter-spacing: .5px;
+}
+
+    /* 已完成 */
+    .dbadge.done {
+        background: var(--accent);
+        color: var(--color-white);
+    }
+
+    /* 部分完成 */
+    .dbadge.partial {
+        background: var(--partial);
+        color: var(--color-white);
+    }
+
+    /* 已安排 */
+    .dbadge.planned {
+        background: var(--surface3);
+        color: var(--text-dim);
+        border: 1px solid var(--border);
+    }
+
+    /* 未完成 */
+    .dbadge.missed {
+        background: var(--missed);
+        color: var(--color-white);
+    }
+
+    /* 無資料 */
+    .dbadge.none {
+        background: var(--surface3);
+        color: var(--text-muted);
+        border: 1px solid var(--border);
+    }
+
+/* ===== 訓練項目列表 ===== */
+
+/* 單列（可點擊開 modal） */
+.ex-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 13px 20px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background var(--dur-instant) var(--ease-expo);
+}
+
+    /* 最後一列 */
+    .ex-row:last-child {
+        border-bottom: none;
+    }
+
+    /* hover */
+    .ex-row:hover {
+        background: var(--surface2);
+    }
+
+/* ===== 勾選狀態 ===== */
+
+/* 圓形勾選框 */
+.ex-check {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    transition: all var(--dur-instant) var(--ease-expo);
+}
+
+    /* 已完成 */
+    .ex-check.checked {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: var(--color-white);
+    }
+
+/* ===== 訓練資訊 ===== */
+
+.ex-info {
+    flex: 1;
+}
+
+/* 動作名稱 */
+.ex-name {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+/* 次要資訊（組數 / 次數） */
+.ex-meta {
+    font-size: 16px;
+    color: var(--text-muted);
+    margin-top: 3px;
+    font-family: var(--font-sans);
+}
+
+/* 肌群標籤 */
+.ex-muscle {
+    font-size: 15px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: var(--surface2);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+}
+
+/* 進度（x / y sets） */
+.ex-prog {
+    font-size: 16px;
+    color: var(--text-dim);
+    font-family: var(--font-sans);
+}
+
+/* 右箭頭 */
+.ex-arr {
+    color: var(--text-muted);
+    font-size: 18px;
+}
+
+/* ===== 空狀態 ===== */
+
+.detail-empty {
+    padding: 36px 20px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 18px;
+}
+
+/* ===== 主要操作按鈕 ===== */
+
+/* 新增訓練 */
+.add-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 15px;
+    background: var(--color-white);
+    color: var(--color-black);
+    border: none;
+    border-radius: var(--radius);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 14px;
+    transition: opacity var(--dur-fast) var(--ease-expo);
+    font-family: var(--font-sans);
+    letter-spacing: 1px;
+}
+
+    .add-btn:hover {
+        opacity: .85;
+    }
+
+/* ===== 動作選擇 Grid（部位 × 器材）===== */
+
+/* modal 加寬，讓等寬欄內最長文字不換行 */
+#mo-add .mb {
+    width: min(700px, 95vw);
+}
+
+/* 單一 grid 容器，header + body 共享同一套欄寬 → 欄位完全對齊 */
+.ex-grid {
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 44px repeat(4, 1fr);
+}
+
+/* display: contents 讓子層直接參與父層 grid，不打斷欄寬計算 */
+.ex-grid-head,
+.ex-grid-row {
+    display: contents;
+}
+
+.ex-grid-corner {
+    background: var(--color-black);
+}
+
+.eq-col-lbl {
+    padding: 12px 20px;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--color-white);
+    background: var(--color-black);
+}
+
+.ex-row-lbl {
+    padding: 14px 16px;
+    text-align: center;
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--color-black);
+    background: var(--surface2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.ex-cell {
+    padding: 16px 20px;
+    font-size: 19px;
+    color: var(--color-black);
+    text-align: center;
+    cursor: pointer;
+    background: var(--surface);
+    transition: all var(--dur-instant) var(--ease-expo);
+    line-height: 1.3;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .ex-cell:hover {
+        background: var(--accent-dim);
+    }
+
+    .ex-cell.sel {
+        background: var(--accent);
+        color: var(--color-white);
+        font-weight: 700;
+    }
+
+/* ===== 重量 / 組數 / 次數（橫向三欄）===== */
+
+.add-ctrl-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.add-ctrl-grp {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    text-align: center;
+}
+
+.add-ctrl-lbl {
+    font-size: 15px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    font-family: var(--font-sans);
+}
+
+.add-winp {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 8px 6px;
+    font-size: 23px;
+    color: var(--text);
+    font-family: var(--font-sans);
+    text-align: center;
+}
+
+    .add-winp:focus {
+        outline: none;
+        border-color: var(--accent);
+    }
+
+.w-mode-lbl {
+    font-family: var(--font-brand);
+    font-size: 24px;
+    color: var(--text-dim);
+    padding: 6px 0;
+    letter-spacing: 2px;
+    display: none;
+}
+
+/* ===== Modal 按鈕 ===== */
+
+/* 確認 */
+.msub {
+    width: 100%;
+    padding: 15px;
+    background: var(--accent);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--radius);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    transition: opacity var(--dur-fast) var(--ease-expo);
+}
+
+    .msub:hover {
+        opacity: .88;
+    }

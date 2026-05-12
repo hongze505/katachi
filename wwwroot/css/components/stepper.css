@@ -1,0 +1,69 @@
+/* 
+stepper.css - 數值步進控制元件
+
+包含：
+- + / - 按鈕
+- 數值顯示
+- 組數 / 次數調整 UI
+*/
+
+/* 組數 / 次數數字步進控制器（- 數值 +） */
+.num-row {
+    display: flex;
+    gap: 12px;
+}
+
+/* 數字步進控制單組容器（組數 or 次數） */
+.num-grp {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+}
+
+/* 步進控制標籤（SETS / REPS） */
+.num-lbl {
+    font-size: 15px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+/* 步進控制橫排（- 數值 +） */
+.num-ctrl {
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* 步進 +/- 按鈕 */
+.num-btn {
+    width: 30px;
+    height: 30px;
+    background: var(--surface3);
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background var(--dur-instant) var(--ease-expo);
+}
+
+    /* 步進按鈕 hover：黑底白色 */
+    .num-btn:hover {
+        background: var(--accent);
+        color: var(--color-white);
+    }
+
+/* 步進數值顯示（Big Shoulders 28px） */
+.num-val {
+    font-family: var(--font-brand);
+    font-size: 28px;
+    color: var(--text);
+    min-width: 36px;
+    text-align: center;
+}

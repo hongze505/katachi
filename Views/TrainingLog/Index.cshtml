@@ -1,0 +1,826 @@
+﻿@model katachi.Models.Training.TrainingLogViewModel
+@using System.Text.Json
+@section Styles {
+    <link rel="stylesheet" href="~/css/base/main.css" />
+    <link rel="stylesheet" href="~/css/pages/trainingLog/overview.css" />
+    <link rel="stylesheet" href="~/css/pages/trainingLog/calendar.css" />
+    <link rel="stylesheet" href="~/css/pages/trainingLog/detail.css" />
+    <link rel="stylesheet" href="~/css/pages/trainingStats.css" />
+    <link rel="stylesheet" href="~/css/pages/muscleAnalysis.css" />
+    <link rel="stylesheet" href="~/css/pages/userSettings.css" />
+    <link rel="stylesheet" href="~/css/components/form.css" />
+    <link rel="stylesheet" href="~/css/components/modal.css" />
+    <link rel="stylesheet" href="~/css/components/stepper.css" />
+    <link rel="stylesheet" href="~/css/components/workoutSets.css" />
+    
+}
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" defer></script>
+    <script src="~/js/data.js" defer></script>
+    <script src="~/js/utils.js" defer></script>
+    <script src="~/js/pages/trainingLog.js" defer></script>
+    <script src="~/js/pages/trainingStats.js" defer></script>
+    <script src="~/js/pages/muscleAnalysis.js" defer></script>
+    <script src="~/js/main.js" defer></script>
+}
+
+<!-- ===============================================================
+       版面骨架：sidebar-l | main | sidebar-r
+       =============================================================== -->
+<div class="layout">
+    <div class="sidebar-l">
+        <div class="sidebar-hero">
+            <h2 class="sidebar-hero-title">FORGE<br>YOUR FORM</h2>
+            <div class="sidebar-tag">形を鍛える</div>
+            <div class="coord-label">
+                <span class="coord-line"></span>
+                <span class="coord-numbers">35.7° N / 139.7° E</span>
+            </div>
+        </div>
+        <div class="sidebar-divider"></div>
+        <div class="subnav">
+            <button class="subnav-tab active" data-page="p1">
+                <span class="subnav-tag">[ 01 ]</span>
+                <div class="subnav-text">
+                    <span class="subnav-en">TRAINING LOG</span>
+                    <span class="subnav-jp">訓練日誌</span>
+                </div>
+            </button>
+            <button class="subnav-tab" data-page="p2">
+                <span class="subnav-tag">[ 02 ]</span>
+                <div class="subnav-text">
+                    <span class="subnav-en">ANALYTICS</span>
+                    <span class="subnav-jp">訓練統計</span>
+                </div>
+            </button>
+            <button class="subnav-tab" data-page="p3">
+                <span class="subnav-tag">[ 03 ]</span>
+                <div class="subnav-text">
+                    <span class="subnav-en">MUSCLE MAP</span>
+                    <span class="subnav-jp">肌群分析</span>
+                </div>
+            </button>
+            <button class="subnav-tab" data-page="p4">
+                <span class="subnav-tag">[ 04 ]</span>
+                <div class="subnav-text">
+                    <span class="subnav-en">GOALS</span>
+                    <span class="subnav-jp">目標設定</span>
+                </div>
+            </button>
+        </div>
+    </div>
+    <div class="main">
+
+
+        <!-- ═══════════════════════════════════════
+           PAGE 1：訓練日誌
+           ─ 上半：PR/RM 最佳記錄 + 完成率/活躍度
+           ─ 中：月曆
+           ─ 下：選取日期詳情 + 新增按鈕
+           ═══════════════════════════════════════ -->
+        <div class="page active" id="page-p1">
+            <div class="pi">
+
+                <!-- P1 上方雙欄：左＝PR/RM，右＝完成率/活躍度 -->
+                <div class="p1-top">
+
+                    <!-- 左卡：訓練活躍度 -->
+                    <div class="card">
+                        <div class="sec-label" style="margin-bottom:14px">訓練活躍度</div>
+                        <div class="act-view" style="display:block;padding-top:0">
+                            <div class="act-quad">
+                                <div class="act-item">
+                                    <div><span class="act-num" id="act-next">—</span><span class="act-unit" id="act-next-unit"></span></div>
+                                    <div class="act-lbl">下次安排距今</div>
+                                </div>
+                                <div class="act-item">
+                                    <div><span class="act-num" id="act-last">—</span><span class="act-unit" id="act-last-unit"></span></div>
+                                    <div class="act-lbl">上次訓練距今</div>
+                                </div>
+                                <div class="act-item">
+                                    <div><span class="act-num" id="act-streak">—</span><span class="act-unit"> 週</span></div>
+                                    <div class="act-lbl">連續訓練週數</div>
+                                </div>
+                                <div class="act-item">
+                                    <div><span class="act-num" id="act-sets">—</span><span class="act-unit"> 組</span></div>
+                                    <div class="act-lbl">本月完成組數</div>
+                                </div>
+                                <div class="act-item">
+                                    <div><span class="act-num" id="act-rest">—</span><span class="act-unit"> 天</span></div>
+                                    <div class="act-lbl">本月休息天數</div>
+                                </div>
+                                <div class="act-item">
+                                    <div><span class="act-num" id="act-avg">—</span><span class="act-unit"> 天</span></div>
+                                    <div class="act-lbl">本月週均訓練天數</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右卡：完成率 / 訓練活躍度（兩個 view，JS 切換顯示） -->
+                    <div class="card">
+                        
+                        <div class="sec-label" style="margin-bottom:14px">完成率</div>
+                        <!-- 完成率視圖（預設顯示） -->
+                        <div class="cmp-view" id="cmp-view">
+                            <!-- 頂列：大百分比（左）＋ 完成/計畫比（右） -->
+                            <div class="cmp-top-row">
+                                <div class="cmp-right">
+                                    <div class="cmp-frac" id="cmp-frac">0 / 0</div>
+                                    <div class="cmp-frac-lbl">已完成 / 已安排</div>
+                                </div>
+                                <div class="cmp-pct">
+                                    <div class="cmp-big">
+                                        <div class="cmp-num" id="cmp-num">0</div>
+                                        <div class="cmp-sym">%</div>
+                                    </div>
+                                    <div class="cmp-sub" id="cmp-sub-lbl">完成率 · 2026年 04月</div>
+                                </div>
+                            </div>
+                            <!-- 進度條（寬度由 JS 設定） -->
+                            <div class="prog-bar">
+                                <div class="prog-fill" id="cmp-bar" style="width:0%"></div>
+                            </div>
+                            <!-- 三格統計：待完成 / 部分完成 / 未完成 -->
+                            <div class="trio">
+                                <div class="trio-item">
+                                    <div class="trio-num" style="color:var(--text-dim)" id="st-upcoming">-</div>
+                                    <div class="trio-lbl">待完成 (未來已安排)</div>
+                                </div>
+                                <div class="trio-item">
+                                    <div class="trio-num" style="color:var(--partial)" id="st-partial">-</div>
+                                    <div class="trio-lbl">部分完成</div>
+                                </div>
+                                <div class="trio-item">
+                                    <div class="trio-num" style="color:var(--danger)" id="st-miss">-</div>
+                                    <div class="trio-lbl">未完成 (過去未訓練)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 月曆區段 -->
+                <div class="cal-section">
+                    <!-- 月份導覽 + 圖例 -->
+                    <div class="cal-header">
+                        <div class="cal-mnav">
+                            <button class="cal-nb" id="cal-prev">&#8249;</button>
+                            <div class="cal-mlbl" id="cal-mlbl">2026年 04月</div>
+                            <button class="cal-nb" id="cal-next">&#8250;</button>
+                        </div>
+                        <!-- 色塊圖例：完成 / 部分 / 計畫 / 未完成 -->
+                        <div class="cal-legend">
+                            <div class="leg-item">
+                                <div class="leg-dot" style="background:var(--done)"></div>已完成
+                            </div>
+                            <div class="leg-item">
+                                <div class="leg-dot" style="background:var(--partial)"></div>部分完成
+                            </div>
+                            <div class="leg-item">
+                                <div class="leg-dot" style="background:var(--planned)"></div>已安排
+                            </div>
+                            <div class="leg-item">
+                                <div class="leg-dot" style="background:var(--missed);border:1px solid var(--danger)"></div>未完成
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 日曆本體 -->
+                    <div class="cal-wrap">
+                        <!-- 星期標頭列 -->
+                        <div class="cal-dow">
+                            <div class="cal-dow-cell">日</div>
+                            <div class="cal-dow-cell">一</div>
+                            <div class="cal-dow-cell">二</div>
+                            <div class="cal-dow-cell">三</div>
+                            <div class="cal-dow-cell">四</div>
+                            <div class="cal-dow-cell">五</div>
+                            <div class="cal-dow-cell">六</div>
+                        </div>
+                        <!-- 日期格子（由 JS renderCal() 動態注入） -->
+                        <div class="cal-cells" id="cal-cells"></div>
+                    </div>
+                </div>
+
+                <!-- 選取日期詳情面板 + 新增按鈕 -->
+                <div>
+                    <div class="detail-panel">
+                        <!-- 頂列：日期文字 + 狀態徽章 -->
+                        <div class="detail-topbar">
+                            <div class="detail-date" id="detail-date">2026.04.15</div>
+                            <div class="dbadge none" id="dbadge">未安排</div>
+                        </div>
+                        <!-- 訓練項目列表（由 JS renderDetail() 動態注入） -->
+                        <div id="ex-wrap"></div>
+                    </div>
+                    <!-- 新增訓練項目按鈕（開啟 mo-add 彈窗） -->
+                    <button class="add-btn" id="add-btn">+ 新增訓練項目</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════
+           PAGE 2：訓練統計
+           ─ 控制列：指標切換 + 動作選擇 + 月/年
+           ─ 雙折線圖：對比月 vs 主月
+           ─ 本月摘要表格
+           ═══════════════════════════════════════ -->
+        <div class="page" id="page-p2">
+            <div class="pi">
+
+                <!-- 控制列：三欄 grid — 左：動作選單 / 中：指標切換 / 右：月年切換 -->
+                <div class="p2-ctrl">
+                    <!-- 左：動作選單（決定圖表顯示哪個訓練動作） -->
+                    <select class="exsel" id="p2-ex">
+                        <optgroup label="背">
+                            <option value="row-bar">槓鈴划船</option>
+                            <option value="row-db">單手啞鈴划船</option>
+                            <option value="pullup">引體向上</option>
+                            <option value="lat">滑輪下拉</option>
+                        </optgroup>
+                        <optgroup label="胸">
+                            <option value="bench-bar">槓鈴臥推</option>
+                            <option value="bench-db">啞鈴臥推</option>
+                            <option value="pushup">伏地挺身</option>
+                            <option value="chestpress">胸推機</option>
+                        </optgroup>
+                        <optgroup label="核心">
+                            <option value="rollout">槓鈴滾輪</option>
+                            <option value="sidebend">啞鈴側彎</option>
+                            <option value="plank">棒式</option>
+                            <option value="crunch">捲腹機</option>
+                        </optgroup>
+                        <optgroup label="肩">
+                            <option value="ohp-bar">槓鈴肩推</option>
+                            <option value="lateral-db">啞鈴側平舉</option>
+                            <option value="hspu">倒立撐</option>
+                            <option value="shoulderpress">肩推機</option>
+                        </optgroup>
+                        <optgroup label="臂">
+                            <option value="curl-bar">槓鈴彎舉</option>
+                            <option value="curl-db">啞鈴彎舉</option>
+                            <option value="dip">雙槓撐體</option>
+                            <option value="curl-mach">二頭彎舉機</option>
+                        </optgroup>
+                        <optgroup label="腿">
+                            <option value="squat-bar">槓鈴深蹲</option>
+                            <option value="squat-db">啞鈴深蹲</option>
+                            <option value="squat-bw">自重深蹲</option>
+                            <option value="legpress">腿推機</option>
+                        </optgroup>
+                        <optgroup label="臀">
+                            <option value="hipthrust-bar">槓鈴臀推</option>
+                            <option value="hipthrust-db">啞鈴臀推</option>
+                            <option value="glutebridge">臀橋</option>
+                            <option value="abduction">臀外展機</option>
+                        </optgroup>
+                    </select>
+                    <!-- 中：指標切換，置中 -->
+                    <div class="seg" id="ctrl-metric">
+                        <button class="seg-btn active" data-v="weight">最高重量</button>
+                        <button class="seg-btn" data-v="rm">最大重複</button>
+                        <button class="seg-btn" data-v="volume">總訓練量</button>
+                    </div>
+                    <!-- 右：月 / 年檢視切換 -->
+                    <div class="p2-ctrl-right">
+                        <div class="seg" id="ctrl-period">
+                            <button class="seg-btn active" data-v="month">月檢視</button>
+                            <button class="seg-btn" data-v="year">年檢視</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 雙折線圖：左＝對比期，右＝主期 -->
+                <div class="p2-charts">
+                    <!-- 左圖：月份選單（月檢視）/ 年份選單（年檢視） -->
+                    <div class="chart-card">
+                        <div class="chart-card-header">
+                            <div class="chart-card-title" id="p2-lt">對比月</div>
+                            <select class="msel" id="p2-lm"></select>
+                            <select class="msel" id="p2-ly" style="display:none"></select>
+                        </div>
+                        <canvas id="chart-l" height="260"></canvas>
+                    </div>
+                    <!-- 右圖：月份選單（月檢視）/ 年份選單（年檢視） -->
+                    <div class="chart-card">
+                        <div class="chart-card-header">
+                            <div class="chart-card-title" id="p2-rt">主月</div>
+                            <select class="msel" id="p2-rm"></select>
+                            <select class="msel" id="p2-ry" style="display:none"></select>
+                        </div>
+                        <canvas id="chart-r" height="260"></canvas>
+                    </div>
+                </div>
+
+                <!-- 本月摘要：三欄對比表格（由 JS renderSummary() 動態注入） -->
+                <div class="p2-summary">
+                    <div class="p2-sum-topbar">
+                        <div class="sec-label">本月摘要</div>
+                        <div class="p2-sum-formula" id="p2-sum-formula"></div>
+                    </div>
+                    <div class="p2-sum-grid" id="p2-sum-grid"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════
+           PAGE 3：肌群分析
+           ─ 左：人體 SVG（正面/背面切換）+ 圖例
+           ─ 右：訓練佔比圓餅圖 / 目標達成率 / 本月建議
+           ═══════════════════════════════════════ -->
+        <div class="page" id="page-p3">
+            <div class="pi">
+                <div class="p3-grid">
+
+                    <!-- 左欄：人體肌群熱力圖 -->
+                    <div class="muscle-card">
+                        <div class="sec-label" id="p3-month-label">肌群分布圖 · 2026年 04月</div>
+                        <!-- 正面 / 背面切換 + 月份滾輪選單 -->
+                        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px">
+                            <div class="body-tog">
+                                <button class="body-tog-btn active" data-side="front">正面</button>
+                                <button class="body-tog-btn" data-side="back">背面</button>
+                            </div>
+                            <select id="p3-msel" class="msel"></select>
+                        </div>
+                        <!-- 正面 SVG（預設顯示；肌群 fill 由 JS muColor() 動態設定） -->
+                        <div class="body-fig active" id="fig-front">
+                            <div class="bsvg-wrap">
+                                <!-- 正面圖 -->
+                                <div class="body-map__figure">
+                                    <img class="body-map__image" src="~/training-svg/front.svg" alt="front body map" />
+                                    <!-- 互動 SVG 覆蓋層 -->
+                                    <svg class="body-map__overlay" viewBox="0 0 340 649" xmlns="http://www.w3.org/2000/svg">
+
+                                        <!-- 斜方肌 -->
+                                        <g class="muscle-pair" data-muscle="frontTrapezius" role="button" tabIndex="0"
+                                               transform="translate(117, 97) scale(1)">
+                                            <!-- 左 -->
+                                            <path d="M9.373 10.9756C14.528 7.9436 20.321 4.5296 22.246 3.3876C27.74 0.130004 28.246 0.434004 28.246 6.9976C28.246 15.5356 26.786 18.8296 21.886 21.3376C19.61 22.5036 16.302 23.7856 14.536 24.1876L11.327 24.9176L9.858 22.6766C9.05 21.4446 6.502 19.5476 4.195 18.4616L0 16.4876L9.373 10.9756Z" />
+                                            <!-- 右 -->
+                                            <path d="M77.2461 6.50861C77.2461 17.1966 79.0601 19.6596 89.6181 23.3096L94.7461 25.0816L96.4171 23.1016C97.3361 22.0116 99.9411 20.0676 102.207 18.7806L106.326 16.4416L97.5361 11.4396C92.7011 8.68861 86.1581 4.9896 82.9961 3.219L77.2461 0V6.50861Z" />
+                                        </g>
+                                        <!-- 三角肌(左)-->
+                                        <g class="muscle-pair" data-muscle="frontDeltoidLeft" role="button" tabIndex="0">
+                                            <g transform="translate(71, 115.5) scale(0.87)">
+                                                <path d="M13.4981 12.008C18.6791 7.108 28.4101 1.72701 33.9651 0.69101C35.3391 0.43501 40.0621 0.175007 44.4621 0.113007L52.4621 0L57.4501 2.726C60.1931 4.226 62.5621 6.128 62.7161 6.953C62.8691 7.778 61.6171 9.353 59.9352 10.453C55.1611 13.574 38.3651 34.928 31.4981 46.609C29.1031 50.682 24.5321 53.19 11.8171 57.406L1.50211 60.826L0.747132 59.64C-0.376868 57.871 -0.192895 42.179 1.03211 35.387C2.63411 26.507 7.17814 17.984 13.4981 12.008Z" />
+                                            </g>
+                                        </g>
+                                        <!-- 三角肌(右) -->
+                                        <g class="muscle-pair" data-muscle="frontDeltoidRight" role="button" tabIndex="0">
+                                            <g transform="translate(68, 115.5) scale(0.87)">
+                                                <path d="M169.063 6.30299C169.648 5.31199 172.106 3.488 174.525 2.25L178.924 0H187.03C206.483 0 220.914 8.848 227.596 24.871L230.777 32.5L231.273 43.628C231.545 49.749 231.462 56.387 231.088 58.38L230.409 62.004L227.655 60.58C226.14 59.797 221.773 58.158 217.95 56.937C209.752 54.321 201.5 50.353 201.5 49.028C201.5 48.512 197.946 42.773 193.602 36.274C186.055 24.984 174.255 11.434 170 9.17L168 8.10699L169.063 6.30299Z" />
+                                            </g>
+                                        </g>
+                                        <!-- 二頭(左) -->
+                                        <g class="muscle-pair" data-muscle="bicepsLeft" role="button" tabIndex="0">
+                                            <!-- 左 -->
+                                            <g transform="translate(64.5, 162) scale(0.84)">
+                                                <path d="M23.9765 5.67923C30.2435 3.47523 35.8275 1.21524 36.3865 0.656237C37.8145 -0.771763 38.8255 0.118236 39.5565 3.44924C39.9035 5.02524 41.2875 7.80723 42.6335 9.63223L45.0815 12.9502V22.5452C45.0815 33.9152 43.3495 41.3002 38.2825 51.5372C31.9105 64.4082 15.5635 79.5242 7.98653 79.5522C1.66753 79.5742 -0.113489 73.1992 0.00551134 50.9812C0.106511 32.0082 0.838509 26.9302 4.50951 19.7362C8.25151 12.4022 11.4715 10.0772 23.9765 5.67923Z" />
+                                            </g>
+                                        </g>
+                                        <!-- 二頭(右) -->
+                                        <g class="muscle-pair" data-muscle="bicepsRight" role="button" tabIndex="0">
+                                            <g transform="translate(236.24, 162.16) scale(1)">
+                                                <path d="M7 1.27494C7 2.03794 5.425 4.95193 3.5 7.75093L0 12.8389V18.6539C0 36.2629 11.495 56.7119 26.214 65.2889C32.343 68.8609 34.983 68.4459 37.381 63.5369L39.261 59.6859L39.77 46.3369C40.345 31.2839 39.179 23.1489 35.372 15.6349C32.623 10.2109 29.054 7.63793 21.03 5.29793C18.022 4.42093 13.877 2.84493 11.82 1.79493C7.35401 -0.483075 7 -0.521064 7 1.27494Z" />
+                                            </g>
+                                        </g>
+                                        <!-- 前臂-->
+                                        <g class="muscle-pair" data-muscle="frontForearm" role="button" tabIndex="0">
+                                            <!-- 左 -->
+                                            <g transform="translate(32.5, 216) scale(0.86)">
+                                                <path d="M10.3904 49.48C13.6544 27.498 17.7754 17.168 28.2714 4.65701C30.4204 2.09601 32.5494 0 33.0024 0C33.4554 0 34.0804 1.238 34.3904 2.75C35.7594 9.415 37.0154 12.965 38.7754 15.139L40.6644 17.471L44.7054 17.365C49.3654 17.243 55.1984 14.111 62.1144 8.01599C64.7264 5.71399 66.8644 3.98101 66.8634 4.16501C66.8634 4.34901 66.0164 6.75 64.9804 9.5C63.9454 12.25 62.5734 17.875 61.9334 22C58.7014 42.82 55.3784 51.404 44.9534 65.866C34.9104 79.798 30.2214 87.023 27.4244 92.875C25.8144 96.244 24.1034 99 23.6214 99C23.1404 99 21.0494 97.636 18.9744 95.968C14.7864 92.603 6.19339 89 2.35339 89C-0.654608 89 -0.731599 88.088 1.8504 83.028C4.5244 77.786 8.51441 62.111 10.3904 49.48Z">
+                                                </path>
+                                            </g>
+                                            <!-- 右 -->
+                                            <g transform="translate(31.2, 216) scale(0.86)">
+                                                <path d="M267.854 14.702C278.638 20.101 283.364 17.537 286.094 4.80895C286.696 2.00295 287.511 -0.157037 287.905 0.00896311C289.165 0.539963 295.558 8.15896 298.646 12.811C304.828 22.123 307.048 30.298 311.51 60.178C312.403 66.155 314.453 74.926 316.066 79.67C317.68 84.414 319 88.361 319 88.442C319 88.522 317.313 88.899 315.25 89.279C309.993 90.246 303.502 93.246 299.074 96.752L295.307 99.736L292.919 94.524C289.936 88.012 285.618 81.063 276.737 68.482C265.368 52.378 260.706 40.331 258.497 21.348C258.115 18.068 256.947 13.214 255.901 10.561C254.856 7.90796 254 5.47496 254 5.15496C254 4.55396 260.459 9.22497 262.854 11.558C263.599 12.283 265.849 13.698 267.854 14.702Z">
+                                                </path>
+                                            </g>
+                                        </g>
+                                        <!-- 胸大肌 -->
+                                        <g class="muscle-pair" data-muscle="chest" role="button" tabIndex="0">
+                                            <!-- 左 -->
+                                            <g transform="translate(100, 124) scale(0.86)">
+                                                <path d="M8.216 26.2833C17.387 13.3053 24.996 4.5553 29.5 1.8063C33.211 -0.457698 41.338 -0.597694 52.5 1.41031C66.935 4.00831 77.027 8.6743 79.72 13.9963L80.971 16.4683L80.985 38.2153L81 59.9623L77.392 63.9553L73.785 67.9483L64.032 70.9583L54.278 73.9683H45.685H37.091L30.676 71.6393C18.742 67.3083 8.882 60.0353 3.091 51.2923L0 46.6253V42.2673V37.9103L8.216 26.2833Z">
+                                                </path>
+                                            </g>
+                                            <!-- 右 -->
+                                            <g transform="translate(98,124.5) scale(0.87)">
+                                                <path d="M86.374 11.5826C90.528 7.10064 100.961 2.87764 112.831 0.874636C119.771 -0.296364 130.496 -0.290363 133.59 0.885637C137.64 2.42564 146.458 12.0296 155.75 25.0206L164 36.5546V40.7426C164 46.5937 160.759 52.3466 153.508 59.3666C147.31 65.3686 139.438 69.9856 131.091 72.5156C118.707 76.2686 94.785 71.7766 87.25 64.2836L84 61.0516V37.5976V14.1436L86.374 11.5826Z">
+                                                </path>
+                                            </g>
+                                        </g>
+                                        <!-- 腹肌 -->
+                                        <g class="muscle-pair" data-muscle="abs" role="button" tabIndex="0">
+                                            <!-- 左上 -->
+                                            <g transform="translate(139,186.3) scale(0.86)">
+                                                <path d="M0.157659 27.0261C-0.953341 9.57913 3.58569 3.87413 20.8727 0.987127C28.5067 -0.287873 31.4067 -0.11888 33.7247 1.73612L34.9747 2.73612V18.5461V34.3561L33.2247 34.8631C32.2617 35.1411 25.4707 35.9051 18.1317 36.5591L4.78864 37.7491L2.68067 35.6411L0.57166 33.5331L0.157659 27.0261Z">
+                                                </path>
+                                            </g>
+                                            <!-- 左中 -->
+                                            <g transform="translate(139.2,186.1) scale(0.86)">
+                                                <path d="M4.53772 40.4841L13.5057 39.6231C25.0127 38.5181 32.3967 38.3321 34.3927 39.0981L35.9747 39.7051V53.9761V68.2461L34.7027 69.3021C34.0027 69.8831 27.3047 70.6761 19.8167 71.0641L6.20374 71.7701L4.67474 69.3811C3.81574 68.0371 2.59375 62.0481 1.88275 55.6961L0.619751 44.4021L2.57874 42.4431L4.53772 40.4841Z">
+                                                </path>
+                                            </g>
+                                            <!-- 左下 -->
+                                            <g transform="translate(139,185) scale(0.87)">
+                                                <path d="M19.7157 74.0161C25.6337 73.6481 30.9247 73.1901 31.4747 72.9981C35.3367 71.6491 35.9747 73.8651 35.9747 88.6321C35.9747 96.1901 35.6367 102.577 35.2247 102.826C34.8127 103.075 29.2517 103.601 22.8667 103.996L11.2597 104.713L9.2887 102.598L7.31873 100.483L6.03973 89.2831L4.76074 78.0821L6.8587 76.3831L8.95673 74.6851L19.7157 74.0161Z">
+                                                </path>
+                                            </g>
+                                            <!-- 右上 -->
+                                            <g transform="translate(139,186.3) scale(0.86)">
+                                                <path d="M38.4747 2.05013L40.9747 0.801137C43.8987 -0.659863 48.7027 -0.158861 58.2497 2.60314C70.0517 6.01814 72.9017 10.3961 72.9507 25.1851L72.9747 32.3791L70.6907 35.0351L68.4057 37.6912L54.9407 36.5021C47.5347 35.8471 40.7997 34.9661 39.9747 34.5431L38.4747 33.7732V17.9121V2.05013Z">
+                                                </path>
+                                            </g>
+                                            <!-- 右中 -->
+                                            <g transform="translate(137.4, 150.7) scale(0.93)">
+                                                <path d="M38.9747 74.8911L40.2247 73.6241C41.0187 72.8191 42.9347 72.5471 45.4747 72.8801C47.6747 73.1681 53.3887 73.6991 58.1727 74.0611L66.8707 74.7191L68.5187 76.5391L70.1657 78.3591L69.0037 89.1751L67.8427 99.9911L65.6588 102.336L63.4747 104.682L52.9747 104.021C47.1997 103.658 41.6877 103.135 40.7247 102.859L38.9747 102.356V88.6241V74.8911Z">
+                                                </path>
+                                            </g>
+                                            <!-- 右下 -->
+                                            <g transform="translate(139,186) scale(0.86)">
+                                                <path d="M38.9747 74.8911L40.2247 73.6241C41.0187 72.8191 42.9347 72.5471 45.4747 72.8801C47.6747 73.1681 53.3887 73.6991 58.1727 74.0611L66.8707 74.7191L68.5187 76.5391L70.1657 78.3591L69.0037 89.1751L67.8427 99.9911L65.6588 102.336L63.4747 104.682L52.9747 104.021C47.1997 103.658 41.6877 103.135 40.7247 102.859L38.9747 102.356V88.6241V74.8911Z">
+                                                </path>
+                                            </g>
+                                            <!-- 下 -->
+                                            <g transform="translate(139.5,185.6) scale(0.86)">
+                                                <path d="M23.2528 106.822C29.7088 106.179 35.5488 105.427 36.2328 105.151C36.9158 104.875 38.1288 104.86 38.9278 105.117C39.7268 105.374 45.3518 106.064 51.4278 106.65C57.5038 107.237 63.0378 108.171 63.7248 108.726C66.3648 110.858 64.4298 122.785 60.0558 131.34C55.3348 140.576 43.6308 150.491 37.4508 150.491C33.5688 150.491 26.2978 145.8 21.1968 140.006C13.7528 131.549 8.40475 116.869 10.5438 110.765L11.5158 107.991L23.2528 106.822Z">
+                                                </path>
+                                            </g>
+                                        </g>
+                                        <!-- 側腹 -->
+                                        <g class="muscle-pair" data-muscle="sideabs" role="button" tabIndex="0">
+                                            <!-- 左 -->
+                                            <g transform="translate(106.5,178.1) scale(0.86)">
+                                                <path d="M0.21654 22.5L0.0335262 11.25C-0.0674738 5.063 0.0675445 0 0.333544 0C0.599544 0 2.45757 1.291 4.46157 2.869C12.0676 8.858 28.4766 15 36.8726 15H39.8195L39.0775 16.75C38.6695 17.712 37.6745 20.3 36.8665 22.5L35.3966 26.5L35.8906 34.757C36.2136 40.152 36.9766 43.918 38.0926 45.62L39.7996 48.225L38.0756 51.427L36.3516 54.628L37.5496 64.936C38.8486 76.11 39.8916 79.887 42.1566 81.614L43.6166 82.729L42.1956 86.131L40.7736 89.533L41.6676 97.516C42.8746 108.303 43.4256 110.502 45.6276 113.301L47.5116 115.696L46.3716 119.411L45.2316 123.126L46.4946 129.243C47.1896 132.607 49.1836 138.091 50.9246 141.43C52.6666 144.768 54.2456 147.841 54.4346 148.259C55.4936 150.599 31.5665 134.805 25.1505 128.929C22.9255 126.891 19.5545 123.882 17.6585 122.241L14.2116 119.259L15.4085 115.263C16.0665 113.066 16.6056 107.368 16.6056 102.602C16.6056 97.566 17.1745 92.575 17.9625 90.687C20.0305 85.739 20.7455 77.171 19.6475 70.5C18.9995 66.563 16.4306 60.03 12.1776 51.5C8.61258 44.35 4.46255 34.9 2.95555 30.5L0.21654 22.5Z">
+                                                </path>
+                                            </g>
+                                            <!-- 右 -->
+                                            <g transform="translate(141.9,175.7) scale(0.86)">
+                                                <path d="M71.0205 16.887C78.9235 16.844 95.6565 10.548 102.645 4.98901L105.145 3L105.807 7.70201C107.743 21.443 105.029 33.523 95.9875 51.404C92.9275 57.454 89.8045 64.429 89.0465 66.904C86.9655 73.693 87.2545 85.853 89.6445 92.143C90.8825 95.399 91.6445 99.826 91.6445 103.76C91.6455 107.255 92.3615 112.878 93.2365 116.254L94.8265 122.392L89.9865 126.711C87.3235 129.087 82.9805 132.792 80.3345 134.944C74.8025 139.445 57.6535 150.245 57.0295 149.621C56.7995 149.391 57.9415 146.323 59.5685 142.803C61.1955 139.284 63.0965 133.577 63.7925 130.121L65.0595 123.838L63.8645 120.673L62.6695 117.507L64.7585 115.283L66.8485 113.059L68.3845 101.754L69.9205 90.448L68.2965 87.618L66.6715 84.788L68.6575 82.096C70.7115 79.312 72.5565 68.76 72.6145 59.468L72.6455 54.533L70.5605 52.313L68.4755 50.094L70.3105 47.291L72.1455 44.487V34.946V25.404L70.0205 21.154L67.8965 16.904L71.0205 16.887Z">
+                                                </path>
+                                            </g>
+                                        </g>
+                                        <!-- 股四頭 -->
+                                        <g class="muscle-pair" data-muscle="quads" role="button" tabIndex="0">
+                                            <!-- 左 -->
+                                            <g transform="translate(102,283.4) scale(0.86)">
+                                                <path d="M11.307 31.983C14.592 18.508 17.588 5.799 17.965 3.741L18.649 0L21.29 1.565C26.352 4.567 27.122 5.518 28.911 10.983C33.018 23.531 44.178 42.062 59.679 62.077C67.116 71.678 71.049 75.953 73.944 77.582L75.897 78.68L74.195 97.082C72.444 116.016 69.368 130.986 63.469 149.281C61.838 154.342 60.025 161.539 59.441 165.274C58.328 172.39 56.187 179.561 53.767 184.277C52.177 187.376 46.96 190.973 44.048 190.979C40.241 190.987 35.559 186.946 32.77 181.245L30.013 175.611L29.443 165.047L28.873 154.483L27.719 158.28C25.971 164.032 22.121 169.96 16.683 175.274L11.779 180.064L8.12701 169.043C6.11901 162.982 3.47197 153.401 2.24597 147.753L0.0150146 137.483L0.00799561 111.483L0 85.483L2.66699 70.983C4.13399 63.008 8.02201 45.458 11.307 31.983Z">
+                                                </path>
+                                            </g>
+                                            <!-- 右 -->
+                                            <g transform="translate(102,283.2) scale(0.86)">
+                                                <path d="M132.816 12.056C133.896 8.417 135.497 5.71499 137.678 3.84799C139.467 2.31699 141.209 1.04599 141.55 1.02399C141.891 1.00099 142.645 2.896 143.225 5.233C151.664 39.223 158.663 69.338 159.861 76.803C163.415 98.963 162.909 123.81 158.449 146.105C156.778 154.458 149.948 177.681 148.798 178.918C148.043 179.73 140.202 171.507 136.94 166.483C135.155 163.733 133.375 160.026 132.985 158.244C131.745 152.578 130.417 153.546 131.017 159.68C132.202 171.797 126.857 186.129 119.926 189.418L116.354 191.113L112.934 189.984C107.318 188.131 104.501 181.96 99.921 161.483C98.568 155.433 96.767 148.008 95.92 144.983C91.563 129.438 88.5241 109.648 87.7581 91.848L87.129 77.213L89.131 76.578C91.932 75.689 112.286 50.039 120.748 36.734C125.975 28.515 130.948 18.345 132.816 12.056Z">
+                                                </path>
+                                            </g>
+                                        </g>
+                                        <!-- 小腿前側 -->
+                                        <g class="muscle-pair" data-muscle="shin" role="button" tabIndex="0">
+                                            <!-- 左左 -->
+                                            <g transform="translate(100,463.1) scale(0.87)">
+                                                <path d="M1.72998 27.989C3.40098 19.776 5.638 12.576 8.953 4.73904C9.825 2.67704 10.721 0.989044 10.943 0.989044C11.166 0.989044 12.297 3.12704 13.459 5.73904C17.247 14.262 18.163 21.449 18.205 42.989L18.246 63.489L20.184 77.989C22.394 94.517 24.797 107.066 29.18 124.964C30.86 131.825 32.235 137.912 32.235 138.49C32.235 139.106 30.65 139.391 28.414 139.177C26.312 138.977 22.882 139.528 20.791 140.401C18.701 141.274 16.596 141.989 16.113 141.989C15.63 141.989 15.232 138.726 15.229 134.739C15.22 123.717 12.909 110.685 6.67096 86.489L0.998962 64.489L0.498962 50.489L0 36.489L1.72998 27.989Z">
+                                                </path>
+                                            </g>
+                                            <!-- 左右 -->
+                                            <g transform="translate(99.2,464.2) scale(0.87)">
+                                                <path d="M33.318 93.565C30.395 64.081 33.094 47.356 44.786 22.489L49.488 12.489L51.328 19.989C53.896 30.458 56.235 44.55 56.235 49.555C56.235 56.299 53.425 69.254 50.337 76.742C45.147 89.328 41.287 108.959 41.253 122.939L41.235 130.389L40.165 129.319C38.67 127.824 34.615 106.651 33.318 93.565Z">
+                                                </path>
+                                            </g>
+                                            <!-- 右左 -->
+                                            <g transform="translate(99.4,464.7) scale(0.86)">
+                                                <path d="M111.053 39.31C111.735 33.909 113.218 25.552 114.347 20.739C115.477 15.927 116.554 11.989 116.74 11.989C117.415 11.989 124.568 27.676 127.414 35.396C135.293 56.77 136.086 79.131 130.149 112.489C126.314 134.03 125.727 134.418 124.848 115.989C124.177 101.898 121.528 89.2351 116.665 76.8681C114.636 71.7091 112.265 63.359 111.394 58.31L109.812 49.1311L111.053 39.31Z">
+                                                </path>
+                                            </g>
+                                            <!-- 右右 -->
+                                            <g transform="translate(99,464.7) scale(0.86)">
+                                                <path d="M146.246 49.9891C147.121 20.2051 147.574 16.7801 152.019 6.37205C153.513 2.87405 155.057 0.00604349 155.45 4.34871e-05C157.674 -0.0339565 164.212 19.877 165.753 31.378L167.078 41.2671L166.097 50.878C165.557 56.164 163.771 66.1141 162.128 72.9891C155.919 98.9621 155.307 101.714 153.789 110.489C152.932 115.439 151.943 124.477 151.59 130.573L150.949 141.657L146.843 140.242C144.585 139.464 140.824 138.979 138.486 139.165C136.512 139.322 135.322 139.43 134.769 138.888C133.924 138.06 134.565 135.717 136.165 129.721C142.267 106.855 145.275 83.0631 146.246 49.9891Z">
+                                                </path>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 背面 SVG（切換後顯示；肌群 fill 同樣由 JS 控制） -->
+                        <div class="body-fig" id="fig-back">
+                            <div class="bsvg-wrap">
+                                <!-- 背面圖 -->
+                                <div class="body-map__figure">
+                                    <img class="body-map__image" src="~/training-svg/back.svg" alt="back body map" />
+                                    <svg class="body-map__overlay" viewBox="0 0 340 649" xmlns="http://www.w3.org/2000/svg">
+
+                                        <!-- 背部斜方肌 -->
+                                        <g class="muscle-pair" data-muscle="backTrapezius" role="button" tabIndex="0">
+                                            <!-- 左 -->
+                                            <g transform="translate(105.9, 67.3) scale(0.86)">
+                                                <path d="M58.3361 2.46145C55.8611 3.75345 51.6991 6.69644 49.0861 8.99944L44.3361 13.1874L44.2601 15.8525C44.2181 17.3185 43.6561 19.9555 43.0101 21.7145L41.8361 24.9105L31.3361 32.0854C7.31907 48.4954 -0.698918 54.3784 0.0470816 55.0424C0.481082 55.4284 2.30809 56.2354 4.10809 56.8364C9.71309 58.7074 28.1691 72.0964 34.7311 79.0524L40.9931 85.6904L43.7381 92.5494C47.0171 100.739 49.5441 112.389 52.3011 132.017C53.4211 139.992 54.9651 149.667 55.7321 153.517C56.4981 157.367 57.8351 164.117 58.7021 168.517C59.5691 172.917 61.2081 188.217 62.3451 202.517C63.4821 216.817 65.3151 235.942 66.4171 245.017C67.5191 254.092 68.6901 263.88 69.0181 266.767C69.3471 269.654 70.0521 272.017 70.5841 272.017C71.1201 272.017 71.2701 270.892 70.9211 269.501C70.5741 268.117 70.0551 207.292 69.7681 134.333C69.4811 61.3745 69.0151 1.30645 68.7321 0.849451C67.7891 -0.676549 62.8871 0.0834501 58.3361 2.46145Z">
+                                                </path>
+                                            </g>
+                                            <!-- 右 -->
+                                            <g transform="translate(105.7, 67.9) scale(0.86)">
+                                                <path d="M73.8391 1.01344C73.2131 2.02544 73.0711 270.086 73.6961 270.71C73.8831 270.897 74.5761 266.206 75.2341 260.284C75.8931 254.362 76.8681 246.142 77.4011 242.017C77.9341 237.892 79.2551 223.267 80.3371 209.517C83.0191 175.433 83.2061 173.708 85.2741 164.017C86.2711 159.342 88.0791 148.542 89.2901 140.017C90.5011 131.492 92.5971 118.701 93.9481 111.593L96.4031 98.6694L100.201 90.5934L103.999 82.5174L110.582 76.3814C118.222 69.2614 137.568 56.0174 140.33 56.0174C145.858 56.0174 142.354 53.0934 114.483 34.4494C100.934 25.3864 99.1371 23.4674 97.9241 16.7654C97.1451 12.4644 94.3261 9.44244 85.9311 3.90944C80.2211 0.145441 75.1281 -1.07356 73.8391 1.01344Z">
+                                                </path>
+                                            </g>
+                                        </g>
+                                        <!-- 後三角 -->
+                                        <g class="muscle-pair" data-muscle="rearDelt" role="button" tabIndex="0">
+                                            <!-- 左 -->
+                                            <g transform="translate(64.4, 117.6) scale(0.86)">
+                                                <path d="M30.2276 1.83503C9.38758 7.97203 -1.96543 26.352 0.280571 50.319L0.981575 57.796L8.15557 54.517C12.1016 52.714 18.1796 50.53 21.6636 49.663C25.1476 48.796 30.0176 46.904 32.4846 45.458C39.8196 41.159 48.3346 31.777 52.4416 23.467L56.1366 15.99L56.2326 9.77602L56.3296 3.56103L53.3296 2.06603C48.8366 -0.172967 37.4336 -0.285969 30.2276 1.83503Z">
+                                                </path>
+                                            </g>
+                                            <!-- 右 -->
+                                            <g transform="translate(63.7, 117.7) scale(0.86)">
+                                                <path d="M185.947 2.06602L182.564 4.12801L183.146 9.76601C183.84 16.491 189.033 27.552 194.48 33.907C199.57 39.845 208.455 46.249 213.885 47.894C227.531 52.028 231.707 53.441 235.254 55.122C237.412 56.145 239.437 56.72 239.754 56.4C240.071 56.08 240.294 50.12 240.249 43.157L240.168 30.496L237.985 24.996C231.273 8.09101 218.471 -0.00799408 198.475 5.92072e-06L189.33 0.0030119L185.947 2.06602Z">
+                                                </path>
+                                            </g>
+                                        </g>
+                                        <!-- 肱三頭 -->
+                                        <g class="muscle-pair" data-muscle="triceps" role="button" tabIndex="0">
+                                            <!-- 左 -->
+                                            <g transform="translate(58.5, 160.9) scale(0.86)">
+                                                <path d="M22.6039 3.465C12.1909 7.14 8.61289 9.94201 5.05789 17.21C1.32789 24.835 -0.0401081 31.644 0.00089187 42.386C0.0428919 53.566 1.4789 63.612 3.9929 70.333L6.11389 76H7.96189C8.97789 76 14.9239 73.597 21.1749 70.659L32.5409 65.319L36.2479 60.989C41.4839 54.871 43.9679 47.488 44.6309 36.072L45.1869 26.5L43.5809 19.699C42.5389 15.285 40.5569 10.81 37.9349 6.94901L33.8949 1L31.6829 1.021C30.4659 1.033 26.3799 2.132 22.6039 3.465Z">
+                                                </path>
+                                            </g>
+                                            <!-- 右 -->
+                                            <g transform="translate(56.7, 160.9) scale(0.86)">
+                                                <path d="M217.105 5.80099C211.631 13.862 209.97 20.195 209.97 33C209.97 45.232 211.533 51.716 215.952 57.817C220.117 63.567 224.736 66.215 237.335 70.077L248.199 73.407L249.559 71.547C250.307 70.524 251.693 67.17 252.639 64.094L254.36 58.5L254.415 42.5L254.47 26.5L252.691 21.405C250.6 15.417 247.108 10.398 243.24 7.82201C241.039 6.35501 223.37 0 221.495 0C221.247 0 219.272 2.60999 217.105 5.80099Z">
+                                                </path>
+                                            </g>
+                                        </g>
+                                        <!-- 前臂 -->
+                                        <g class="muscle-pair" data-muscle="backForearm" role="button" tabIndex="0">
+                                            <!-- 左 -->
+                                            <g transform="translate(33.7,213.4) scale(0.86)">
+                                                <path d="M22.4987 7.25002C14.4657 17.338 10.2407 29.373 7.66669 49.5C4.69669 72.737 3.36668 81.066 1.50168 88.113L0.0234241 93.7009L0 93.7894C2.01436 93.2952 5.55361 92.9947 7.83043 93.143C12.3939 93.4422 22.4742 96.0078 25.3657 97.9306L27.2702 99.1962L27.3205 99.2242L27.3437 99.1694L29.5397 94C31.2907 89.875 36.0787 80.599 40.1787 73.387C53.5057 49.946 56.2247 41.932 57.5687 22.147C58.0037 15.741 58.6927 9.71601 59.0997 8.75801L59.8407 7.01503L55.9867 8.60402C53.8667 9.47802 49.2887 11.5 45.8127 13.097C42.3367 14.694 38.2147 16 36.6517 16H33.8107L31.7807 11.75C30.6637 9.41302 29.4497 6.262 29.0827 4.75C28.7157 3.238 28.0247 2 27.5477 2C27.0697 2 24.7977 4.36302 22.4987 7.25002Z">
+                                                </path>
+                                            </g>
+                                            <!-- 右 -->
+                                            <g transform="translate(32,213.6) scale(0.86)">
+                                                <path d="M283.008 5.21201C281.77 8.65501 280.221 10.936 278.446 11.932L275.76 13.439L265.079 10.17C259.205 8.37203 254.251 7.04802 254.071 7.22902C253.891 7.40902 254.158 9.34403 254.664 11.528C255.171 13.713 255.596 17.431 255.609 19.792C255.647 26.673 258.532 38.898 262.033 47.011C263.815 51.142 268.87 59.917 273.266 66.511C284.48 83.332 288.083 89.535 290.973 97L291.478 98.4763L291.499 98.5377L293.369 97.2739C296.209 95.3539 305.885 92.3647 310.405 92.0092C312.66 91.8329 316.173 92.0781 318.177 92.5336L318.087 92.2894L316.371 87.624C312.733 77.734 310.135 66.81 307.661 51C304.456 30.518 302.929 24.321 299.18 16.585C296.073 10.173 287.819 0 285.723 0C285.261 0 284.04 2.34601 283.008 5.21201Z">
+                                                </path>
+                                            </g>
+                                        </g>
+                                        <!-- 菱形肌 -->
+                                        <g class="muscle-pair" data-muscle="rhomboid" role="button" tabIndex="0">
+                                            <!-- 左 -->
+                                            <g transform="translate(89.3, 123) scale(0.86)">
+                                                <path d="M29.467 0.532534C29.1 1.12653 29.02 1.83354 29.29 2.10254C30.064 2.87654 27.039 13.4825 24.785 17.9015C20.1 27.0845 11.692 36.1105 3.25 41.0205C1.463 42.0605 0 43.3865 0 43.9675C0 46.1635 7.395 56.2345 13.823 62.7925C21.995 71.1305 31.061 77.9805 41.07 83.3765C48.896 87.5975 72.013 96.7995 72.804 96.0095C73.05 95.7635 72.503 91.1555 71.59 85.7705C70.676 80.3855 69.513 73.2795 69.006 69.9795C63.512 34.2325 60.22 24.4165 50.579 15.0255C43.653 8.27955 30.331 -0.865466 29.467 0.532534Z">
+                                                </path>
+                                            </g>
+                                            <!-- 右 -->
+                                            <g transform="translate(89.2, 123) scale(0.86)">
+                                                <path d="M143.382 3.79254C121.065 19.3325 117.225 27.3005 111.007 70.9795C109.91 78.6795 108.606 87.4545 108.108 90.4795C107.609 93.5045 107.294 96.0805 107.408 96.2035C107.658 96.4745 128.609 88.5065 135.326 85.5845C142.891 82.2945 157.803 71.6585 165.619 63.9795C171.634 58.0705 181.03 45.5935 180.987 43.5745C180.98 43.2475 178.455 41.4045 175.377 39.4795C163.85 32.2725 152.893 16.6905 151.391 5.36754C151.031 2.65454 150.435 0.248536 150.066 0.0205361C149.697 -0.207464 146.69 1.48954 143.382 3.79254Z">
+                                                </path>
+                                            </g>
+                                        </g>
+                                        <!-- 背闊肌 -->
+                                        <g class="muscle-pair" data-muscle="lats" role="button" tabIndex="0">
+                                            <!-- 左 -->
+                                            <g transform="translate(98.8, 176.9) scale(0.86)">
+                                                <path d="M0.142998 15.246L0.286003 30.492L5.994 45.992C9.134 54.517 13.104 65.443 14.818 70.271L17.934 79.051L23.219 85.271C26.127 88.693 32.007 96.174 36.287 101.896C40.566 107.619 47.965 117.519 52.727 123.896C61.358 135.453 78.389 153.219 77.241 149.467C75.292 143.097 69.186 89.536 67.612 64.992C67.03 55.917 66.029 46.103 65.387 43.182L64.22 37.872L60.144 35.492C57.902 34.183 52.402 31.763 47.922 30.116C31.594 24.109 14.148 13.69 4.034 3.903L0 0L0.142998 15.246Z">
+                                                </path>
+                                            </g>
+                                            <!-- 右 -->
+                                            <g transform="translate(98.6, 176.9) scale(0.86)">
+                                                <path d="M153.68 5.092C142.878 15.166 127.903 23.895 109.847 30.642C104.469 32.652 99.109 34.919 97.938 35.681C94.86 37.681 93.779 43.079 92.067 64.992C91.229 75.717 90.112 88.767 89.583 93.992C89.055 99.217 88.111 109.019 87.487 115.775C86.862 122.53 85.583 133.218 84.645 139.525C83.707 145.832 83.078 150.992 83.248 150.992C83.903 150.992 98.096 136.208 102.464 130.975C104.996 127.941 111.204 119.391 116.258 111.975C121.313 104.559 129.188 94.11 133.758 88.755L142.068 79.018L148.82 61.735C152.534 52.229 156.517 41.986 157.672 38.972L159.771 33.492L159.919 16.743C160.001 7.53101 159.843 0.0109999 159.568 0.0309999C159.293 0.0519999 156.644 2.329 153.68 5.092Z">
+                                                </path>
+                                            </g>
+                                        </g>
+                                        <!-- 臀大肌 -->
+                                        <g class="muscle-pair" data-muscle="glute" role="button" tabIndex="0">
+                                            <!-- 左 -->
+                                            <g transform="translate(99.4, 290) scale(0.86)">
+                                                <path d="M28.6658 0.689121C22.9298 1.84712 18.9178 4.49513 14.5208 10.0261C3.24485 24.2101 -2.61515 46.3661 1.12685 60.6661C4.82685 74.8041 14.9408 89.2871 24.2668 93.8021L28.8008 95.9971L36.9828 95.5171C45.3648 95.0251 53.9508 92.5611 63.1658 88.0021C70.5618 84.3441 74.4458 81.1051 76.6749 76.7351L78.6658 72.8331L78.6618 49.5431L78.6588 26.2531L76.7858 23.2531C73.5248 18.0301 63.3538 8.25811 58.1658 5.36411C49.9498 0.781108 37.7728 -1.14788 28.6658 0.689121Z">
+                                                </path>
+                                            </g>
+                                            <!-- 右 -->
+                                            <g transform="translate(98.6, 291.2) scale(0.86)">
+                                                <path d="M112.166 1.1831C100.724 4.4211 94.3808 8.5791 86.5778 17.9551L81.6658 23.8571V49.8311V75.8061L86.2378 80.3781C91.6268 85.7671 101.731 90.7191 113.629 93.8031L121.958 95.9621L122.002 95.9596C123.164 96.2262 126.309 96.0182 128.437 95.7681C128.962 95.6298 129.629 95.4945 130.45 95.3406C131.864 95.0753 133.26 94.6662 134.631 94.1197L139.858 92.0991C146.166 87.5661 153.726 75.9191 157.107 65.5241L159.946 56.7961L159.393 48.0241C158.214 29.3451 147.548 8.3351 136.309 2.5531C131.046 -0.154904 119.255 -0.823899 112.166 1.1831Z">
+                                                </path>
+                                            </g>
+                                        </g>
+                                        <!-- 大腿後側 -->
+                                        <g class="muscle-pair" data-muscle="hamstring" role="button" tabIndex="0">
+                                            <!-- 左 -->
+                                            <g transform="translate(94.7, 342.2) scale(0.86)">
+                                                <path d="M1.883 14.318L0 27.596L0.0189972 48.596L0.038002 69.596L2.284 80.109C3.519 85.891 6.363 96.466 8.604 103.609C14.674 122.958 15.629 127.684 15.069 135.596L14.573 142.596L17.7365 141L22.491 138.602C25.357 136.674 28.443 135.106 29.35 135.118C34.599 135.188 44.856 142.942 51.766 152.066C53.212 153.974 54.573 155.324 54.792 155.066C55.01 154.807 57.021 147.171 59.259 138.096C61.497 129.021 64.471 117.321 65.868 112.096C75.201 77.185 79.367 55.054 80.221 35.846C80.532 28.834 80.61 23.133 80.394 23.178C80.177 23.223 78.2 24.549 76 26.124C72.07 28.938 57.043 34.993 48.817 37.077L40.5 38.587C40.5 38.317 39.262 38.092 37.75 38.086C33.063 38.07 24.812 33.47 19.496 27.91C16.112 24.371 12.637 18.996 9.091 11.818L3.767 1.04102L1.883 14.318Z">
+                                                </path>
+                                            </g>
+                                            <!-- 右 -->
+                                            <g transform="translate(93.9, 342.2) scale(0.86)">
+                                                <path d="M141.384 36.4031C151.017 32.564 159.443 21.9458 164.659 6.798L167 0L168.412 6.798L169.824 13.596L169.911 42.596L169.998 71.596L168.162 80.596C165.966 91.363 162.206 105.807 158.92 116.096C157.434 120.751 156.521 126.03 156.513 130.013C156.506 133.542 155.987 142.937 155.647 142.596L155.566 142.235C155.593 142.441 155.621 142.566 155.647 142.596L153.317 140.073C147.003 133.237 141.594 132.348 134.446 136.972C130.052 139.814 123.853 145.897 119.678 151.463C119.524 151.669 119.38 151.865 119.246 152.049C118.633 152.89 118.217 153.46 117.834 153.438C117.026 153.393 116.367 150.711 114.319 142.369C114.107 141.507 113.88 140.583 113.637 139.596C112.01 132.996 109.509 123.321 108.079 118.096C96.268 74.945 92.278 55.355 91.021 34.346C90.605 27.375 90.749 24.096 91.474 24.096C92.06 24.096 94.218 25.15 96.27 26.438C100.906 29.348 114.671 34.69 121.147 36.092C123.816 36.67 127.24 37.638 128.755 38.243C129.917 38.5096 133.062 38.3016 135.19 38.0515C135.715 37.9132 136.382 37.7779 137.203 37.624C138.617 37.3587 140.013 36.9496 141.384 36.4031Z">
+                                                </path>
+                                            </g>
+                                        </g>
+                                        <!-- 小腿後側 -->
+                                        <g class="muscle-pair" data-muscle="calves" role="button" tabIndex="0">
+                                            <!-- 左 -->
+                                            <g transform="translate(96.4, 460) scale(0.86)">
+                                                <path d="M21.9355 3.84036C14.6355 9.36436 7.7505 20.0924 3.4665 32.6164C-1.29116 46.5305 -0.978336 68.4992 3.34502 82.7273C5.13423 90.0908 7.70998 99.666 10.3855 108.08C16.1385 130.971 18.1355 156.595 14.7905 164.601C13.0695 168.72 13.5935 172.83 15.8395 172.83C16.6435 172.83 17.5915 171.593 17.9465 170.08C18.3015 168.567 19.8825 165.03 21.4595 162.219C21.7612 161.939 22.0051 161.495 22.2863 160.983C22.8954 159.875 23.6792 158.448 25.6025 157.681L28.0365 156.755C31.5705 155.411 36.4345 155.631 39.5895 157.277L42.3395 158.711V151.483C42.3395 142.762 44.6015 123.824 46.7495 114.562C47.6085 110.858 50.3445 102.393 52.8285 95.7523C58.4395 80.7514 59.7345 72.7484 59.0425 57.3303C58.2065 38.6873 53.3185 24.0303 44.2715 13.0363C39.6055 7.36634 30.6705 0.812365 27.6705 0.858365C26.6635 0.873365 24.0825 2.21536 21.9355 3.84036Z">
+                                                </path>
+                                            </g>
+                                            <!-- 右 -->
+                                            <g transform="translate(95.7, 459.4) scale(0.86)">
+                                                <path d="M133.34 2.28433C120.404 10.9193 111.156 29.5853 108.394 52.6333L107.28 61.9364L108.413 70.6333C109.037 75.4163 111.327 84.5053 113.503 90.8303C122.289 116.367 124.033 124.815 124.876 145.939C125.131 152.324 125.34 157.862 125.34 158.246C125.34 158.629 126.34 158.243 127.563 157.387C130.102 155.608 136.536 155.329 139.421 156.873L141.37 157.916L143.289 158.666L145.889 162.498C147.32 164.605 148.735 167.557 149.035 169.058C149.336 170.558 150.142 172.251 150.828 172.82L152.075 173.855L153.393 172.266L154.712 170.677L153.362 166.503C152.619 164.208 151.836 156.389 151.622 149.127L151.233 135.924L153.289 124.627C154.42 118.414 156.478 109.101 157.862 103.933C159.247 98.7654 160.207 94.3644 159.995 94.1524C163.796 85.291 164.461 82.6133 165.832 72.3303C170.091 49.7343 165.328 25.6614 153.476 9.88937C145.962 -0.111632 140.193 -2.29067 133.34 2.28433Z">
+                                                </path>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右欄：三張卡片縱向排列 -->
+                    <div class="right-col">
+
+                        <!-- 訓練佔比圓餅圖（Chart.js doughnut） -->
+                        <div class="pie-card">
+                            <div class="sec-label">訓練佔比</div>
+                            <div class="pie-inner">
+                                <!-- 圓餅 canvas -->
+                                <div class="pie-cw"><canvas id="pie-chart" width="180" height="180"></canvas></div>
+                                <!-- 右側圖例列表（由 JS renderPieLeg() 動態注入） -->
+                                <div class="pie-leg" id="pie-leg"></div>
+                            </div>
+                        </div>
+
+                        <!-- 目標達成率（由 JS renderGoals() 動態注入進度條列表） -->
+                        <div class="goal-card">
+                            <div class="sec-label" style="margin-bottom:14px">目標達成率</div>
+                            <div id="goal-rows"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 本月訓練建議（橫向填滿，位於雙欄下方） -->
+                <div class="sug-card">
+                    <div class="sug-head">
+                        <span style="font-size:20px">&#128161;</span>
+                        <span class="sug-title">本月建議</span>
+                    </div>
+                    <div id="sug-list"></div>
+                </div>
+            </div>
+        </div>
+        <!-- PAGE 4：目標設定 -->
+        <div class="page" id="page-p4">
+            <div class="pi">
+                <div class="msec">
+                    <div class="mlbl" style="margin-bottom:12px">每月肌群目標組數</div>
+                    <div class="goal-setting-grid" id="goal-setting-grid"></div>
+                </div>
+                <button class="msub" id="mo-profile-save" style="margin-top:32px">儲存設定</button>
+            </div>
+        </div>
+    </div>
+    <div class="sidebar-r"></div>
+</div>
+
+<!-- ─────────────────────────────────────────
+       MODAL ADD：新增訓練項目
+       ─ 動作 chip 選擇
+       ─ 重量輸入
+       ─ 組數 / 次數步進控制
+       ───────────────────────────────────────── -->
+<div class="mo" id="mo-add">
+    <div class="mb lg">
+        <div class="mhead">
+            <div class="mtitle">新增訓練項目</div>
+            <button class="mclose" id="mo-add-close">X</button>
+        </div>
+        <!-- 選取日期顯示（由 JS 注入） -->
+        <div style="font-size:18px;color:var(--text-dim);font-family:var(--font-sans);margin-bottom:18px"
+             id="mo-add-date"></div>
+
+        <!-- 動作選擇 grid（部位 × 器材） -->
+        <div class="msec">
+            <div class="ex-grid">
+                <div class="ex-grid-head">
+                    <div class="ex-grid-corner"></div>
+                    <div class="eq-col-lbl">槓鈴</div>
+                    <div class="eq-col-lbl">啞鈴</div>
+                    <div class="eq-col-lbl">徒手</div>
+                    <div class="eq-col-lbl">機械</div>
+                </div>
+                <div class="ex-grid-row">
+                    <div class="ex-row-lbl">背</div>
+                    <div class="ex-cell" data-ex="row-bar">槓鈴划船</div>
+                    <div class="ex-cell" data-ex="row-db">單手啞鈴划船</div>
+                    <div class="ex-cell" data-ex="pullup">引體向上</div>
+                    <div class="ex-cell" data-ex="lat">滑輪下拉</div>
+                </div>
+                <div class="ex-grid-row">
+                    <div class="ex-row-lbl">胸</div>
+                    <div class="ex-cell" data-ex="bench-bar">槓鈴臥推</div>
+                    <div class="ex-cell" data-ex="bench-db">啞鈴臥推</div>
+                    <div class="ex-cell" data-ex="pushup">伏地挺身</div>
+                    <div class="ex-cell" data-ex="chestpress">胸推機</div>
+                </div>
+                <div class="ex-grid-row">
+                    <div class="ex-row-lbl">核心</div>
+                    <div class="ex-cell" data-ex="rollout">槓鈴滾輪</div>
+                    <div class="ex-cell" data-ex="sidebend">啞鈴側彎</div>
+                    <div class="ex-cell" data-ex="plank">棒式</div>
+                    <div class="ex-cell" data-ex="crunch">捲腹機</div>
+                </div>
+                <div class="ex-grid-row">
+                    <div class="ex-row-lbl">肩</div>
+                    <div class="ex-cell" data-ex="ohp-bar">槓鈴肩推</div>
+                    <div class="ex-cell" data-ex="lateral-db">啞鈴側平舉</div>
+                    <div class="ex-cell" data-ex="hspu">倒立撐</div>
+                    <div class="ex-cell" data-ex="shoulderpress">肩推機</div>
+                </div>
+                <div class="ex-grid-row">
+                    <div class="ex-row-lbl">臂</div>
+                    <div class="ex-cell" data-ex="curl-bar">槓鈴彎舉</div>
+                    <div class="ex-cell" data-ex="curl-db">啞鈴彎舉</div>
+                    <div class="ex-cell" data-ex="dip">雙槓撐體</div>
+                    <div class="ex-cell" data-ex="curl-mach">二頭彎舉機</div>
+                </div>
+                <div class="ex-grid-row">
+                    <div class="ex-row-lbl">腿</div>
+                    <div class="ex-cell" data-ex="squat-bar">槓鈴深蹲</div>
+                    <div class="ex-cell" data-ex="squat-db">啞鈴深蹲</div>
+                    <div class="ex-cell" data-ex="squat-bw">自重深蹲</div>
+                    <div class="ex-cell" data-ex="legpress">腿推機</div>
+                </div>
+                <div class="ex-grid-row">
+                    <div class="ex-row-lbl">臀</div>
+                    <div class="ex-cell" data-ex="hipthrust-bar">槓鈴臀推</div>
+                    <div class="ex-cell" data-ex="hipthrust-db">啞鈴臀推</div>
+                    <div class="ex-cell" data-ex="glutebridge">臀橋</div>
+                    <div class="ex-cell" data-ex="abduction">臀外展機</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 重量 / 次數 / 組數（橫向三欄） -->
+        <div class="msec">
+            <div class="add-ctrl-row">
+                <div class="add-ctrl-grp">
+                    <div class="add-ctrl-lbl">重量</div>
+                    <input class="winp add-winp" type="number" id="winp" placeholder="60" min="0" step="2.5">
+                    <div class="w-mode-lbl" id="w-mode-lbl"></div>
+                </div>
+                <div class="add-ctrl-grp">
+                    <div class="add-ctrl-lbl">次數</div>
+                    <div class="num-ctrl">
+                        <button class="num-btn" data-t="reps" data-d="-">-</button>
+                        <div class="num-val" id="reps-v">8</div>
+                        <button class="num-btn" data-t="reps" data-d="+">+</button>
+                    </div>
+                </div>
+                <div class="add-ctrl-grp">
+                    <div class="add-ctrl-lbl">組數</div>
+                    <div class="num-ctrl">
+                        <button class="num-btn" data-t="sets" data-d="-">-</button>
+                        <div class="num-val" id="sets-v">3</div>
+                        <button class="num-btn" data-t="sets" data-d="+">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 確認加入項目按鈕 -->
+        <button class="msub" id="mo-add-sub">加入項目</button>
+    </div>
+</div>
+
+<!-- ─────────────────────────────────────────
+       MODAL SETS：組數詳情
+       ─ 點擊訓練項目列後開啟
+       ─ 顯示各組重量 × 次數 + 完成勾選
+       ───────────────────────────────────────── -->
+<div class="mo" id="mo-sets">
+    <div class="mb sm">
+        <div class="mhead">
+            <div class="mtitle" id="sets-title">訓練組</div>
+            <div style="display:flex;align-items:center;gap:16px">
+                <button class="mbtn mbtn-sm mbtn-danger" id="sets-delete">刪除項目</button>
+                <button class="mclose" id="mo-sets-close">X</button>
+            </div>
+        </div>
+        <!-- 組數列表（由 JS renderSets() 動態注入） -->
+        <div id="sets-list"></div>
+        <!-- 底部操作列 -->
+        <div class="mfoot">
+            <button class="mbtn" id="sets-complete-all">全部完成</button>
+            <button class="mbtn" id="sets-confirm">確定</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const SERVER_PR = @Html.Raw(JsonSerializer.Serialize(Model.PrList, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
+    const SERVER_RM = @Html.Raw(JsonSerializer.Serialize(Model.RmList, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
+    const SERVER_ACTIVITY = @Html.Raw(JsonSerializer.Serialize(Model.Activity, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
+    const SERVER_TD = @Html.Raw(JsonSerializer.Serialize(Model.MonthlyData));
+    const SERVER_MONTHS = @Html.Raw(JsonSerializer.Serialize(Model.AvailableMonths));
+    const SERVER_YEARS = @Html.Raw(JsonSerializer.Serialize(Model.AvailableYears));
+    const SERVER_WEIGHTED_DATA = @Html.Raw(JsonSerializer.Serialize(Model.WeightedData));
+    const SERVER_PRIMARY_DATA  = @Html.Raw(JsonSerializer.Serialize(Model.PrimaryData));
+</script>

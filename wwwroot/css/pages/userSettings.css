@@ -1,0 +1,98 @@
+/*
+userSettings.css - 使用者設定與目標設定（User Settings）
+
+包含：
+- 個人資料設定表單（Profile modal）
+- 目標肌群設定介面（Goal setting grid）
+- 數值步進控制（+ / - 調整）
+- 輸入框與按鈕樣式
+*/
+
+/* PAGE 4 左右額外內距 */
+#page-p4 .pi {
+    padding-left: calc(var(--g) + 100px);
+    padding-right: calc(var(--g) + 100px);
+}
+
+/* PAGE 4 標題字體 */
+#page-p4 .mlbl {
+    font-size: 17px;
+}
+
+/* 目標設定列表 */
+.goal-setting-grid {
+    display: flex;
+    flex-direction: column;
+}
+
+/* 單個目標設定列（名稱左 / 步進右） */
+.gs-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+    .gs-item:last-child {
+        border-bottom: none;
+    }
+
+/* 目標名稱文字 */
+.gs-name {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+/* 目標數值調整橫排（- 數值 +） */
+.gs-ctrl {
+    display: flex;
+    align-items: center;
+    gap: 100px;
+}
+
+    /* 數值 + 單位置中容器：固定寬確保 +/- 對齊 */
+    .gs-ctrl > span {
+        display: flex;
+        justify-content: center;
+        min-width: 120px;
+    }
+
+/* 目標 +/- 步進按鈕 */
+.gs-btn {
+    width: 34px;
+    height: 30px;
+    background: var(--surface3);
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    cursor: pointer;
+    font-size: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background var(--dur-instant) var(--ease-expo);
+}
+
+    /* 目標步進按鈕 hover：黑底白色 */
+    .gs-btn:hover {
+        background: var(--accent);
+        color: var(--color-white);
+    }
+
+/* 目標數值（Big Shoulders 22px，強調色） */
+.gs-val {
+    font-family: var(--font-brand);
+    font-size: 24px;
+    color: var(--accent);
+    min-width: 40px;
+    text-align: center;
+}
+
+/* 目標單位文字（kg / 次） */
+.gs-unit {
+    font-size: 17px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    margin-left: 2px;
+}

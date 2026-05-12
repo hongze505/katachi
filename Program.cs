@@ -14,6 +14,7 @@ builder.Services.AddDbContext<KatachiDbContext>(options =>
         builder.Configuration.GetConnectionString("KatachiDB")
     )
 );
+builder.Services.AddSingleton<katachi.Helpers.DbHelper>();
 builder.Services.AddScoped<NutritionService>();
 builder.Services.AddScoped<PlanService>();
 
@@ -24,6 +25,6 @@ app.UseRouting();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Account}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

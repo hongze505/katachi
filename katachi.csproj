@@ -15,4 +15,9 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="10.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\css\muscle-map.css\" />
+    <Folder Include="wwwroot\svg\" />
+  </ItemGroup>
+
 </Project>

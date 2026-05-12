@@ -1,0 +1,56 @@
+﻿@{
+    ViewBag.Title = "KATACHI首頁";
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/css/muscle-map.css/exercise.css" />
+
+}
+
+@section scripts{
+    <script src="~/js/muscle-map.js/data.js" defer></script>
+    <script src="~/js/muscle-map.js/exercise.js" defer></script>
+
+}
+
+<div class="ex-layout">
+    <header class="ex-header">
+        <button class="ex-back-btn" onclick="history.back()">&#36820;&#22238;</button>
+        <span class="ex-header-title" id="ex-muscle-name"></span>
+    </header>
+
+    <main class="ex-main">
+        <div class="ex-title-row">
+            <h1 class="ex-title" id="ex-title"></h1>
+            <span class="ex-badge" id="ex-badge"></span>
+        </div>
+
+        <div class="ex-content-row">
+            <div class="ex-img-wrap">
+                <img class="ex-img" id="ex-img" src="" alt="" />
+            </div>
+
+            <div class="ex-right-col">
+                <section class="ex-desc-section">
+                    <h2 class="ex-desc-label">&#21205;&#20316;&#35498;&#26126;</h2>
+                    <p class="ex-desc" id="ex-desc"></p>
+                </section>
+
+                <div class="ex-stats-card" id="ex-stats-card" style="display:none">
+                    <div class="ex-difficulty-wrap" id="ex-difficulty-wrap" style="display:none">
+                        <span class="ex-stats-label">&#38627;&#24230;</span>
+                        <div class="ex-stars" id="ex-stars"></div>
+                    </div>
+
+                    <hr class="ex-stats-divider" id="ex-stats-divider" style="display:none">
+
+                    <div class="ex-muscles-wrap" id="ex-muscles-wrap" style="display:none">
+                        <span class="ex-stats-label">&#20027;&#35201;&#32908;&#32676;(&#32908;&#32905;&#21443;&#33287;&#27604;&#20363;)</span>
+                        <div class="ex-muscle-bars" id="ex-muscle-bars"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+

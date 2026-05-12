@@ -1,0 +1,219 @@
+﻿@{
+    ViewBag.Title = "KATACHI首頁";
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/css/muscle-map.css/index.css" />
+
+}
+
+@section scripts{
+    <script src="~/js/muscle-map.js/data.js" defer></script>
+    <script src="~/js/muscle-map.js/detail-svg.js" defer></script>
+    <script src="~/js/muscle-map.js/svg.js" defer></script>
+    <script src="~/js/muscle-map.js/app.js" defer></script>
+
+}
+<div class="app-layout">
+    <div class="left-sidebar">
+        <div class="sidebar-top">
+            <h2 class="sidebar-title"><span>EXPLORE</span><br />YOUR BODY</h2>
+            <div class="sidebar-tag">自分の身体を探求する</div>
+            <div class="coord-label">
+                <span class="line"></span>
+                <span class="numbers">34.7° N / 135.2° E</span>
+            </div>
+        </div>
+
+        <div class="sidebar-divider">
+            <span class="line"></span>
+            <span class="numbers">34.7° N / 135.2° E</span>
+        </div>
+
+        <div class="mode-switch">
+            <button class="mode-btn active" data-mode="basic">
+                <span class="mode-tag">[ 01 ]</span>
+                <div class="mode-text" id="btn-simple">
+                    <span class="en">MODE_BASIC</span>
+                    <span class="jp">簡易表示</span>
+                </div>
+            </button>
+
+            <button class="mode-btn" data-mode="detail">
+                <span class="mode-tag">[ 02 ]</span>
+                <div class="mode-text" id="btn-detailed">
+                    <span class="en">MODE_DETAIL</span>
+                    <span class="jp">詳細解析</span>
+                </div>
+            </button>
+
+        </div>
+    </div>
+    <!-- 中:人體圖區 -->
+    <div class="app-main">
+        <div class="body-map body-view">
+            <!-- svg發光效果 -->
+            <svg style="position: absolute; width: 0; height: 0" aria-hidden="true">
+                <defs>
+                    <!-- 定義視覺特效 -->
+                    <filter id="muscle-hover-glow" x="-12%" y="-12%" width="124%" height="124%">
+                        <!-- 近距離金色光 -->
+                        <feDropShadow dx="0" dy="0" stdDeviation="1.6" flood-color="#ffd76a" flood-opacity="0.28" />
+                    </filter>
+                </defs>
+            </svg>
+
+            <!-- 模式切換 -->
+            <!-- 正面圖 -->
+            <div class="body-map__figure">
+                <img class="body-map__image" src="~/svg/front.svg" alt="front body map" />
+                <!-- 互動 SVG 覆蓋層 -->
+                <svg class="body-map__overlay" viewBox="0 0 340 649" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 斜方肌 -->
+                    <g id="frontTrapezius-slot" class="muscle-pair" data-muscle="frontTrapezius" role="button" tabIndex="0">
+                    </g>
+
+                    <!-- 三角肌(左)-->
+                    <g id="frontDeltoidLeft-slot" class="muscle-pair" data-muscle="frontDeltoidLeft" role="button" tabIndex="0">
+                    </g>
+                    <!-- 三角肌(右) -->
+                    <g id="frontDeltoidRight-slot" class="muscle-pair" data-muscle="frontDeltoidRight" role="button"
+                           tabIndex="0">
+                    </g>
+
+                    <!-- 二頭(左) -->
+                    <g id="bicepsLeft-slot" class="muscle-pair" data-muscle="bicepsLeft" role="button" tabIndex="0">
+                    </g>
+                    <!-- 二頭(右) -->
+                    <g id="bicepsRight-slot" class="muscle-pair" data-muscle="bicepsRight" role="button" tabIndex="0">
+                    </g>
+
+                    <!-- 前臂-->
+                    <g id="frontForearm-slot" class="muscle-pair" data-muscle="frontForearm" role="button" tabIndex="0">
+                    </g>
+
+                    <!-- 胸大肌 -->
+                    <g id="chest-slot" class="muscle-pair" data-muscle="chest" role="button" tabIndex="0">
+                    </g>
+
+                    <!-- 腹肌 -->
+                    <g id="abs-slot" class="muscle-pair" data-muscle="abs" role="button" tabIndex="0">
+                    </g>
+
+                    <!-- 側腹 -->
+                    <g id="sideabs-slot" class="muscle-pair" data-muscle="sideabs" role="button" tabIndex="0">
+                    </g>
+
+                    <!-- 股四頭 -->
+                    <g id="quads-slot" class="muscle-pair" data-muscle="quads" role="button" tabIndex="0">
+                    </g>
+
+                    <!-- 小腿前側 -->
+                    <g id="shin-slot" class="muscle-pair" data-muscle="shin" role="button" tabIndex="0">
+                    </g>
+                </svg>
+            </div>
+
+            <!-- 背面圖 -->
+            <div class="body-map__figure">
+                <img class="body-map__image" src="~/svg/back.svg" alt="back body map" />
+                <svg class="body-map__overlay body-map__overlay--back" viewBox="0 0 340 649" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 背部斜方肌 -->
+                    <g id="backTrapezius-slot" class="muscle-pair" data-muscle="backTrapezius" role="button" tabIndex="0">
+                    </g>
+
+                    <!-- 後三角 -->
+                    <g id="rearDelt-slot" class="muscle-pair" data-muscle="rearDelt" role="button" tabIndex="0">
+                    </g>
+
+                    <!-- 肱三頭 -->
+                    <g id="triceps-slot" class="muscle-pair" data-muscle="triceps" role="button" tabIndex="0">
+                    </g>
+
+                    <!-- 前臂 -->
+                    <g id="backForearm-slot" class="muscle-pair" data-muscle="backForearm" role="button" tabIndex="0">
+                    </g>
+
+                    <!-- 菱形肌 -->
+                    <g id="rhomboid-slot" class="muscle-pair" data-muscle="rhomboid" role="button" tabIndex="0">
+                    </g>
+
+                    <!-- 背闊肌 -->
+                    <g id="lats-slot" class="muscle-pair" data-muscle="lats" role="button" tabIndex="0">
+                    </g>
+
+                    <!-- 臀大肌 -->
+                    <g id="glute-slot" class="muscle-pair" data-muscle="glute" role="button" tabIndex="0">
+                    </g>
+
+                    <!-- 大腿後側 -->
+                    <g id="hamstring-slot" class="muscle-pair" data-muscle="hamstring" role="button" tabIndex="0">
+                    </g>
+
+                    <!-- 小腿後側 -->
+                    <g id="calves-slot" class="muscle-pair" data-muscle="calves" role="button" tabIndex="0">
+                    </g>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- 右：器材 + 動作列表面板 -->
+    <div class="equipment-panel">
+        <!-- 1. 動作數量大數字 -->
+        <div class="exercise-count-wrap">
+            <div id="exercise-count">—</div>
+            <div class="exercise-count-label">個動作</div>
+        </div>
+
+        <!-- 2. 肌群名稱 -->
+        <div id="muscle-name"></div>
+        <span id="muscle-name-en"></span>
+
+        <hr />
+
+        <!-- 3. 器材篩選 -->
+        <div class="equipment-panel-label">器材</div>
+        <div class="equipment-btns">
+            <button class="equipment-btn" data-eq="dumbbell">啞鈴</button>
+            <button class="equipment-btn" data-eq="barbell">槓鈴</button>
+            <button class="equipment-btn" data-eq="bodyweight">徒手訓練</button>
+        </div>
+
+        <!-- 4. 肌群說明 -->
+        <div class="muscle-desc"></div>
+
+        <!-- 5. 動作列表 -->
+        <div class="equipment-panel-label">相關動作</div>
+        <ul class="exercise-list" id="exercise-list"></ul>
+
+        <!-- 圖例（CSS 隱藏） -->
+        <div class="legend">
+            <div class="legend-item">
+                <span class="legend-dot legend-dot--hover"></span>滑鼠指向
+            </div>
+            <div class="legend-item">
+                <span class="legend-dot legend-dot--selected"></span>已選取
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 詳細彈窗（平時隱藏，詳細模式點擊後顯示） -->
+<div class="muscle-detail-backdrop" id="detail-backdrop" style="display: none">
+    <div class="muscle-detail-modal" id="detail-modal">
+        <!-- 叉叉按鈕 -->
+        <button class="muscle-detail-close" id="detail-close">✕</button>
+        <h2 class="muscle-detail-title" id="detail-title"></h2>
+        <!-- 內容由 JS 動態填入 -->
+        <div id="detail-body"></div>
+    </div>
+</div>
+
+<script>
+    const BASE_URL = {
+        exerciseDetail: '@Url.Action("Exercise", "MuscleMap")'
+    };
+</script>
+

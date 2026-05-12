@@ -1,0 +1,138 @@
+/* 
+modal.css - 彈窗系統
+
+包含：
+- 遮罩（overlay）
+- 彈窗容器（modal box）
+- header（標題 / 關閉按鈕）
+*/
+
+/* MODALS */
+.mo {
+    position: fixed;
+    inset: 0;
+    background: rgba(24, 24, 24, .45);
+    z-index: var(--z-drawer);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(6px);
+}
+
+    /* 彈窗遮罩開啟狀態（display: flex 置中內容） */
+    .mo.open {
+        display: flex;
+    }
+
+/* 彈窗本體（.sm 較窄 / .lg 較寬） */
+.mb {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    width: 480px;
+    max-width: 95vw;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 28px;
+    animation: fu var(--dur-fast) var(--ease-expo);
+}
+
+    /* 窄版彈窗（新增訓練等簡短表單） */
+    .mb.sm {
+        width: 380px;
+    }
+
+    /* 寬版彈窗（組數詳情 / 個人設定等複雜表單） */
+    .mb.lg {
+        width: 580px;
+    }
+
+/* 彈窗入場動畫：由下淡入 */
+@keyframes fu {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 彈窗頂列（標題 + 關閉按鈕） */
+.mhead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+}
+
+/* 彈窗標題文字 */
+.mtitle {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* 彈窗關閉按鈕（× 號） */
+.mclose {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-dim);
+}
+
+    /* 關閉按鈕 hover：邊框與圖示變紅色 */
+    .mclose:hover {
+        border-color: var(--danger);
+        color: var(--danger);
+    }
+
+/* 彈窗底部操作列 */
+.mfoot {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+}
+
+.mbtn {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface2);
+    color: var(--text-dim);
+    font-size: 17px;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    transition: all var(--dur-instant) var(--ease-expo);
+}
+
+    .mbtn:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+    }
+
+.mbtn-sm {
+    flex: none;
+    padding: 6px 12px;
+    font-size: 16px;
+}
+
+.mbtn-danger {
+    color: var(--danger);
+}
+
+    .mbtn-danger:hover {
+        border-color: var(--danger);
+        color: var(--danger);
+    }

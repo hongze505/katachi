@@ -1,0 +1,220 @@
+/* 
+calendar.css - 日曆元件
+
+包含：
+- 月份導覽（切換月份、顯示當前月份）
+- 圖例（完成 / 部分 / 計畫 / 未完成）
+- 日曆格線（星期列 + 日期格）
+- 日期狀態樣式（done / partial / planned / missed）
+- 當天與選中狀態
+*/
+
+/* ===== CALENDAR 容器 ===== */
+.cal-section {
+    margin-bottom: var(--g);
+    background: var(--color-bg);
+    border-radius: 10px;
+}
+
+/* ===== 月份導覽列 ===== */
+
+/* 月份文字 + 圖例容器 */
+.cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding: 10px 10px;
+}
+
+/* 上 / 下月按鈕 + 月份標籤 */
+.cal-mnav {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+/* 月份切換按鈕 */
+.cal-nb {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--dur-instant) var(--ease-expo);
+}
+
+    /* hover 狀態 */
+    .cal-nb:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+    }
+
+/* 月份標籤（YYYY 年 M 月） */
+.cal-mlbl {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    color: var(--text);
+    min-width: 110px;
+    text-align: center;
+}
+
+/* ===== 圖例（Legend） ===== */
+
+/* 圖例容器 */
+.cal-legend {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+/* 單個圖例項 */
+.leg-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    color: var(--text-muted);
+}
+
+/* 色點 */
+.leg-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+}
+
+/* ===== 日曆主體 ===== */
+
+/* 外框 */
+.cal-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+/* 星期列（7欄） */
+.cal-dow {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    border-bottom: 1px solid var(--border);
+}
+
+/* 星期格 */
+.cal-dow-cell {
+    text-align: center;
+    padding: 10px 0;
+    font-size: 15px;
+    font-family: var(--font-sans);
+    color: var(--text-muted);
+    letter-spacing: 1px;
+}
+
+/* 日期格區域 */
+.cal-cells {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background: var(--border);
+}
+
+/* 單一日期格 */
+.cal-cell {
+    background: var(--surface);
+    aspect-ratio: 1.4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background var(--dur-instant) var(--ease-expo);
+    min-height: 56px;
+}
+
+    /* hover 效果 */
+    .cal-cell:hover {
+        background: var(--surface2);
+    }
+
+    /* 空白佔位（非當月） */
+    .cal-cell.empty {
+        background: var(--color-bg);
+        cursor: default;
+        pointer-events: none;
+    }
+
+    /* 日期數字 */
+    .cal-cell .cn {
+        font-size: 18px;
+        font-weight: 500;
+    }
+
+    /* ===== 日期狀態 ===== */
+
+    /* 已完成 */
+    .cal-cell.done {
+        background: var(--done);
+    }
+
+        .cal-cell.done .cn {
+            color: var(--color-white);
+            font-weight: 700;
+        }
+
+    /* 部分完成 */
+    .cal-cell.partial {
+        background: var(--partial);
+    }
+
+        .cal-cell.partial .cn {
+            color: var(--color-white);
+        }
+
+    /* 已安排 */
+    .cal-cell.planned {
+        background: var(--planned);
+    }
+
+        .cal-cell.planned .cn {
+            color: var(--text-dim);
+        }
+
+    /* 未完成 */
+    .cal-cell.missed {
+        background: var(--missed);
+    }
+
+        .cal-cell.missed .cn {
+            color: var(--color-white);
+        }
+
+    /* ===== 特殊狀態 ===== */
+
+    /* 今天 */
+    .cal-cell.today {
+        outline: 3px solid #a34024;
+        outline-offset: -4px;
+    }
+
+    /* 今天 + 已完成 */
+    .cal-cell.done.today .cn {
+        color: var(--color-white);
+    }
+
+    /* 今天但未完成 / 部分 */
+    .cal-cell.today:not(.done):not(.partial) .cn {
+        color: #a34024;
+    }
+
+    /* 被選中 */
+    .cal-cell.selected {
+        outline: 3px solid var(--color-black);
+        outline-offset: -3px;
+    }

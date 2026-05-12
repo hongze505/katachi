@@ -1,0 +1,41 @@
+/* 
+form.css - 表單元件
+
+包含：
+- 輸入框（input）
+- 標籤（label）
+- 表單區塊排版
+*/
+
+/* 彈窗表單區段（標籤 + 輸入元件） */
+.msec {
+    margin-bottom: 20px;
+}
+
+/* 彈窗欄位標籤（大寫字距） */
+.mlbl {
+    font-size: 15px;
+    font-family: var(--font-sans);
+    color: var(--text-muted);
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+}
+
+/* 重量輸入框（數字鍵盤，支援小數點 2.5 倍數） */
+.winp {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 6px 14px;
+    font-size: 23px;
+    color: var(--text);
+    font-family: var(--font-sans);
+    text-align: center;
+}
+
+    /* 重量輸入框 focus：移除預設 outline，改顯示黑邊 */
+    .winp:focus {
+        outline: none;
+        border-color: var(--accent);
+    }

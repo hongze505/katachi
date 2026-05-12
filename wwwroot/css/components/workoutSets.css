@@ -1,0 +1,64 @@
+/* 
+workout-sets.css - 訓練組數 UI
+
+包含：
+- set 列表
+- 重量 × 次數顯示
+- 完成勾選狀態
+*/
+
+/* 組數明細列（組號 + 重量次數 + 完成勾選） */
+.set-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+    /* 最後一組不顯示分隔線 */
+    .set-row:last-child {
+        border-bottom: none;
+    }
+
+/* 組號文字（SET 1 / SET 2 …） */
+.set-num {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    color: var(--text-muted);
+    width: 36px;
+}
+
+/* 組數主要資訊（重量 × 次數） */
+.set-info {
+    flex: 1;
+    font-size: 18px;
+}
+
+    /* 組數資訊中的數字強調（強調色顯示） */
+    .set-info span {
+        color: var(--accent);
+        font-family: var(--font-sans);
+    }
+
+/* 組數勾選圓圈 */
+.set-chk {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: none;
+    cursor: pointer;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--dur-instant) var(--ease-expo);
+}
+
+    /* 組數已完成：黑底白勾 */
+    .set-chk.done {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: var(--color-white);
+    }

@@ -1,0 +1,351 @@
+/* 
+overview.css - 訓練總覽頁（PAGE 1）
+
+包含：
+- 頁面版面（雙欄 grid）
+- 卡片系統（card + glow + 各類卡片）
+- 切換控制（完成率 / 活躍度）
+- PR / RM 紀錄區塊
+- 完成率視圖（百分比 + 進度條 + 統計）
+- 活躍度視圖（週期與連續紀錄）
+*/
+
+/* ===== 頁面版面 ===== */
+
+/* 上半部雙欄布局 */
+.p1-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--g);
+    margin-bottom: var(--g);
+}
+
+/* ===== 卡片系統 ===== */
+
+/* 通用卡片 */
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+    /* 卡片光暈效果 */
+    .card.glow::before {
+        content: '';
+        position: absolute;
+        top: -40px;
+        right: -40px;
+        width: 130px;
+        height: 130px;
+        background: var(--accent-glow);
+        border-radius: 50%;
+        filter: blur(40px);
+        pointer-events: none;
+    }
+
+/* 各類卡片共用樣式 */
+.chart-card,
+.muscle-card,
+.pie-card,
+.goal-card,
+.sug-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 22px 24px;
+}
+
+/* ===== 切換控制 ===== */
+
+/* 切換容器 */
+.tog {
+    display: flex;
+    background: var(--surface2);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    margin-bottom: 18px;
+    width: fit-content;
+}
+
+/* 切換按鈕 */
+.tog-btn,
+.body-tog-btn {
+    padding: 6px 14px;
+    font-size: 16px;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: var(--text-muted);
+    border-radius: var(--radius-sm);
+    transition: all var(--dur-instant) var(--ease-expo);
+}
+
+    /* 選中狀態 */
+    .tog-btn.active,
+    .body-tog-btn.active {
+        background: var(--accent);
+        color: var(--color-white);
+        font-weight: 700;
+    }
+
+/* ===== PR / RM 記錄 ===== */
+
+/* 列表容器 */
+.prmr-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* 單列 */
+.prmr-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+    /* 最後一列 */
+    .prmr-row:last-child {
+        border-bottom: none;
+    }
+
+/* 動作名稱 */
+.prmr-exname {
+    font-size: 18px;
+    color: var(--text-dim);
+}
+
+/* 數值區 */
+.prmr-vwrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* PR 標籤 */
+.pr-badge {
+    background: var(--accent);
+    color: var(--color-white);
+    font-size: 9px;
+    font-weight: 900;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-family: var(--font-sans);
+    letter-spacing: 1px;
+}
+
+/* 數字 */
+.prmr-num {
+    font-family: var(--font-brand);
+    font-size: 34px;
+    color: var(--accent);
+    line-height: 1;
+}
+
+    /* 小尺寸 */
+    .prmr-num.sm {
+        font-size: 24px;
+    }
+
+/* 單位 */
+.prmr-unit {
+    font-size: 17px;
+    color: var(--text-muted);
+}
+
+/* × 分隔符 */
+.prmr-x {
+    font-size: 18px;
+    color: var(--text-muted);
+}
+
+/* ===== 完成率視圖 ===== */
+
+.cmp-view {
+    display: block;
+}
+
+/* 頂部：左=已完成/已安排，右=百分比大數字 */
+.cmp-top-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+/* 大數字區（數字 + % 符號，靠右對齊） */
+.cmp-big {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 6px;
+}
+
+/* 百分比 */
+.cmp-num {
+    font-family: var(--font-brand);
+    font-size: 72px;
+    color: var(--accent);
+    line-height: 1;
+}
+
+/* % */
+.cmp-sym {
+    font-family: var(--font-brand);
+    font-size: 36px;
+    color: var(--accent);
+    opacity: .6;
+    margin-bottom: 6px;
+}
+
+/* 左側資訊（已完成/已安排） */
+.cmp-right {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+/* 右側百分比大數字區 */
+.cmp-pct {
+    text-align: right;
+}
+
+/* 分數 */
+.cmp-frac {
+    font-family: var(--font-brand);
+    font-size: 32px;
+    color: var(--text-dim);
+    line-height: 1;
+}
+
+/* 說明 */
+.cmp-frac-lbl {
+    font-size: 15px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    font-family: var(--font-sans);
+}
+
+.cmp-sub {
+    font-size: 16px;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+}
+
+/* 進度條 */
+.prog-bar {
+    height: 2px;
+    background: var(--surface3);
+    border-radius: 1px;
+    margin-bottom: 18px;
+    overflow: hidden;
+}
+
+.prog-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+    transition: width var(--dur-slow) var(--ease-expo);
+}
+
+/* 三格統計：待完成 / 部分完成 / 未完成 */
+.trio {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.trio-item {
+    background: var(--surface2);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    text-align: center;
+    border: 1px solid var(--border);
+}
+
+.trio-num {
+    font-family: var(--font-brand);
+    font-size: 28px;
+    line-height: 1;
+}
+
+.trio-lbl {
+    font-size: 15px;
+    color: var(--text-muted);
+    margin-top: 3px;
+}
+
+
+/* ===== 活躍度視圖 ===== */
+
+.act-view {
+    padding: 11px 0 0 0;
+    display: none;
+}
+
+/* 3x2 grid */
+.act-quad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+@media (max-width: 1280px) {
+    .act-quad {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .p1-top {
+        grid-template-columns: 1fr;
+    }
+
+    .act-quad {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.act-placeholder .act-num {
+    color: var(--color-grey-hint);
+}
+
+.act-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* 數字 */
+.act-num {
+    font-family: var(--font-brand);
+    font-size: 38px;
+    color: var(--accent);
+    line-height: 1;
+}
+
+/* 單位 */
+.act-unit {
+    font-size: 18px;
+    color: var(--text-dim);
+}
+
+/* 說明 */
+.act-lbl {
+    font-size: 15px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    font-family: var(--font-sans);
+    white-space: normal;
+}
