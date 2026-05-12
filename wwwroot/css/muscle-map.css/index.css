@@ -234,7 +234,7 @@ body {
 /* 大數字 */
 .exercise-count-wrap {
     padding-bottom: 20px;
-    margin-bottom: 32px;
+    margin-top:16px;
 }
 
 #exercise-count {

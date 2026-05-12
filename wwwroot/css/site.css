@@ -145,6 +145,10 @@
 
 }
 
+body {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-light);
+}
 
 /*
  * ══════════════════════════════
