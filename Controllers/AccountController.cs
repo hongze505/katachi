@@ -65,7 +65,7 @@ namespace katachi.Controllers
                 }
             );
 
-            return Redirect(returnUrl ?? "/");
+            return RedirectToAction("Index", "Home");
         }
 
         // POST — 註冊
