@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using System.Security.Claims;
 using katachi.Models;
 using katachi.Models.Nutrition;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace katachi.Controllers
 {
@@ -16,22 +18,37 @@ namespace katachi.Controllers
             _nutritionService = nutritionService;
         }
 
-        // TDEE 頁面（Razor）
-        public async Task<IActionResult> Tdee()
-        {
-            // 暫時先抓第一個使用者，之後換成登入的 user_id
-            var user = await _db.Users.FirstOrDefaultAsync();
-            if (user == null) return NotFound();
 
-            var vm = _nutritionService.CalculateTdee(user);
+        public async Task<IActionResult> Index()
+        {
+            var vm = new TdeeViewModel();
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+                var user = await _db.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+                if (user != null)
+                {
+                    vm.UserId = userId;
+                    vm.Name = user.Name ?? "";
+                    vm.Gender = user.Gender ?? "";
+                    vm.Age = user.Age.HasValue ? (int)user.Age.Value : 0;
+                    vm.HeightCm = user.HeightCm ?? 0;
+                    vm.WeightKg = user.WeightKg ?? 0;
+                    vm.Activity = user.Activity ?? "";
+                    vm.Tdee = user.Tdee ?? 0;
+
+                    // 若 TDEE 尚未存入 DB 但 profile 資料完整，自動計算供前端使用
+                    if (vm.Tdee == 0 && vm.HeightCm > 0 && vm.WeightKg > 0 && vm.Age > 0 && !string.IsNullOrEmpty(vm.Gender))
+                    {
+                        var calculated = _nutritionService.CalculateTdee(user);
+                        vm.Tdee = calculated.Tdee;
+                        vm.Bmr = calculated.Bmr;
+                    }
+                }
+            }
             return View(vm);
         }
-
         // 飲食記錄頁面
-        public IActionResult Index()
-        {
-            return View();
-        }
 
         // 取得所有食物（JS fetch 用）
         [HttpGet]
@@ -105,18 +122,23 @@ namespace katachi.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveProfile([FromBody] SaveProfileRequest req)
         {
-            var user = await _db.Users.FirstOrDefaultAsync(u => u.UserId == 1); // 之後換成登入的 user_id
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.UserId == userId);
             if (user == null) return NotFound();
 
             user.Gender = req.Gender;
-            user.Age = req.Age;
+            user.Age = (byte?)req.Age;
             user.HeightCm = req.HeightCm;
             user.WeightKg = req.WeightKg;
             user.Activity = req.Activity;
             user.ProfileUpdatedAt = DateTime.Now;
 
+            // 計算並儲存 TDEE
+            var tdeeVm = _nutritionService.CalculateTdee(user);
+            user.Tdee = tdeeVm.Tdee;
+
             await _db.SaveChangesAsync();
-            return Ok(new { success = true });
+            return Ok(new { success = true, tdee = tdeeVm.Tdee });
         }
 
         public class SaveProfileRequest

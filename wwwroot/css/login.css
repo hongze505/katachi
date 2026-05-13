@@ -103,13 +103,17 @@ body {
 /* ══ 右側：表單 ══ */
 .auth-right {
     width: 500px;
-    background: rgba(8, 8, 8, 0.55); /* 降低不透明度，讓背景透出來 */
-    backdrop-filter: blur(24px); /* 加強模糊，讓邊緣更柔和 */
-    -webkit-backdrop-filter: blur(24px);
-    border: 0.5px solid rgba(255, 255, 255, 0.06); /* 邊框更淡 */
-    border-radius: 20px; /* 圓角更小，更硬朗 */
+    background: rgba(245, 242, 235, 0.15); /* 降到非常低的不透明度 */
+    backdrop-filter: blur(15px);
+    border: none; /* 拿掉邊框，用邊界模糊來區分 */
+    color: #E0DDD5; /* 文字改用米白色 */
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 20px;
     padding: 48px 40px;
     position: relative;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2); /* 增加陰影深度，讓它從背景中浮現 */
+    /* 設定預設文字顏色為深炭色 */
+    color: #2D2D2D;
     animation: slideInFromRight 1.2s 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
@@ -117,15 +121,15 @@ body {
 .auth-close {
     position: absolute;
     top: 28px;
-    left: 48px;
+    right: 48px;
     display: flex;
     align-items: center;
     gap: 10px;
-    font-family: var(--font-sans);
+    font-family: var(--font-mincho);
     font-size: 0.58rem;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.3);
+    color: var(--color-bg);
     text-decoration: none;
     transition: color 0.2s;
 }
@@ -163,8 +167,8 @@ body {
 /* 右側頂部裝飾文字 */
 .auth-deco-num {
     position: absolute;
-    top: 40px;
-    right: 56px;
+    top: 20px;
+    left: 20px;
     font-family: var(--font-brand);
     font-weight: 800;
     font-size: 0.7rem;
@@ -176,7 +180,7 @@ body {
 .auth-tabs {
     display: flex;
     gap: 0;
-    margin-bottom: 48px;
+    .auth-right input margin-bottom: 48px;
     border-bottom: 0.5px solid rgba(255,255,255,0.08);
 }
 
@@ -185,7 +189,7 @@ body {
     border: none;
     padding: 10px 0;
     margin-right: 36px;
-    font-family: var(--font-sans);
+    font-family: var(--font-serif);
     font-weight: 300;
     font-size: 0.78rem;
     letter-spacing: 4px;
@@ -198,8 +202,8 @@ body {
 }
 
     .auth-tab.active {
-        color: #ffffff;
-        border-bottom-color: var(--orange, #c17f5a);
+        color: var(--color-white);
+        border-bottom-color: rgba(180, 70, 50, 0.45);
     }
 
 /* ── 表單面板 ── */
@@ -224,7 +228,7 @@ body {
 /* 標題 */
 .auth-title {
     padding-bottom: 32px;
-    font-family: var(--font-brand);
+    font-family: var(--font-mincho);
     font-weight: 800;
     font-size: 2.6rem;
     letter-spacing: 3px;
@@ -249,7 +253,7 @@ body {
 }
 
 .form-label {
-    font-family: var(--font-serif);
+    font-family: var(--font-mincho);
     display: block;
     font-size: 0.8rem;
     letter-spacing: 4px;
@@ -262,8 +266,8 @@ body {
     width: 100%;
     background: rgba(255,255,255,0.04);
     border: none;
-    border-radius:5px;
-    border-bottom: 0.5px solid rgba(255,255,255,0.12);
+    border-radius: 5px;
+    border: 0.5px solid rgba(255,255,255,0.12);
     color: #ffffff;
     font-family: var(--font-sans);
     font-weight: 300;
@@ -494,4 +498,34 @@ body {
     .dumbbell-i svg {
         height: 0.78em;
         width: auto;
+    }
+
+
+/* 標題 (Sign In) */
+.auth-right h2,
+.auth-right .auth-title {
+    /*color: #1A1A1A;*/ /* 標題用最深色，增加重量感 */
+    font-weight: 500;
+    letter-spacing: 0.05em; /* 增加一點字距符合極簡美學 */
+}
+
+
+/* 輸入框內的文字顏色 */
+.auth-right input {
+    color: #333;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #C0BAB1; /* 調整底線顏色 */
+}
+
+/* 底部按鈕 (登入) */
+.auth-right .btn-submit {
+    background-color: #333230; /* 深色按鈕與淺色容器形成對比 */
+    color: #F8F5F0; /* 按鈕文字反白用米色 */
+    border: none;
+    transition: all 0.3s ease;
+}
+
+    .auth-right .btn-submit:hover {
+        background-color: #55524E;
     }

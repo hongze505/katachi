@@ -50,7 +50,7 @@
 
         <!-- 右側：表單 -->
         <div class="auth-right">
-            <div class="auth-deco-num">MEMBER · ACCESS</div>
+            @* <div class="auth-deco-num">MEMBER · ACCESS</div> *@
 
             <a class="auth-close" href="/" title="回到首頁">
                 <span class="auth-close-x"></span>
@@ -118,7 +118,7 @@
                          style="color:#c17f5a;font-size:0.7rem;margin-bottom:16px;"></div>
 
                     <div class="form-group">
-                        <label class="form-label">Name</label>
+                        <label class="form-label">姓名</label>
                         <input asp-for="Register.Name" class="form-input" placeholder="Your Name" />
                         <span asp-validation-for="Register.Name" style="color:#c17f5a;font-size:0.7rem;"></span>
                     </div>

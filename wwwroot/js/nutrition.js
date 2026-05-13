@@ -40,9 +40,24 @@ async function loadFoods() {
 }
 
 let foodLog = [];
-let tdeeBase = 0; // TDEE 維持值
-let tdeeTarget = 0; // 當前選擇目標值
-let goalMode = "maintain"; // 'cut' | 'maintain' | 'bulk'
+let tdeeBase = 0;
+let tdeeTarget = 0;
+let goalMode = "maintain";
+let macroTargets = { protein: 0, carbs: 0, fat: 0 };
+
+function calcMacroTargets(kcal, mode) {
+    const ratios = {
+        cut:      { p: 0.35, c: 0.35, f: 0.30 },
+        maintain: { p: 0.30, c: 0.40, f: 0.30 },
+        bulk:     { p: 0.25, c: 0.50, f: 0.25 },
+    };
+    const r = ratios[mode] || ratios.maintain;
+    return {
+        protein: Math.round(kcal * r.p / 4),
+        carbs:   Math.round(kcal * r.c / 4),
+        fat:     Math.round(kcal * r.f / 9),
+    };
+}
 
 /* ════════ 登入判斷 TODO: JWT ════════ */
 function isLoggedIn() {
@@ -136,7 +151,7 @@ async function saveLog() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                userId: 1,  // 之後換成登入的 user_id
+                userId: window.__userId || 0,
                 date: dateKey,
                 items: items
             })
@@ -462,6 +477,9 @@ function totals() {
 function updateChart() {
   const t = totals();
   const C = 301.59;
+  const hasTarget = macroTargets.protein > 0;
+
+  // 圓餅圖固定顯示實際攝取
   const total = t.protein + t.carbs + t.fat || 1;
   const pLen = C * (t.protein / total);
   const cLen = C * (t.carbs / total);
@@ -469,19 +487,29 @@ function updateChart() {
   setArc("donut-protein", pLen, C, 0);
   setArc("donut-carbs", cLen, C, pLen);
   setArc("donut-fat", fLen, C, pLen + cLen);
+
   document.getElementById("donut-cal").textContent = Math.round(t.cal);
-  document.getElementById("legend-protein").textContent =
-    `${Math.round(t.protein)}g`;
-  document.getElementById("legend-carbs").textContent =
-    `${Math.round(t.carbs)}g`;
-  document.getElementById("legend-fat").textContent = `${Math.round(t.fat)}g`;
+
+  // 圖例：有目標時顯示「實際 / 目標Xg」
+  if (hasTarget) {
+    document.getElementById("legend-protein").textContent =
+      `${Math.round(t.protein)}g / 目標 ${macroTargets.protein}g`;
+    document.getElementById("legend-carbs").textContent =
+      `${Math.round(t.carbs)}g / 目標 ${macroTargets.carbs}g`;
+    document.getElementById("legend-fat").textContent =
+      `${Math.round(t.fat)}g / 目標 ${macroTargets.fat}g`;
+  } else {
+    document.getElementById("legend-protein").textContent = `${Math.round(t.protein)}g`;
+    document.getElementById("legend-carbs").textContent   = `${Math.round(t.carbs)}g`;
+    document.getElementById("legend-fat").textContent     = `${Math.round(t.fat)}g`;
+  }
+
+  // 進度條
   const pct = tdeeTarget > 0 ? Math.min((t.cal / tdeeTarget) * 100, 100) : 0;
   document.getElementById("cal-progress-bar").style.width = pct + "%";
-  document.getElementById("progress-current").textContent =
-    `${Math.round(t.cal)} kcal`;
+  document.getElementById("progress-current").textContent = `${Math.round(t.cal)} kcal`;
   if (tdeeTarget > 0) {
-    document.getElementById("progress-target").textContent =
-      `目標 ${tdeeTarget} kcal`;
+    document.getElementById("progress-target").textContent = `目標 ${tdeeTarget} kcal`;
     document.getElementById("progress-hint").style.display = "none";
   }
 }
@@ -496,6 +524,7 @@ function setGoalMode(mode) {
   goalMode = mode;
   const offsets = { cut: -300, maintain: 0, bulk: +300 };
   tdeeTarget = tdeeBase + offsets[mode];
+  macroTargets = calcMacroTargets(tdeeTarget, mode);
   // 更新按鈕 active 狀態
   document
     .querySelectorAll(".goal-btn")
@@ -564,7 +593,8 @@ function calcTDEE() {
   document.getElementById("tdee-result").classList.remove("hidden");
   tdeeBase = tdee;
   tdeeTarget = tdee; // 預設維持
-  goalMode = "maintain";
+    goalMode = "maintain";
+    sessionStorage.setItem('tdeeBase', tdee);  
   updateChart();
 }
 
@@ -614,7 +644,45 @@ async function saveTDEEToProfile() {
 }
 
 /* ════════ 初始化 ════════ */
-// 改成 async 初始化
+
+// ① 同步執行：從已填好的 profile 表單計算 TDEE，不等待任何網路請求
+function _initTdeeFromProfile() {
+    const _h   = parseFloat(document.getElementById("tdee-height").value);
+    const _w   = parseFloat(document.getElementById("tdee-weight").value);
+    const _age = parseFloat(document.getElementById("tdee-age").value);
+    if (!_h || !_w || !_age) return;
+
+    const _g    = document.querySelector('input[name="tdee-gender"]:checked')?.value || 'male';
+    const _act  = parseFloat(document.getElementById("tdee-activity").value) || 1.55;
+    let   _bmr  = 10 * _w + 6.25 * _h - 5 * _age + (_g === 'male' ? 5 : -161);
+    const _tdee = Math.round(_bmr * _act);
+    _bmr = Math.round(_bmr);
+
+    // TDEE tab — 結果面板
+    document.getElementById("bmr-display").textContent   = _bmr;
+    document.getElementById("tdee-display").textContent  = _tdee;
+    document.getElementById("tdee-cut").textContent      = _tdee - 300;
+    document.getElementById("tdee-maintain").textContent = _tdee;
+    document.getElementById("tdee-bulk").textContent     = _tdee + 300;
+    document.getElementById("tdee-empty").classList.add("hidden");
+    document.getElementById("tdee-result").classList.remove("hidden");
+
+    // Food Log tab — 目標切換器
+    tdeeBase     = _tdee;
+    tdeeTarget   = _tdee;
+    goalMode     = "maintain";
+    macroTargets = calcMacroTargets(_tdee, "maintain");
+    document.getElementById("goal-cut-val").textContent      = _tdee - 300;
+    document.getElementById("goal-maintain-val").textContent = _tdee;
+    document.getElementById("goal-bulk-val").textContent     = _tdee + 300;
+    document.getElementById("goal-switcher").style.display   = "block";
+    document.querySelectorAll(".goal-btn").forEach(b =>
+        b.classList.toggle("active", b.dataset.mode === "maintain"));
+    updateChart();
+}
+_initTdeeFromProfile();
+
+// ② 非同步：載入食物清單與歷史記錄
 (async () => {
     await loadFoods();
     renderHistory();

@@ -13,16 +13,21 @@ namespace katachi.Models.Nutrition
             else
                 bmr = 10 * (double)user.WeightKg + 6.25 * (double)user.HeightCm - 5 * user.Age.Value - 161;
 
-            // 活動係數
-            double factor = user.Activity switch
-            {
-                "sedentary" => 1.2,
-                "light" => 1.375,
-                "moderate" => 1.55,
-                "active" => 1.725,
-                "very_active" => 1.9,
-                _ => 1.2
-            };
+            // 活動係數（相容數字字串與英文 key）
+            double factor = double.TryParse(user.Activity,
+                System.Globalization.NumberStyles.Any,
+                System.Globalization.CultureInfo.InvariantCulture,
+                out var parsedFactor)
+                ? parsedFactor
+                : user.Activity switch
+                {
+                    "sedentary" => 1.2,
+                    "light" => 1.375,
+                    "moderate" => 1.55,
+                    "active" => 1.725,
+                    "very_active" => 1.9,
+                    _ => 1.2
+                };
 
             int tdee = (int)(bmr * factor);
 

@@ -87,21 +87,36 @@
         </span>
     </a>
     <div class="nav-right">
-        <a class="nav-user" asp-controller="Account" asp-action="Index" title="會員登入">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"
-                 aria-label="會員登入">
-                <circle cx="9" cy="6" r="3.25" stroke="currentColor" stroke-width="2" />
-                <path d="M1.5 17c0-4.142 3.358-7.5 7.5-7.5s7.5 3.358 7.5 7.5" stroke="currentColor" stroke-width="2"
-                      stroke-linecap="round" />
-            </svg>
-        </a>
-        <button id="menu-btn" onclick="openMenu()">
-            <span class="menu-lines">
-                <span class="menu-line"></span>
-                <span class="menu-line"></span>
-            </span>
-            <span class="menu-btn-text">Menu</span>
-        </button>
+        <div class="nav-right">
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <span style="font-size:0.75rem;letter-spacing:2px;color:var(--color-bg)">
+                    @User.Identity.Name
+                </span>
+                <a class="nav-user" asp-controller="Account" asp-action="Logout" title="登出">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="9" cy="6" r="3.25" stroke="currentColor" stroke-width="2" />
+                        <path d="M1.5 17c0-4.142 3.358-7.5 7.5-7.5s7.5 3.358 7.5 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                </a>
+            }
+            else
+            {
+                <a class="nav-user" asp-controller="Account" asp-action="Index" title="會員登入">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="9" cy="6" r="3.25" stroke="currentColor" stroke-width="2" />
+                        <path d="M1.5 17c0-4.142 3.358-7.5 7.5-7.5s7.5 3.358 7.5 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                </a>
+            }
+            <button id="menu-btn" onclick="openMenu()">
+                <span class="menu-lines">
+                    <span class="menu-line"></span>
+                    <span class="menu-line"></span>
+                </span>
+                <span class="menu-btn-text">Menu</span>
+            </button>
+        </div>
     </div>
 </nav>
     <main>

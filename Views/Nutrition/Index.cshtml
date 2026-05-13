@@ -2,11 +2,25 @@
     Layout = "_Layout";
     ViewBag.Title = "Nutrition Tracker";
 }
+@model katachi.Models.Nutrition.TdeeViewModel
+@section scripts{ 
+    <script>
+        window.__userId = @Model.UserId;
+        @if (Model.Tdee > 0)
+        {
+            <text>
+            window.__userTdee = @Model.Tdee;
+            window.__userBmr  = @Model.Bmr;
+            </text>
+        }
+    </script>
+    <script src="~/js/nutrition.js" asp-append-version="true" defer></script>
+}
+
 @section styles {
     <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Cormorant+Garamond:ital,wght@0,300;1,200;1,300&family=Noto+Sans+JP:wght@100;200;300&family=Noto+Serif+JP:wght@200;300;400&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/nutrition.css"/>
-	<script src="~/js/nutrition.js" defer></script>
 }
   <!-- ══════ HERO ══════ -->
   <header id="nutrition-hero">
@@ -301,17 +315,26 @@
               <div class="calc-field">
                 <label class="calc-label">性別</label>
                 <div class="calc-radio-group">
-                  <label class="calc-radio"><input type="radio" name="tdee-gender" value="male"
-                      checked /><span>男</span></label>
-                  <label class="calc-radio"><input type="radio" name="tdee-gender"
-                      value="female" /><span>女</span></label>
+                                <!-- 性別 -->
+                                <label class="calc-radio">
+                                    <input type="radio" name="tdee-gender" value="male"
+                                    @(Model.Gender == "male" || string.IsNullOrEmpty(Model.Gender) ? "checked" : "") />
+                                    <span>男</span>
+                                </label>
+                                <label class="calc-radio">
+                                    <input type="radio" name="tdee-gender" value="female"
+                                    @(Model.Gender == "female" ? "checked" : "") />
+                                    <span>女</span>
+                                </label>
                 </div>
               </div>
               <div class="calc-field">
                 <label class="calc-label">年齡</label>
                 <div class="calc-input-wrap">
-                  <input class="calc-input" type="number" id="tdee-age" placeholder="25" min="10" max="100" />
-                  <span class="calc-unit">歲</span>
+                                <!-- 年齡 -->
+                                <input class="calc-input" type="number" id="tdee-age"
+                                       placeholder="25" min="10" max="100"
+                                       value="@(Model.Age > 0 ? Model.Age.ToString() : "")" />
                 </div>
               </div>
             </div>
@@ -319,29 +342,31 @@
               <div class="calc-field">
                 <label class="calc-label">身高</label>
                 <div class="calc-input-wrap">
-                  <input class="calc-input" type="number" id="tdee-height" placeholder="175" min="100" max="250" />
-                  <span class="calc-unit">cm</span>
+                                <input class="calc-input" type="number" id="tdee-height"
+                                       placeholder="175" min="100" max="250"
+                                       value="@(Model.HeightCm > 0 ? Model.HeightCm.ToString() : "")" />
                 </div>
               </div>
               <div class="calc-field">
                 <label class="calc-label">體重</label>
                 <div class="calc-input-wrap">
-                  <input class="calc-input" type="number" id="tdee-weight" placeholder="70" min="30" max="300" />
-                  <span class="calc-unit">kg</span>
+                                <input class="calc-input" type="number" id="tdee-weight"
+                                       placeholder="70" min="30" max="300"
+                                       value="@(Model.WeightKg > 0 ? Model.WeightKg.ToString() : "")" />
+
                 </div>
               </div>
             </div>
             <div class="calc-field">
               <label class="calc-label">活動量</label>
-              <select class="calc-select" id="tdee-activity">
-                <option value="1.2">久坐（幾乎不運動）</option>
-                <option value="1.375">輕度活動（每週運動 1–3 天）</option>
-                <option value="1.55" selected>
-                  中度活動（每週運動 3–5 天）
-                </option>
-                <option value="1.725">高度活動（每週運動 6–7 天）</option>
-                <option value="1.9">極高活動（體力勞動或每日訓練）</option>
-              </select>
+             <!-- 活動量 -->
+                        <select class="calc-select" id="tdee-activity">
+                            <option value="1.2" selected="@(Model.Activity == "1.2" ? "selected" : null)">久坐（幾乎不運動）</option>
+                            <option value="1.375" selected="@(Model.Activity == "1.375" ? "selected" : null)">輕度活動（每週運動 1–3 天）</option>
+                            <option value="1.55" selected="@(string.IsNullOrEmpty(Model.Activity) || Model.Activity == "1.55" ? "selected" : null)">中度活動（每週運動 3–5 天）</option>
+                            <option value="1.725" selected="@(Model.Activity == "1.725" ? "selected" : null)">高度活動（每週運動 6–7 天）</option>
+                            <option value="1.9" selected="@(Model.Activity == "1.9" ? "selected" : null)">極高活動（體力勞動或每日訓練）</option>
+                        </select>
             </div>
             <button class="calc-btn" onclick="calcTDEE()">計算 TDEE</button>
           </div>

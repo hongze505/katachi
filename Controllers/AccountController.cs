@@ -1,15 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using katachi.Models;
+using katachi.Models.Account;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using katachi.Models;
-using katachi.Models.Account;
 
 namespace katachi.Controllers
 {
+   
     public class AccountController : Controller
     {
         private readonly KatachiDbContext _db;
@@ -29,6 +31,8 @@ namespace katachi.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(AuthViewModel vm, string? returnUrl)
         {
+            foreach (var key in ModelState.Keys.Where(k => k.StartsWith("Register.")))
+                ModelState.Remove(key);
             if (!ModelState.IsValid)
             {
                 vm.ActiveTab = "login";
@@ -72,6 +76,8 @@ namespace katachi.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(AuthViewModel vm)
         {
+            foreach (var key in ModelState.Keys.Where(k => k.StartsWith("Login.")))
+                ModelState.Remove(key);
             if (!ModelState.IsValid)
             {
                 vm.ActiveTab = "register";
@@ -97,6 +103,7 @@ namespace katachi.Controllers
             _db.Users.Add(user);
             await _db.SaveChangesAsync();
 
+            TempData["Success"] = "註冊成功！請登入。";
             return RedirectToAction("Index", new { tab = "login" });
         }
 
@@ -104,7 +111,7 @@ namespace katachi.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
         }
 
         // 密碼雜湊

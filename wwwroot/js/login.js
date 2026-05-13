@@ -17,6 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 屏風展開後顯示表單
     setTimeout(() => {
-        form.classList.add("visible");
+        document.getElementById("auth-form-wrap").classList.add("visible");
     }, 650);
 });

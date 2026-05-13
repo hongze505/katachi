@@ -22,7 +22,7 @@ namespace katachi.Models.Entities
         public DateTime CreatedAt { get; set; }
 
         public string? Gender { get; set; }
-        public int? Age { get; set; }
+        public byte? Age { get; set; }
 
         [Column("height_cm")]
         public decimal? HeightCm { get; set; }
@@ -34,6 +34,8 @@ namespace katachi.Models.Entities
 
         [Column("profile_updated_at")]
         public DateTime? ProfileUpdatedAt { get; set; }
+
+        public int? Tdee { get; set; }
 
         // 導航屬性
         public ICollection<NutritionRecord> NutritionRecords { get; set; }
