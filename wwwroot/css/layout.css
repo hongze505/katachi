@@ -284,8 +284,8 @@
     padding: 0;
     transition: color 0.2s;
     position: absolute;
-    top: 28px;
-    right: 48px;
+    top: 22px;
+    right: var(--page-gutter-lg);
 }
 
     .mc-close:hover {

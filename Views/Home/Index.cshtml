@@ -226,14 +226,15 @@
     <div class="program-body">
         <div class="program-intro">
             <div>
-                <p class="program-intro-label">Personal Training Program</p>
-                <h2 class="program-intro-title">為目標而生<br>己を、超える</h2>
+                <div class="program-vertical">
                 <p class="program-intro-desc">
                     輸入你的訓練目標、程度、每週天數與器材條件，系統自動根據科學化的週期化訓練原則，產生一份專屬週課表。
                 </p>
+                <h2 class="program-intro-title">為目標而生<br>己を、超える</h2>
+               </div>
             </div>
             <a asp-controller="Plan" asp-action="Index" class="muscle-cta">
-                立即產生計畫
+                <span> 立即產生計畫</span> 
                 <span class="muscle-cta-arrow"></span>
             </a>
         </div>
@@ -295,8 +296,8 @@
                     搜尋食物資料庫、記錄今日攝取、追蹤三大巨量營養素與微量元素。搭配 TDEE 計算器，讓每一口都符合你的目標。
                 </p>
             </div>
-            <a asp-controller="Nutrition" asp-action="Index " class="nutrition-cta">
-                記錄今日飲食
+            <a asp-controller="Nutrition" asp-action="Index" class="nutrition-cta">
+                <span>記錄今日飲食</span>
                 <span class="nutrition-cta-arrow"></span>
             </a>
         </div>
@@ -347,3 +348,16 @@
     </div>
 </div>
 </div>
+<!-- 墨水擴散濾鏡 -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+    <defs>
+        <filter id="ink-filter">
+            <!-- 1. 讓物體模糊 -->
+            <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
+            <!-- 2. 增加對比度，讓模糊的邊緣變成圓潤的液體感 -->
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -10" result="ink" />
+            <!-- 3. 混合原圖，保持邊緣細節 -->
+            <feComposite in="SourceGraphic" in2="ink" operator="atop" />
+        </filter>
+    </defs>
+</svg>

@@ -483,7 +483,7 @@ html.intro-active {
     align-items: center;
     gap: 12px;
     font-weight: var(--weight-medium);
-    font-size: 1rem;
+    font-size: 1.3rem;
     letter-spacing: 4px;
     text-transform: uppercase;
     color: var(--color-black);
@@ -493,29 +493,66 @@ html.intro-active {
     transition: gap 0.3s var(--ease-expo);
 }
 
-    .muscle-cta:hover {
-        gap: 20px;
-    }
-
+/* ── 核心載體 ── */
 .muscle-cta-arrow {
-    width: 24px;
-    height: 1px;
+    width: 28px;
+    height: 1.5px; /* 稍微加粗，讓墨水有載體感 */
     background: var(--color-black);
     position: relative;
+    filter: url('#ink-filter'); /* 靈魂濾鏡 */
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    margin-left: 10px;
+    display: inline-block;
+    vertical-align: middle;
 }
 
+    /* ── 箭頭尖角 ── */
     .muscle-cta-arrow::after {
         content: '';
         position: absolute;
         right: 0;
-        top: -3px;
-        width: 6px;
-        height: 6px;
-        border-right: 1px solid var(--color-black);
-        border-top: 1px solid var(--color-black);
+        top: -3.5px;
+        width: 7px;
+        height: 7px;
+        border-right: 2px solid var(--color-black);
+        border-top: 2px solid var(--color-black);
         transform: rotate(45deg);
+        transition: all 0.4s ease;
     }
 
+    /* ── 墨水核心粒子 (加強版) ── */
+    .muscle-cta-arrow::before {
+        content: '';
+        position: absolute;
+        right: -4px;
+        top: 50%;
+        width: 10px;
+        height: 10px;
+        background: var(--color-black);
+        border-radius: 50%;
+        transform: translate(0, -50%) scale(0);
+        opacity: 0;
+        /* 這裡使用 expo 曲線讓彈出感更強 */
+        transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s;
+    }
+
+/* ── Hover 觸發動態 ── */
+.muscle-cta:hover .muscle-cta-arrow {
+    width: 50px;
+}
+
+    /* 尖角在 Hover 時像墨水暈開一樣消失/變糊 */
+    .muscle-cta:hover .muscle-cta-arrow::after {
+        opacity: 0.3;
+        filter: blur(2px);
+        transform: rotate(45deg) scale(0.8);
+    }
+
+    /* 核心墨水滲出 */
+    .muscle-cta:hover .muscle-cta-arrow::before {
+        opacity: 1; /* 提高透明度才型 */
+        transform: translate(50%, -50%) scale(4); /* 縮小 scale 配合濾鏡會更像濃縮的墨 */
+    }
 .muscle-right {
     padding: 40px 80px 40px 64px;
     display: flex;
@@ -740,11 +777,19 @@ html.intro-active {
 ══════════════════ */
 #sec-program {
 }
-
+.program-intro-desc {
+    font-family: var(--font-mincho);
+    font-size: 1.1rem;
+    font-weight: 300;
+    line-height: 2;
+    color: var(--color-grey);
+    max-width: 340px;
+    margin-bottom: 40px;
+}
 .program-body {
     overflow: hidden;
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
+    grid-template-columns: 1.3fr 1fr 1fr 1fr;
     min-height: 360px;
     padding-top: 120px;
 }
@@ -767,8 +812,9 @@ html.intro-active {
 }
 
 .program-intro-title {
+    max-height: 400px;
     font-family: var(--font-mincho);
-    font-weight: 500;
+    font-weight: 400;
     font-size: 2.8rem;
     letter-spacing: 4px;
     line-height: 1.2;
@@ -776,13 +822,27 @@ html.intro-active {
     margin-bottom: 24px;
 }
 
-.program-intro-desc {
-    font-size: 1rem;
-    line-height: 2;
-    color: var(--color-grey);
-    flex: 1;
-    margin-bottom: 32px;
+.program-vertical {
+    display: flex;
+    /* 在直書下，flex-direction: column 一樣會由右往左排 */
+    flex-direction: column;
+    gap: 40px; /* 標題與描述文字之間的橫向間距 */
+    writing-mode: vertical-rl;
 }
+
+.program-intro-desc {
+    font-family: var(--font-mincho);
+    writing-mode: vertical-rl;
+    /* 核心設定：限制高度，文字才會往左邊排 */
+    max-height: 320px;
+    font-size: 1rem;
+    line-height: 2; /* 讓行與行之間有呼吸感 */
+    color: var(--color-black);
+    text-align: justify; /* 讓文字上下對齊，更有書卷感 */
+    margin-right: 20px; /* 與右側邊界保持距離 */
+    margin-left: 40px; /* 與左側大標題保持距離 */
+}    
+
 
 .program-card {
     padding: 40px 36px;
@@ -859,6 +919,7 @@ html.intro-active {
 }
 
 .program-detail {
+    font-family:var(--font-mincho);
     font-size: 0.9rem;
     line-height: 1.9;
     color: rgba(255,255,255,0.3);
@@ -903,6 +964,7 @@ html.intro-active {
    04 — 飲食計算
    左右分欄
 ══════════════════ */
+
 .nutrition-body {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1183,3 +1245,4 @@ html.intro-active {
         font-size: 1.2rem;
     }
 }
+
