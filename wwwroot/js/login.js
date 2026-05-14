@@ -20,3 +20,17 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("auth-form-wrap").classList.add("visible");
     }, 650);
 });
+
+function toggleUserMenu() {
+    const menu = document.getElementById("user-menu");
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+}
+
+// 點外面關閉
+document.addEventListener("click", (e) => {
+    const wrap = document.querySelector(".nav-user-wrap");
+    const menu = document.getElementById("user-menu");
+    if (wrap && menu && !wrap.contains(e.target)) {
+        menu.style.display = "none";
+    }
+});

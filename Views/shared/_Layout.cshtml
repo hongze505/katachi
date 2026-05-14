@@ -25,45 +25,54 @@
         <div class="mc-left">
             <ul class="mc-links">
                 <li class="mc-item">
-                    <a class="mc-link" asp-controller="MuscleMap" asp-action="Index" onclick="closeMenu()">
+                    <a class="mc-link" asp-controller="MuscleMap" asp-action="Index" onclick="closeMenu()"
+                           onmouseenter="showMcDesc('muscle')">
                         <span class="mc-num">01</span>
                         <span class="mc-text-wrap"><span class="mc-text">肌肉百科</span></span>
                         <span class="mc-en">Muscle Wiki</span>
                     </a>
                 </li>
                 <li class="mc-item">
-                    <a class="mc-link" asp-controller="TrainingLog" asp-action="Index" onclick="closeMenu()">
+                    <a class="mc-link" asp-controller="TrainingLog" asp-action="Index" onclick="closeMenu()"
+                           onmouseenter="showMcDesc('log')">
                         <span class="mc-num">02</span>
                         <span class="mc-text-wrap"><span class="mc-text">訓練日誌</span></span>
-                        <span class="mc-en">Exercises</span>
+                        <span class="mc-en">Workout Journal</span>
                     </a>
                 </li>
                 <li class="mc-item">
-                    <a class="mc-link" asp-controller="Plan" asp-action="Index" onclick="closeMenu()">
+                    <a class="mc-link" asp-controller="Plan" asp-action="Index" onclick="closeMenu()"
+                           onmouseenter="showMcDesc('plan')">
                         <span class="mc-num">03</span>
                         <span class="mc-text-wrap"><span class="mc-text">訓練計畫</span></span>
                         <span class="mc-en">Programs</span>
                     </a>
                 </li>
                 <li class="mc-item">
-                    <a class="mc-link" asp-controller="Nutrition" asp-action="Index" onclick="closeMenu()">
+                    <a class="mc-link" asp-controller="Nutrition" asp-action="Index" onclick="closeMenu()"
+                           onmouseenter="showMcDesc('nutrition')">
                         <span class="mc-num">04</span>
                         <span class="mc-text-wrap"><span class="mc-text">飲食計算</span></span>
                         <span class="mc-en">Nutrition</span>
                     </a>
                 </li>
                 <li class="mc-item">
-                    <a class="mc-link" href="#" onclick="closeMenu()">
+                    <a class="mc-link" href="#" onclick="closeMenu()"
+                           onmouseenter="showMcDesc('shop')">
                         <span class="mc-num">05</span>
-                        <span class="mc-text-wrap"><span class="mc-text">商店 / 會員</span></span>
+                        <span class="mc-text-wrap"><span class="mc-text">商店</span></span>
                         <span class="mc-en">Shop</span>
                     </a>
                 </li>
             </ul>
         </div>
         <div class="mc-right">
-            <div class="mc-quote">
-                精準的訓練，<br>始於對身體<br>的理解
+            <div class="mc-quote" id="mc-quote-default">
+                形 · KATACHI<br>築身之道。
+            </div>
+            <div class="mc-desc" id="mc-desc" style="display:none;">
+                <div class="mc-desc-title" id="mc-desc-title"></div>
+                <div class="mc-desc-text" id="mc-desc-text"></div>
             </div>
         </div>
         <button class="mc-close" onclick="closeMenu()">
@@ -86,38 +95,44 @@
             </svg>
         </span>
     </a>
+
     <div class="nav-right">
-        <div class="nav-right">
-            @if (User.Identity?.IsAuthenticated == true)
-            {
-                <span style="font-size:0.75rem;letter-spacing:2px;color:var(--color-bg)">
-                    @User.Identity.Name
-                </span>
-                <a class="nav-user" asp-controller="Account" asp-action="Logout" title="登出">
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <div class="nav-user-wrap">
+                <button class="nav-user" onclick="toggleUserMenu()" title="@User.Identity.Name">
                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="9" cy="6" r="3.25" stroke="currentColor" stroke-width="2" />
                         <path d="M1.5 17c0-4.142 3.358-7.5 7.5-7.5s7.5 3.358 7.5 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                     </svg>
-                </a>
-            }
-            else
-            {
-                <a class="nav-user" asp-controller="Account" asp-action="Index" title="會員登入">
-                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="9" cy="6" r="3.25" stroke="currentColor" stroke-width="2" />
-                        <path d="M1.5 17c0-4.142 3.358-7.5 7.5-7.5s7.5 3.358 7.5 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                    </svg>
-                </a>
-            }
-            <button id="menu-btn" onclick="openMenu()">
-                <span class="menu-lines">
-                    <span class="menu-line"></span>
-                    <span class="menu-line"></span>
-                </span>
-                <span class="menu-btn-text">Menu</span>
-            </button>
-        </div>
+                </button>
+                <div class="nav-user-menu" id="user-menu" style="display:none;">
+                    <div class="nav-user-name">@User.Identity.Name</div>
+                    <form asp-controller="Account" asp-action="Logout" method="post">
+                        <button type="submit">登出</button>
+                    </form>
+                </div>
+            </div>
+        }
+        else
+        {
+            <a class="nav-user" asp-controller="Account" asp-action="Index" title="會員登入">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="9" cy="6" r="3.25" stroke="currentColor" stroke-width="2" />
+                    <path d="M1.5 17c0-4.142 3.358-7.5 7.5-7.5s7.5 3.358 7.5 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                </svg>
+            </a>
+        }
+
+        <button id="menu-btn" onclick="openMenu()">
+            <span class="menu-lines">
+                <span class="menu-line"></span>
+                <span class="menu-line"></span>
+            </span>
+            <span class="menu-btn-text">Menu</span>
+        </button>
     </div>
+    
 </nav>
     <main>
 	<!-- ⭐ 每個頁面的內容放這裡 -->

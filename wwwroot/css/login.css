@@ -203,7 +203,7 @@ body {
 
     .auth-tab.active {
         color: var(--color-white);
-        border-bottom-color: rgba(180, 70, 50, 0.45);
+        border-bottom-color: #c17f5a;
     }
 
 /* ── 表單面板 ── */
@@ -227,7 +227,7 @@ body {
 
 /* 標題 */
 .auth-title {
-    padding-bottom: 32px;
+    padding: 32px 0;
     font-family: var(--font-mincho);
     font-weight: 800;
     font-size: 2.6rem;
@@ -266,7 +266,7 @@ body {
     width: 100%;
     background: rgba(255,255,255,0.04);
     border: none;
-    border-radius: 5px;
+    border-radius: 2px;
     border: 0.5px solid rgba(255,255,255,0.12);
     color: #ffffff;
     font-family: var(--font-sans);
