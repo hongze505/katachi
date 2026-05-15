@@ -1,0 +1,96 @@
+﻿@model katachi.Models.Shop.Product
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="utf-8" />
+    <title>商品選項管理</title>
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+</head>
+<body class="admin-page">
+    <main class="admin-shell">
+    <div class="admin-header">
+        <div>
+            <h1 class="admin-title">商品選項管理</h1>
+            <p>商品：@Model.Name</p>
+        </div>
+        <div class="admin-actions">
+            <a class="admin-link primary" asp-action="CreateOption" asp-route-productId="@Model.Id">新增選項類型</a>
+            <a class="admin-link primary" asp-action="CreateValue" asp-route-productId="@Model.Id">新增選項值</a>
+            <a class="admin-link" asp-controller="AdminProducts" asp-action="Index">返回商品列表</a>
+        </div>
+    </div>
+
+    <div class="admin-panel">
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>選項名稱</th>
+                <th>選項值</th>
+                <th>價格</th>
+                <th>原價</th>
+                <th>圖片路徑</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var option in Model.Options)
+            {
+                if (option.Values.Any())
+                {
+                    foreach (var value in option.Values)
+                    {
+                        <tr>
+                            <td>@option.Name</td>
+                            <td>@value.Text</td>
+                            <td class="number">@value.Price</td>
+                            <td class="number">@value.OriginalPrice</td>
+                            <td>@value.ImageUrl</td>
+                            <td>
+                                <div class="admin-actions">
+                                <a asp-action="EditValue"
+                                       asp-route-productId="@Model.Id"
+                                       asp-route-valueId="@value.Id">
+                                    編輯
+                                </a>
+
+                                <form class="admin-inline-form" method="post"
+                                      asp-action="DeleteValue"
+                                      asp-route-productId="@Model.Id"
+                                      asp-route-valueId="@value.Id">
+                                    <button class="admin-btn danger" type="submit">刪除</button>
+                                </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td>@option.Name</td>
+                        <td colspan="4">尚未新增選項值</td>
+                        <td>
+                            <form class="admin-inline-form" method="post"
+                                  asp-action="DeleteOption"
+                                  asp-route-productId="@Model.Id"
+                                  asp-route-optionId="@option.Id">
+                                <button class="admin-btn danger" type="submit">刪除選項類型</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+
+            }
+
+        </tbody>
+    </table>
+    </div>
+    </main>
+</body>
+</html>
+

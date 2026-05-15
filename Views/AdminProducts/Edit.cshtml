@@ -1,0 +1,112 @@
+﻿@model katachi.Models.Shop.Product
+@using katachi.Models.Shop
+
+@{
+    Layout = null;
+    var categories = ViewBag.Categories as List<Category>;
+}
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="utf-8" />
+    <title>編輯商品</title>
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+</head>
+<body class="admin-page">
+    <main class="admin-shell">
+        <div class="admin-header">
+            <h1 class="admin-title">編輯商品</h1>
+            <a class="admin-link" asp-action="Index">返回列表</a>
+        </div>
+
+    <form class="admin-form" method="post" asp-action="Edit" enctype="multipart/form-data">
+		@* 隱藏欄位傳遞商品ID，讓Controller知道要修改哪一筆資料 *@
+        <input type="hidden" asp-for="Id" />
+        <div asp-validation-summary="All" class="admin-alert"></div>
+
+        <div class="admin-field">
+            <label>商品代碼</label>
+            @* 自動選中目前商品的分類 *@
+            <input asp-for="ProductCode" />
+        </div>
+
+        <div class="admin-field">
+            <label>商品名稱</label>
+            <input asp-for="Name" />
+        </div>
+
+        <div class="admin-field">
+            <label>分類</label>
+			@* 下拉選單預設選擇目前商品的分類 *@
+            <select asp-for="CategoryId">
+                @foreach (var category in categories ?? new List<Category>())
+                {
+                    <option value="@category.Id">@category.Name</option>
+                }
+            </select>
+        </div>
+
+        <div class="admin-field">
+            <label>副標題</label>
+            <input asp-for="Subtitle" />
+        </div>
+
+        <div class="admin-field">
+            <label>描述</label>
+            <textarea asp-for="Description"></textarea>
+        </div>
+
+        <div class="admin-field">
+            <label>價格</label>
+            <input asp-for="Price" type="number" />
+        </div>
+
+        <div class="admin-field">
+            <label>庫存</label>
+            <input asp-for="Stock" type="number" min="0" />
+        </div>
+
+
+        <div class="admin-field">
+            <label>原價</label>
+            <input asp-for="OriginalPrice" type="number" />
+        </div>
+
+        <div class="admin-field">
+            <label>評分</label>
+            <input asp-for="Rating" type="number" step="0.1" />
+        </div>
+
+        <div class="admin-field">
+            <label>圖片路徑</label>
+            <input asp-for="ImageUrl" />
+            @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+            {
+                <img class="admin-preview" src="@Model.ImageUrl" alt="@Model.Name" />
+            }
+            <span class="admin-help">可保留原路徑、手動改路徑，或在下面上傳新圖片覆蓋。</span>
+        </div>
+
+        <div class="admin-field">
+            <label>上傳新圖片</label>
+            <input type="file" name="imageFile" accept=".jpg,.jpeg,.png,.webp,.gif" />
+            <span class="admin-help">上傳後會自動存到 /katachi-shop/img/uploads。</span>
+        </div>
+
+        <div class="admin-field">
+            <label>
+                <input asp-for="IsActive" />
+                上架
+            </label>
+        </div>
+
+        <div class="admin-actions">
+            <button class="admin-btn primary" type="submit">儲存修改</button>
+            <a class="admin-link" asp-action="Index">返回列表</a>
+        </div>
+    </form>
+    </main>
+</body>
+</html>
+

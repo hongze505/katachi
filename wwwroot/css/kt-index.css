@@ -477,7 +477,7 @@ html.intro-active {
     margin-bottom: 40px;
 }
 
-.muscle-cta {
+/*.muscle-cta {
     font-family: var(--font-mincho);
     display: inline-flex;
     align-items: center;
@@ -492,67 +492,99 @@ html.intro-active {
     border-bottom: 1px solid var(--color-black);
     transition: gap 0.3s var(--ease-expo);
 }
+*/
 
-/* ── 核心載體 ── */
-.muscle-cta-arrow {
-    width: 28px;
-    height: 1.5px; /* 稍微加粗，讓墨水有載體感 */
-    background: var(--color-black);
-    position: relative;
-    filter: url('#ink-filter'); /* 靈魂濾鏡 */
-    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    margin-left: 10px;
+.muscle-cta {
+    font-family: var(--font-mincho);
+    font-weight: var(--weight-medium);
+    display: inline-flex;
+    gap: 12px;
+    align-items: center;
+    overflow: hidden;
+    cursor: pointer;
+    font-size: 1.3rem;
+    letter-spacing: 0.06em;
+    color: var(--color-black);
+    text-decoration: none;
+    padding-bottom: 5px;
+    border-bottom: 0.7px solid var(--color-black);
+}
+
+
+.cta-slide-wrap {
     display: inline-block;
-    vertical-align: middle;
+    position: relative;
+    height: 1.2em;
+    line-height: 1.2em;
+    overflow: hidden;
+    /* 寬度讓文字撐開 */
+    white-space: nowrap;
 }
 
-    /* ── 箭頭尖角 ── */
-    .muscle-cta-arrow::after {
-        content: '';
-        position: absolute;
-        right: 0;
-        top: -3.5px;
-        width: 7px;
-        height: 7px;
-        border-right: 2px solid var(--color-black);
-        border-top: 2px solid var(--color-black);
-        transform: rotate(45deg);
-        transition: all 0.4s ease;
-    }
-
-    /* ── 墨水核心粒子 (加強版) ── */
-    .muscle-cta-arrow::before {
-        content: '';
-        position: absolute;
-        right: -4px;
-        top: 50%;
-        width: 10px;
-        height: 10px;
-        background: var(--color-black);
-        border-radius: 50%;
-        transform: translate(0, -50%) scale(0);
-        opacity: 0;
-        /* 這裡使用 expo 曲線讓彈出感更強 */
-        transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s;
-    }
-
-/* ── Hover 觸發動態 ── */
-.muscle-cta:hover .muscle-cta-arrow {
-    width: 50px;
+.cta-slide-a,
+.cta-slide-b {
+    display: block;
+    white-space: nowrap;
+    transition: transform 0.3s ease-out;
 }
 
-    /* 尖角在 Hover 時像墨水暈開一樣消失/變糊 */
-    .muscle-cta:hover .muscle-cta-arrow::after {
-        opacity: 0.3;
-        filter: blur(2px);
-        transform: rotate(45deg) scale(0.8);
-    }
+.cta-slide-a {
+    transform: translateY(0);
+}
 
-    /* 核心墨水滲出 */
-    .muscle-cta:hover .muscle-cta-arrow::before {
-        opacity: 1; /* 提高透明度才型 */
-        transform: translate(50%, -50%) scale(4); /* 縮小 scale 配合濾鏡會更像濃縮的墨 */
-    }
+.cta-slide-b {
+    color: grey;
+    transform: translateY(0);
+    /* 初始位置在 a 的正下方 */
+    margin-top: 0;
+    position: absolute;
+    top: 100%;
+    left: 0;
+}
+
+.muscle-cta:hover .cta-slide-a {
+    transform: translateY(-100%);
+}
+
+.muscle-cta:hover .cta-slide-b {
+    transform: translateY(-100%);
+}
+
+.cta-arrow-wrap {
+    display: inline-block;
+    position: relative;
+    height: 1.2em;
+    line-height: 1.2em;
+    overflow: hidden;
+    margin-left: 10px;
+    white-space: nowrap;
+}
+
+.cta-arrow-a,
+.cta-arrow-b {
+    display: block;
+    transition: transform 0.3s ease-out;
+}
+
+.cta-arrow-a {
+    transform: translateY(0);
+}
+
+.cta-arrow-b {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    transform: translateY(0);
+    color: #888; /* 第二層顏色跟文字一致 */
+}
+
+.muscle-cta:hover .cta-arrow-a {
+    transform: translateY(-100%);
+}
+
+.muscle-cta:hover .cta-arrow-b {
+    transform: translateY(-100%);
+}
 .muscle-right {
     padding: 40px 80px 40px 64px;
     display: flex;
@@ -1245,4 +1277,6 @@ html.intro-active {
         font-size: 1.2rem;
     }
 }
+
+
 

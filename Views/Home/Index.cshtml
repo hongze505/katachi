@@ -100,8 +100,14 @@
                 </p>
             </div>
             <a asp-controller="MuscleMap" asp-action="Index" class="muscle-cta">
-                查看人體地圖
-                <span class="muscle-cta-arrow"></span>
+                <span class="cta-slide-wrap">
+                    <span class="cta-slide-a">查看人體地圖</span>
+                    <span class="cta-slide-b">查看人體地圖</span>
+                </span>
+                <span class="cta-arrow-wrap">
+                    <span class="cta-arrow-a">→</span>
+                    <span class="cta-arrow-b">→</span>
+                </span>
             </a>
         </div>
         <div class="muscle-right">
@@ -234,8 +240,14 @@
                </div>
             </div>
             <a asp-controller="Plan" asp-action="Index" class="muscle-cta">
-                <span> 立即產生計畫</span> 
-                <span class="muscle-cta-arrow"></span>
+                <span class="cta-slide-wrap">
+                    <span class="cta-slide-a">立即產生計劃</span>
+                   <span class="cta-slide-b">立即產生計劃</span>
+                </span>
+                <span class="cta-arrow-wrap">
+                    <span class="cta-arrow-a">→</span>
+                    <span class="cta-arrow-b">→</span>
+                </span>
             </a>
         </div>
         <a href="#" class="program-card dark">
@@ -351,13 +363,17 @@
 <!-- 墨水擴散濾鏡 -->
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
     <defs>
-        <filter id="ink-filter">
-            <!-- 1. 讓物體模糊 -->
-            <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
-            <!-- 2. 增加對比度，讓模糊的邊緣變成圓潤的液體感 -->
-            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -10" result="ink" />
-            <!-- 3. 混合原圖，保持邊緣細節 -->
-            <feComposite in="SourceGraphic" in2="ink" operator="atop" />
+        <filter id="ink-filter" x="-100%" y="-100%" width="300%" height="300%" color-interpolation-filters="sRGB">
+            <feTurbulence type="fractalNoise" baseFrequency="0.018 0.022" numOctaves="6" seed="8" result="noise" />
+            <feColorMatrix type="saturate" values="0" in="noise" result="gnoise" />
+            <feDisplacementMap in="SourceGraphic" in2="gnoise" scale="18" xChannelSelector="R" yChannelSelector="G" result="warped" />
+            <feGaussianBlur in="warped" stdDeviation="3.5" result="blurred" />
+            <feColorMatrix in="blurred" type="matrix"
+                           values="1 0 0 0 0
+            0 1 0 0 0
+            0 0 1 0 0
+            0 0 0 6 -1.8" result="sharp" />
+            <feGaussianBlur in="sharp" stdDeviation="1.2" />
         </filter>
     </defs>
 </svg>

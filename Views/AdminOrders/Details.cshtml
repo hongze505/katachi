@@ -1,0 +1,151 @@
+﻿@model katachi.Models.Shop.Order
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="utf-8" />
+    <title>訂單明細</title>
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+</head>
+<body class="admin-page">
+    <main class="admin-shell">
+        <div class="admin-header">
+            <h1 class="admin-title">訂單明細</h1>
+            <a class="admin-link" asp-action="Index">返回訂單列表</a>
+        </div>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="admin-alert">@TempData["Error"]</div>
+    }
+    @if (TempData["Success"] != null)
+    {
+        <div class="admin-alert success">@TempData["Success"]</div>
+    }
+
+    <form class="admin-form" method="post" asp-action="UpdateStatus" asp-route-id="@Model.Id" id="statusForm">
+        <div class="admin-field">
+            <label>修改狀態</label>
+            <select name="status" id="statusSelect" data-current-status="@Model.Status">
+                <option value="待處理" selected="@(Model.Status == "待處理")">待處理</option>
+                <option value="已出貨" selected="@(Model.Status == "已出貨")">已出貨</option>
+                <option value="已完成" selected="@(Model.Status == "已完成")">已完成</option>
+                <option value="已取消" selected="@(Model.Status == "已取消")">已取消</option>
+            </select>
+            <span class="admin-help">取消訂單會自動補回庫存；已完成訂單不可取消。</span>
+        </div>
+        <button class="admin-btn primary" type="submit">更新狀態</button>
+    </form>
+
+    <h2>訂單資料</h2>
+
+    <div class="admin-panel">
+    <table class="admin-table">
+        <tr>
+            <th>訂單編號</th>
+            <td>@Model.OrderNumber</td>
+        </tr>
+        <tr>
+            <th>收件人</th>
+            <td>@Model.RecipientName</td>
+        </tr>
+        <tr>
+            <th>電話</th>
+            <td>@Model.RecipientPhone</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>@Model.RecipientEmail</td>
+        </tr>
+        <tr>
+            <th>地址</th>
+            <td>@Model.RecipientAddress</td>
+        </tr>
+        <tr>
+            <th>狀態</th>
+            <td><span class="status-badge @(Model.Status == "已取消" ? "inactive" : "active")">@Model.Status</span></td>
+        </tr>
+        <tr>
+            <th>建立時間</th>
+            <td>@Model.CreatedAt</td>
+        </tr>
+    </table>
+    </div>
+
+    <h2>商品明細</h2>
+
+    <div class="admin-panel">
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>商品代碼</th>
+                <th>商品名稱</th>
+                <th>選項</th>
+                <th>單價</th>
+                <th>數量</th>
+                <th>小計</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.ProductCode</td>
+                    <td>@item.ProductName</td>
+                    <td>@item.OptionText</td>
+                    <td class="number">@item.UnitPrice</td>
+                    <td class="number">@item.Quantity</td>
+                    <td class="number">@item.Subtotal</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    </div>
+
+    <h2>金額</h2>
+
+    <div class="admin-panel">
+    <table class="admin-table">
+        <tr>
+            <th>商品金額</th>
+            <td class="number">@Model.Subtotal</td>
+        </tr>
+        <tr>
+            <th>運費</th>
+            <td class="number">@Model.Shipping</td>
+        </tr>
+        <tr>
+            <th>會員折扣</th>
+            <td class="number">@Model.MemberDiscount</td>
+        </tr>
+        <tr>
+            <th>折扣碼優惠</th>
+            <td class="number">@Model.CouponDiscount</td>
+        </tr>
+        <tr>
+            <th>應付總額</th>
+            <td class="number">@Model.Total</td>
+        </tr>
+    </table>
+    </div>
+    </main>
+
+    <script>
+        document.getElementById('statusForm')?.addEventListener('submit', function (event) {
+            const select = document.getElementById('statusSelect');
+            const oldStatus = select?.dataset.currentStatus;
+            const newStatus = select?.value;
+
+            if (oldStatus !== '已取消' && newStatus === '已取消') {
+                const confirmed = confirm('取消訂單會把商品庫存補回去，確定要取消這筆訂單嗎？');
+                if (!confirmed) event.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
+

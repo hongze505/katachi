@@ -1,3 +1,4 @@
+using katachi.Data;
 using katachi.Models;
 using katachi.Models.Nutrition;
 using katachi.Models.Program;
@@ -11,6 +12,11 @@ builder.Services.AddControllersWithViews();
 
 // 加入 DbContext
 builder.Services.AddDbContext<KatachiDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("KatachiDB")
+    )
+);
+builder.Services.AddDbContext<ShopDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("KatachiDB")
     )

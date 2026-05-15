@@ -1,0 +1,85 @@
+﻿@model katachi.Models.Shop.ProductOptionValue
+
+@{
+    Layout = null;
+    var productId = (int)ViewBag.ProductId;
+}
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="utf-8" />
+    <title>編輯商品選項值</title>
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+</head>
+<body class="admin-page">
+    <main class="admin-shell">
+    <div class="admin-header">
+        <div>
+            <h1 class="admin-title">編輯商品選項值</h1>
+            <p>選項類型：@Model.ProductOption?.Name</p>
+        </div>
+        <a class="admin-link" asp-action="Index" asp-route-productId="@productId">返回選項列表</a>
+    </div>
+
+    <form class="admin-form" method="post" id="editValueForm" data-option-name="@Model.ProductOption?.Name" enctype="multipart/form-data">
+        <input type="hidden" name="productId" value="@productId" />
+        <input type="hidden" name="valueId" value="@Model.Id" />
+
+        <div class="admin-field">
+            <label>選項值</label>
+            <input type="text" name="text" value="@Model.Text" />
+        </div>
+
+        <div class="admin-field" id="priceRow">
+            <label>價格</label>
+            <input type="number" name="price" value="@Model.Price" />
+        </div>
+
+        <div class="admin-field" id="originalPriceRow">
+            <label>原價</label>
+            <input type="number" name="originalPrice" value="@Model.OriginalPrice" />
+        </div>
+
+        <div class="admin-field">
+            <label>圖片路徑</label>
+            <input type="text" name="imageUrl" value="@Model.ImageUrl" />
+            @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+            {
+                <img class="admin-preview" src="@Model.ImageUrl" alt="@Model.Text" />
+            }
+            <span class="admin-help">可保留原路徑、手動改路徑，或在下面上傳新圖片覆蓋。</span>
+        </div>
+
+        <div class="admin-field">
+            <label>上傳新圖片</label>
+            <input type="file" name="imageFile" accept=".jpg,.jpeg,.png,.webp,.gif" />
+        </div>
+
+        <div class="admin-actions">
+            <button class="admin-btn primary" type="submit">儲存修改</button>
+            <a class="admin-link" asp-action="Index" asp-route-productId="@productId">返回選項列表</a>
+        </div>
+    </form>
+    </main>
+
+    <script>
+        const form = document.getElementById('editValueForm');
+        const isFlavor = form?.dataset.optionName === '口味';
+        const priceRow = document.getElementById('priceRow');
+        const originalPriceRow = document.getElementById('originalPriceRow');
+        const priceInput = document.querySelector('input[name="price"]');
+        const originalPriceInput = document.querySelector('input[name="originalPrice"]');
+
+        if (isFlavor) {
+            priceRow.style.display = 'none';
+            originalPriceRow.style.display = 'none';
+            priceInput.disabled = true;
+            originalPriceInput.disabled = true;
+            priceInput.value = '';
+            originalPriceInput.value = '';
+        }
+    </script>
+</body>
+</html>
+

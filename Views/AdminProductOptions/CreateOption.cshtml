@@ -1,0 +1,40 @@
+﻿@{
+    Layout = null;
+
+    var product = ViewBag.Product as katachi.Models.Shop.Product;
+}
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="utf-8" />
+    <title>新增選項類型</title>
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+</head>
+<body class="admin-page">
+    <main class="admin-shell">
+    <div class="admin-header">
+        <div>
+            <h1 class="admin-title">新增選項類型</h1>
+            <p>商品：@product?.Name</p>
+        </div>
+        <a class="admin-link" asp-action="Index" asp-route-productId="@product?.Id">返回選項列表</a>
+    </div>
+
+    <form class="admin-form" method="post">
+        <input type="hidden" name="productId" value="@product?.Id" />
+
+        <div class="admin-field">
+            <label>選項類型名稱</label>
+            <input type="text" name="name" />
+        </div>
+
+        <div class="admin-actions">
+            <button class="admin-btn primary" type="submit">儲存</button>
+            <a class="admin-link" asp-action="Index" asp-route-productId="@product?.Id">返回選項列表</a>
+        </div>
+    </form>
+    </main>
+</body>
+</html>
+

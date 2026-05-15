@@ -605,49 +605,104 @@ body {
 }
 
 .week-card {
-    border: 0.5px solid var(--color-line);
-    border-radius: 10px;
-    padding: 20px 14px;
+    position: relative;
+    overflow: hidden;
+    min-height: 110px;
+    border: 1px solid rgba(24, 24, 24, 0.1);
+    border-radius: 8px;
+    padding: 18px 14px 16px;
     display: flex;
     flex-direction: column;
     gap: 8px;
     cursor: pointer;
-    transition: border-color 0.25s, background 0.25s, transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
-    color: ease-in-out 0.3s
+    background: rgba(255, 255, 255, 0.68);
+    transition: border-color 0.25s, background 0.25s, box-shadow 0.25s, transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
 }
 
-    .week-card:not(.rest):hover {
-        border-color: var(--color-black);
-        transform: translateY(-3px);
-        background: var(--color-black);
-    }
+.week-card:not(.rest) {
+    border-color: var(--color-black);
+    background: var(--color-black);
+    box-shadow: 0 14px 30px rgba(24, 24, 24, 0.14);
+}
 
-    .week-card.rest {
-        opacity: 0.4;
-        cursor: default;
-    }
+.week-card:not(.rest)::before {
+    content: "";
+    position: absolute;
+    left: 14px;
+    top: 14px;
+    width: 24px;
+    height: 3px;
+    border-radius: 999px;
+    background: var(--color-accent);
+}
 
-    .week-card:hover * {
-        color: var(--color-bg);
-    }
+.week-card:not(.rest):hover {
+    border-color: rgba(24, 24, 24, 0.16);
+    transform: translateY(-3px);
+    background: var(--color-white);
+    box-shadow: 0 10px 28px rgba(24, 24, 24, 0.06);
+}
+
+.week-card:not(.rest):hover::before {
+    background: var(--color-accent-hover);
+}
+
+.week-card.rest {
+    opacity: 0.68;
+    cursor: default;
+    background: rgba(255, 255, 255, 0.34);
+    border-color: rgba(24, 24, 24, 0.06);
+}
+
+.week-card:not(.rest):hover * {
+    color: var(--color-black);
+}
+
+.week-card:not(.rest) .week-card-label,
+.week-card:not(.rest) .week-card-count {
+    color: rgba(245, 242, 236, 0.72);
+}
+
+.week-card:not(.rest) .week-card-split {
+    color: var(--color-white);
+}
+
+.week-card:not(.rest):hover .week-card-label,
+.week-card:not(.rest):hover .week-card-count {
+    color: var(--color-grey);
+}
+
+.week-card:not(.rest):hover .week-card-split {
+    color: var(--color-black);
+}
 
 .week-card-label {
     font-size: 0.72rem;
     letter-spacing: 3px;
-    color: var(--color-grey-mute);
+    color: var(--color-grey-mid);
+}
+
+.week-card:not(.rest) .week-card-label {
+    padding-top: 8px;
 }
 
 .week-card-split {
-    font-size: 0.9rem;
-    font-weight: 300;
+    font-size: 1.02rem;
+    font-weight: 700;
     line-height: 1.4;
+    color: var(--color-black);
+}
+
+.week-card.rest .week-card-split {
+    font-weight: 300;
+    color: var(--color-grey-mid);
 }
 
 .week-card-count {
-    font-family: var(--font-italic);
-    font-size: 0.72rem;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
     letter-spacing: 1px;
-    color: var(--color-grey-mute);
+    color: var(--color-grey);
     margin-top: auto;
 }
 
@@ -719,6 +774,12 @@ body {
     border-radius: 4px;
 }
 
+.exercise-row--link {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
     .exercise-row:hover {
         background: var(--color-black);
         color: var(--color-bg);
@@ -770,6 +831,25 @@ body {
     align-items: baseline;
     gap: 6px;
     flex-shrink: 0;
+}
+
+.exercise-row--link .ex-scheme::before {
+    content: "查看說明";
+    margin-right: 16px;
+    color: var(--color-grey-mute);
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    opacity: 0;
+    transform: translateX(6px);
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.exercise-row--link:hover .ex-scheme::before {
+    opacity: 1;
+    transform: translateX(0);
+    color: var(--color-bg);
 }
 
 .ex-sets {
@@ -945,3 +1025,5 @@ body {
         grid-template-columns: 1fr 1fr;
     }
 }
+
+

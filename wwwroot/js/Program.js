@@ -54,36 +54,48 @@ async function generatePlan() {
         });
 
         if (!res.ok) {
-            showToast("產生失敗，請稍後再試");
+            const message = await res.text();
+            showToast(message || "產生失敗，請稍後再試");
             return;
         }
 
         const data = await res.json();
 
-        const dayLabels = ["一", "二", "三", "四", "五", "六", "日"];
-        const fullWeek = [];
-        let dayIdx = 0;
-
-        for (let i = 0; i < 7; i++) {
-            if (dayIdx < data.weekDays.length) {
-                fullWeek.push({
-                    day: dayLabels[i],
-                    label: `週${dayLabels[i]}`,
-                    split: data.weekDays[dayIdx].dayName,
-                    exercises: data.weekDays[dayIdx].exercises,
-                    isRest: false
-                });
-                dayIdx++;
-            } else {
-                fullWeek.push({
-                    day: dayLabels[i],
-                    label: `週${dayLabels[i]}`,
-                    split: "休息",
-                    exercises: [],
-                    isRest: true
-                });
-            }
+        if (!Array.isArray(data.weekDays) || data.weekDays.length === 0) {
+            showToast("目前資料庫沒有符合條件的訓練模板");
+            return;
         }
+
+        const totalExercises = data.weekDays.reduce((sum, day) => sum + (day.exercises?.length || 0), 0);
+        if (totalExercises === 0) {
+            showToast("目前沒有符合器材與目標的動作，請增加器材或更換目標");
+            return;
+        }
+
+        const dayLabels = ["一", "二", "三", "四", "五", "六", "日"];
+        const trainingPositions = getTrainingPositions(data.weekDays.length);
+        const fullWeek = dayLabels.map((day, index) => {
+            const trainingIndex = trainingPositions.indexOf(index);
+
+            if (trainingIndex >= 0) {
+                const trainingDay = data.weekDays[trainingIndex];
+                return {
+                    day,
+                    label: `週${day}`,
+                    split: trainingDay.dayName,
+                    exercises: trainingDay.exercises,
+                    isRest: false
+                };
+            }
+
+            return {
+                day,
+                label: `週${day}`,
+                split: "休息",
+                exercises: [],
+                isRest: true
+            };
+        });
 
         renderResult(fullWeek, data.prescription);
 
@@ -93,6 +105,83 @@ async function generatePlan() {
     }
 }
 
+function normalizeText(value) {
+    return String(value || "").replace(/\s+/g, "").trim();
+}
+
+function toExerciseEquipmentKey(equipment) {
+    const map = {
+        "槓鈴": "barbell",
+        "啞鈴": "dumbbell",
+        "徒手": "bodyweight",
+        "徒手訓練": "bodyweight",
+        "自體重量": "bodyweight"
+    };
+
+    return map[equipment] || equipment || "";
+}
+
+function findExerciseDetail(exercise) {
+    if (typeof EXERCISES === "undefined" || !EXERCISES || !exercise?.name) return null;
+
+    const targetName = normalizeText(exercise.name);
+    for (const [muscleKey, exerciseList] of Object.entries(EXERCISES)) {
+        const matched = (exerciseList || []).find(item => normalizeText(item.name) === targetName);
+        if (matched) {
+            return {
+                muscle: muscleKey,
+                equipment: matched.equipment || toExerciseEquipmentKey(exercise.equipment),
+                name: matched.name
+            };
+        }
+    }
+
+    return null;
+}
+
+function getExerciseDetailUrl(exercise) {
+    if (exercise?.exKey) {
+        const params = new URLSearchParams({
+            key: exercise.exKey,
+            name: exercise.name || ""
+        });
+
+        return `/MuscleMap/Exercise?${params.toString()}`;
+    }
+
+    const detail = findExerciseDetail(exercise);
+    if (!detail) return "";
+
+    const params = new URLSearchParams({
+        muscle: detail.muscle,
+        equipment: detail.equipment,
+        name: detail.name
+    });
+
+    return `/MuscleMap/Exercise?${params.toString()}`;
+}
+
+function renderExerciseRow(exercise, index) {
+    const url = getExerciseDetailUrl(exercise);
+    const tagName = url ? "a" : "div";
+    const href = url ? ` href="${url}" title="查看${exercise.name}動作說明"` : "";
+    const extraClass = url ? " exercise-row--link" : "";
+
+    return `
+        <${tagName} class="exercise-row${extraClass}"${href}>
+            <span class="ex-num">${String(index + 1).padStart(2, "0")}</span>
+            <div class="ex-info">
+                <span class="ex-name">${exercise.name}</span>
+                <span class="ex-muscle">${exercise.muscleGroup}</span>
+            </div>
+            <div class="ex-scheme">
+                <span class="ex-sets">${exercise.sets}</span>
+                <span class="ex-x">×</span>
+                <span class="ex-reps">${exercise.reps}</span>
+            </div>
+        </${tagName}>
+    `;
+}
 /* ════════ 渲染結果 ════════ */
 function renderResult(weekDays, pres) {
     const goalMap = {
@@ -139,20 +228,7 @@ function renderResult(weekDays, pres) {
                     <span class="day-detail-count">${d.exercises.length} 個動作 · ${pres.rest} 休息</span>
                 </div>
                 <div class="exercise-list">
-                    ${d.exercises.map((ex, j) => `
-                        <div class="exercise-row">
-                            <span class="ex-num">${String(j + 1).padStart(2, "0")}</span>
-                            <div class="ex-info">
-                                <span class="ex-name">${ex.name}</span>
-                                <span class="ex-muscle">${ex.muscleGroup}</span>
-                            </div>
-                            <div class="ex-scheme">
-                                <span class="ex-sets">${ex.sets}</span>
-                                <span class="ex-x">×</span>
-                                <span class="ex-reps">${ex.reps}</span>
-                            </div>
-                        </div>
-                    `).join("")}
+                    ${d.exercises.map((ex, j) => renderExerciseRow(ex, j)).join("")}
                 </div>
             </div>
         `)
@@ -162,6 +238,19 @@ function renderResult(weekDays, pres) {
     document.getElementById("sec-result").scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
+function getTrainingPositions(trainingDayCount) {
+    const scheduleMap = {
+        1: [0],
+        2: [0, 3],
+        3: [0, 2, 4],
+        4: [0, 1, 3, 5],
+        5: [0, 1, 3, 4, 6],
+        6: [0, 1, 2, 4, 5, 6],
+        7: [0, 1, 2, 3, 4, 5, 6]
+    };
+
+    return scheduleMap[trainingDayCount] || Array.from({ length: Math.min(trainingDayCount, 7) }, (_, index) => index);
+}
 function scrollToDay(i) {
     const el = document.getElementById(`day-detail-${i}`);
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -184,3 +273,6 @@ function showToast(msg) {
     t.classList.add("show");
     setTimeout(() => t.classList.remove("show"), 2400);
 }
+
+
+

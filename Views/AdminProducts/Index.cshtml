@@ -1,0 +1,76 @@
+﻿@*   接收傳進的商品列表 *@
+@model List<katachi.Models.Shop.Product>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="utf-8" />
+    <title>商品管理</title>
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+</head>
+<body class="admin-page">
+    <main class="admin-shell">
+        <div class="admin-header">
+            <h1 class="admin-title">商品管理</h1>
+            <div class="admin-actions">
+                <a class="admin-link" asp-controller="AdminOrders" asp-action="Index">訂單管理</a>
+                <a class="admin-link primary" asp-action="Create">新增商品</a>
+            </div>
+        </div>
+
+        <div class="admin-panel">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>商品代碼</th>
+                        <th>名稱</th>
+                        <th>分類</th>
+                        <th>價格</th>
+                        <th>庫存</th>
+                        <th>狀態</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model)
+                    {
+                        var stockClass = product.Stock <= 0 ? "soldout" : product.Stock <= 5 ? "low" : "ok";
+                        var stockText = product.Stock <= 0 ? "售完" : product.Stock <= 5 ? $"低庫存 {product.Stock}" : $"庫存 {product.Stock}";
+
+                        <tr>
+                            <td>@product.Id</td>
+                            <td>@product.ProductCode</td>
+                            <td>@product.Name</td>
+                            <td>@product.Category?.Name</td>
+                            <td class="number">@product.Price</td>
+                            <td><span class="stock-badge @stockClass">@stockText</span></td>
+                            <td>
+                                <span class="status-badge @(product.IsActive ? "active" : "inactive")">
+                                    @(product.IsActive ? "上架" : "停用")
+                                </span>
+                            </td>
+                            <td>
+                                <div class="admin-actions">
+                                    <a asp-action="Edit" asp-route-id="@product.Id">編輯</a>
+                                    <a asp-controller="AdminProductOptions" asp-action="Index" asp-route-productId="@product.Id">選項管理</a>
+                                    <form class="admin-inline-form" method="post" asp-action="ToggleActive" asp-route-id="@product.Id">
+                                        <button class="admin-btn" type="submit">
+                                            @(product.IsActive ? "停用" : "上架")
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>
+

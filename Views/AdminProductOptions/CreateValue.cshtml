@@ -1,0 +1,99 @@
+﻿@{
+    Layout = null;
+
+    var product = ViewBag.Product as katachi.Models.Shop.Product;
+    var options = ViewBag.Options as List<katachi.Models.Shop.ProductOption>;
+}
+
+@* 選擇要新增到哪個選項類型，例如 口味 或 規格 *@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="utf-8" />
+    <title>新增商品選項值</title>
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+</head>
+<body class="admin-page">
+    <main class="admin-shell">
+    <div class="admin-header">
+        <div>
+            <h1 class="admin-title">新增商品選項值</h1>
+            <p>商品：@product?.Name</p>
+        </div>
+        <a class="admin-link" asp-action="Index" asp-route-productId="@product?.Id">返回選項列表</a>
+    </div>
+
+    <form class="admin-form" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="productId" value="@product?.Id" />
+
+        <div class="admin-field">
+            <label>選項類型</label>
+            <select name="optionId" id="optionId">
+                @foreach (var option in options ?? new List<katachi.Models.Shop.ProductOption>())
+                {
+                    <option value="@option.Id" data-option-name="@option.Name">@option.Name</option>
+                }
+            </select>
+        </div>
+
+        <div class="admin-field">
+            <label>選項值</label>
+            <input type="text" name="text" />
+        </div>
+
+        <div class="admin-field" id="priceRow">
+            <label>價格</label>
+            <input type="number" name="price" />
+        </div>
+
+        <div class="admin-field" id="originalPriceRow">
+            <label>原價</label>
+            <input type="number" name="originalPrice" />
+        </div>
+
+        <div class="admin-field">
+            <label>圖片路徑</label>
+            <input type="text" name="imageUrl" />
+            <span class="admin-help">可手動輸入圖片路徑，或在下面上傳圖片。</span>
+        </div>
+
+        <div class="admin-field">
+            <label>上傳圖片</label>
+            <input type="file" name="imageFile" accept=".jpg,.jpeg,.png,.webp,.gif" />
+        </div>
+
+        <div class="admin-actions">
+            <button class="admin-btn primary" type="submit">儲存</button>
+            <a class="admin-link" asp-action="Index" asp-route-productId="@product?.Id">返回選項列表</a>
+        </div>
+    </form>
+    </main>
+
+    <script>
+        const optionSelect = document.getElementById('optionId');
+        const priceRow = document.getElementById('priceRow');
+        const originalPriceRow = document.getElementById('originalPriceRow');
+        const priceInput = document.querySelector('input[name="price"]');
+        const originalPriceInput = document.querySelector('input[name="originalPrice"]');
+
+        function syncPriceFields() {
+            const selectedOption = optionSelect.options[optionSelect.selectedIndex];
+            const isFlavor = selectedOption?.dataset.optionName === '口味';
+
+            priceRow.style.display = isFlavor ? 'none' : 'block';
+            originalPriceRow.style.display = isFlavor ? 'none' : 'block';
+            priceInput.disabled = isFlavor;
+            originalPriceInput.disabled = isFlavor;
+
+            if (isFlavor) {
+                priceInput.value = '';
+                originalPriceInput.value = '';
+            }
+        }
+
+        optionSelect.addEventListener('change', syncPriceFields);
+        syncPriceFields();
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,422 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>結帳 | KATACHI SHOP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Noto+Sans+JP:wght@100;200;300;500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
+  <link rel="stylesheet" href="~/katachi-shop/css/checkout.css" asp-append-version="true">
+</head>
+
+<body>
+  <!-- 頂部導覽 -->
+    <header class="checkout-topbar">
+        <a class="brand" asp-controller="Home" asp-action="Index">
+            KATACH
+            <span class="brand-mark" aria-hidden="true">
+                <svg viewBox="0 0 28 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="2" y="0" width="24" height="7" rx="1.5" fill="currentColor" />
+                    <rect x="0" y="9" width="28" height="9" rx="2" fill="currentColor" />
+                    <rect x="11" y="20" width="6" height="40" fill="currentColor" />
+                    <rect x="0" y="62" width="28" height="9" rx="2" fill="currentColor" />
+                    <rect x="2" y="73" width="24" height="7" rx="1.5" fill="currentColor" />
+                </svg>
+            </span>
+            SHOP
+        </a>
+
+        <!-- 進度步驟 -->
+        <div class="checkout-steps">
+            <div class="step is-done">
+                <span class="step-num"><i class="fa fa-check"></i></span>
+                <span class="step-label">購物車</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step is-active">
+                <span class="step-num">2</span>
+                <span class="step-label">結帳</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step">
+                <span class="step-num">3</span>
+                <span class="step-label">完成</span>
+            </div>
+        </div>
+
+        <a class="ghost-btn" asp-controller="Shop" asp-action="Index">返回商店</a>
+
+    </header>
+
+  <main class="checkout-page">
+    <!-- 左側：填寫表單 -->
+    <section class="checkout-form-col">
+
+      <!-- 收件資訊 -->
+      <div class="form-block">
+        <div class="form-block__head">
+          <div class="form-kicker">Step 01</div>
+          <h2 class="form-title">收件資訊</h2>
+        </div>
+
+        <div class="field-grid">
+          <div class="field">
+            <label class="field-label" for="lastName">姓氏</label>
+            <input class="field-input" id="lastName" type="text" placeholder="王">
+          </div>
+          <div class="field">
+            <label class="field-label" for="firstName">名字</label>
+            <input class="field-input" id="firstName" type="text" placeholder="小明">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="phone">手機號碼</label>
+          <input class="field-input" id="phone" type="tel" placeholder="09XX-XXX-XXX">
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="email">電子郵件</label>
+          <input class="field-input" id="email" type="email" placeholder="example@email.com">
+        </div>
+
+        <div class="delivery-fields" id="homeDeliveryFields">
+          <div class="field">
+            <label class="field-label" for="address">收件地址</label>
+            <input class="field-input" id="address" type="text" placeholder="台北市信義區信義路五段7號">
+          </div>
+
+          <div class="field-grid">
+            <div class="field">
+              <label class="field-label" for="city">縣市</label>
+              <select class="field-input" id="city">
+                <option value="">請選擇縣市</option>
+                <option>台北市</option>
+                <option>新北市</option>
+                <option>桃園市</option>
+                <option>台中市</option>
+                <option>台南市</option>
+                <option>高雄市</option>
+                <option>其他縣市</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="field-label" for="zipcode">郵遞區號</label>
+              <input class="field-input" id="zipcode" type="text" placeholder="110" maxlength="6">
+            </div>
+          </div>
+        </div>
+
+        <div class="delivery-fields is-hidden" id="convenienceDeliveryFields">
+          <div class="field-grid">
+            <div class="field">
+              <label class="field-label" for="storeType">超商品牌</label>
+              <select class="field-input" id="storeType">
+                <option value="">請選擇超商</option>
+                <option>7-ELEVEN</option>
+                <option>全家</option>
+                <option>萊爾富</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="field-label" for="storeArea">取貨地區</label>
+              <select class="field-input" id="storeArea">
+                <option value="">請選擇地區</option>
+                <option>台北市</option>
+                <option>新北市</option>
+                <option>桃園市</option>
+                <option>台中市</option>
+                <option>台南市</option>
+                <option>高雄市</option>
+                <option>其他縣市</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label" for="storeBranch">取貨門市</label>
+            <select class="field-input" id="storeBranch">
+              <option value="">請選擇門市</option>
+              <option>信義門市</option>
+              <option>站前門市</option>
+              <option>中山門市</option>
+              <option>逢甲門市</option>
+              <option>自訂門市，請於備註填寫</option>
+            </select>
+          </div>
+          <p class="delivery-hint">正式串接超商 API 前，先以門市選單記錄取貨資訊。</p>
+        </div>
+      </div>
+
+      <!-- 配送方式 -->
+      <div class="form-block">
+        <div class="form-block__head">
+          <div class="form-kicker">Step 02</div>
+          <h2 class="form-title">配送方式</h2>
+        </div>
+
+        <div class="ship-options">
+          <label class="ship-option is-selected" id="shipHome">
+            <input type="radio" name="shipping" value="home" checked hidden>
+            <div class="ship-option__icon"><i class="fa fa-truck"></i></div>
+            <div class="ship-option__info">
+              <strong>宅配到府</strong>
+              <span>1–3 個工作天到貨</span>
+            </div>
+            <div class="ship-option__price" id="shipHomePrice">NT$ 120</div>
+          </label>
+
+          <label class="ship-option" id="shipConvenience">
+            <input type="radio" name="shipping" value="convenience" hidden>
+            <div class="ship-option__icon"><i class="fa fa-map-marker"></i></div>
+            <div class="ship-option__info">
+              <strong>超商取貨</strong>
+              <span>7-ELEVEN / 全家 / 萊爾富</span>
+            </div>
+            <div class="ship-option__price">NT$ 60</div>
+          </label>
+
+          <label class="ship-option" id="shipFree">
+            <input type="radio" name="shipping" value="free" hidden>
+            <div class="ship-option__icon"><i class="fa fa-gift"></i></div>
+            <div class="ship-option__info">
+              <strong>免費配送</strong>
+              <span>訂單滿 NT$ 2,000 自動適用</span>
+            </div>
+            <div class="ship-option__price free">免費</div>
+          </label>
+        </div>
+      </div>
+
+      <!-- 付款方式 -->
+      <div class="form-block">
+        <div class="form-block__head">
+          <div class="form-kicker">Step 03</div>
+          <h2 class="form-title">付款方式</h2>
+        </div>
+
+        <div class="pay-tabs" id="payTabs">
+          <button class="pay-tab is-active" type="button" data-tab="card">
+            <i class="fa fa-credit-card"></i> 信用卡
+          </button>
+          <button class="pay-tab" type="button" data-tab="transfer">
+            <i class="fa fa-bank"></i> ATM 轉帳
+          </button>
+          <button class="pay-tab" type="button" data-tab="cod">
+            <i class="fa fa-money"></i> 貨到付款
+          </button>
+        </div>
+
+        <!-- 信用卡 -->
+        <div class="pay-panel is-active" id="panel-card">
+          <div class="field">
+            <label class="field-label" for="cardNumber">卡號</label>
+            <input class="field-input" id="cardNumber" type="text" placeholder="1234  5678  9012  3456" maxlength="19">
+          </div>
+          <div class="field-grid">
+            <div class="field">
+              <label class="field-label" for="cardExpiry">有效期限</label>
+              <input class="field-input" id="cardExpiry" type="text" placeholder="MM / YY" maxlength="7">
+            </div>
+            <div class="field">
+              <label class="field-label" for="cardCvc">安全碼</label>
+              <input class="field-input" id="cardCvc" type="text" placeholder="CVV" maxlength="4">
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label" for="cardName">持卡人姓名</label>
+            <input class="field-input" id="cardName" type="text" placeholder="MING WANG">
+          </div>
+        </div>
+
+        <!-- ATM 轉帳 -->
+        <div class="pay-panel" id="panel-transfer">
+          <div class="transfer-info">
+            <div class="transfer-row">
+              <span>銀行代碼</span>
+              <strong>822（中國信託）</strong>
+            </div>
+            <div class="transfer-row">
+              <span>帳號</span>
+              <strong>1234-5678-9012-34</strong>
+            </div>
+            <p class="transfer-note">請於下單後 24 小時內完成轉帳，逾時訂單將自動取消。</p>
+          </div>
+        </div>
+
+        <!-- 貨到付款 -->
+        <div class="pay-panel" id="panel-cod">
+          <div class="cod-info">
+            <i class="fa fa-info-circle"></i>
+            <p>貨到付款需加收 NT$ 30 手續費，僅接受現金付款。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 備註 -->
+      <div class="form-block">
+        <div class="field">
+          <label class="field-label" for="note">訂單備註（選填）</label>
+          <textarea class="field-input field-textarea" id="note" placeholder="如有特殊需求請填寫，例如：指定口味優先出貨"></textarea>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- 右側：訂單摘要 -->
+    <aside class="checkout-summary-col">
+      <div class="order-summary">
+        <div class="order-summary__head">
+          <div class="form-kicker">Order Summary</div>
+          <h2 class="form-title">訂單明細</h2>
+        </div>
+
+        <!-- 購物車商品列表 -->
+        <div class="order-items" id="orderItems">
+          <div class="empty-cart">購物車沒有商品</div>
+        </div>
+
+        <div class="order-divider"></div>
+
+        <!-- 折扣碼 -->
+        <div class="coupon-row">
+          <input class="field-input" id="couponInput" type="text" placeholder="折扣碼">
+          <button class="ghost-btn" id="couponApply" type="button">套用</button>
+        </div>
+        <div class="coupon-msg" id="couponMsg"></div>
+
+        <div class="order-divider"></div>
+
+        <!-- 金額明細 -->
+        <div class="price-rows">
+          <div class="price-row">
+            <span>商品金額</span>
+            <span id="oSubtotal">NT$ 0</span>
+          </div>
+          <div class="price-row">
+            <span>運費</span>
+            <span id="oShipping">NT$ 0</span>
+          </div>
+          <div class="price-row discount" id="oDiscountRow">
+            <span>會員折扣</span>
+            <span id="oDiscount">-NT$ 0</span>
+          </div>
+          <div class="price-row discount" id="oCouponRow" style="display:none">
+            <span>折扣碼優惠</span>
+            <span id="oCoupon">-NT$ 0</span>
+          </div>
+        </div>
+
+        <div class="order-total">
+          <span>應付總額</span>
+          <strong id="oTotal">NT$ 0</strong>
+        </div>
+
+        <button class="place-order-btn" id="placeOrderBtn" type="button">
+          確認下單
+          <i class="fa fa-arrow-right"></i>
+        </button>
+
+        <div class="secure-note">
+          <i class="fa fa-lock"></i>
+          SSL 加密保護，付款資訊安全無虞
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- 下單成功 Modal -->
+  <div class="order-modal" id="orderModal" aria-hidden="true">
+    <div class="order-modal__card">
+      <div class="order-modal__icon"><i class="fa fa-check-circle"></i></div>
+      <h2>訂單已成立！</h2>
+      <p>感謝您的購買，我們將盡快為您安排出貨。<br>訂單確認信已寄送至您的電子郵件。</p>
+      <div class="order-modal__num">訂單編號：<strong id="orderNumber">#KT-000000</strong></div>
+      <div class="order-modal__actions">
+        <a class="accent-btn" asp-controller="Shop" asp-action="Index">繼續購物</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- footer區域 -->
+  <footer class="site-footer">
+    <div class="footer-main">
+
+      <!-- 左:品牌區 -->
+      <div class="footer-brand">
+        <div class="brand">
+          KATACH
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 28 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="0" width="24" height="7" rx="1.5" fill="currentColor" />
+              <rect x="0" y="9" width="28" height="9" rx="2" fill="currentColor" />
+              <rect x="11" y="20" width="6" height="40" fill="currentColor" />
+              <rect x="0" y="62" width="28" height="9" rx="2" fill="currentColor" />
+              <rect x="2" y="73" width="24" height="7" rx="1.5" fill="currentColor" />
+            </svg>
+          </span>
+          SHOP
+        </div>
+        <p>專為訓練者設計的補給品平台，提供高蛋白、肌酸、魚油與日常營養品，讓你專注在每一次的訓練!</p>
+      </div>
+
+      <!-- 中:快速連結 -->
+      <div class="footer-col">
+        <h4>商品分類</h4>
+        <ul>
+          <li><a asp-controller="Shop" asp-action="Index" asp-route-category="protein">高蛋白</a></li>
+          <li><a asp-controller="Shop" asp-action="Index" asp-route-category="performance">訓練補給</a></li>
+          <li><a asp-controller="Shop" asp-action="Index" asp-route-category="wellness">日常營養</a></li>
+          <li><a asp-controller="Shop" asp-action="Index" asp-route-category="accessories">沖泡配件</a></li>
+        </ul>
+      </div>
+
+      <!-- 右:服務資訊 -->
+      <div class="footer-col">
+        <h4>服務資訊</h4>
+        <ul>
+          <li><a href="#">常見問題</a></li>
+          <li><a href="#">配送說明</a></li>
+          <li><a href="#">退換貨政策</a></li>
+          <li><a asp-controller="Account" asp-action="Index">會員登入</a></li>
+        </ul>
+      </div>
+
+      <!-- 右:聯絡資訊 -->
+      <div class="footer-col">
+        <h4>聯絡我們</h4>
+        <ul>
+          <li>service@katachi.tw</li>
+          <li>週一至週五 10:00–18:00</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- 底部版權列 -->
+    <div class="footer-bottom">
+      <span>© 2024 KATACHI SHOP. All rights reserved.</span>
+      <div class="footer-links">
+        <a href="#">隱私權政策</a>
+        <a href="#">服務條款</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="~/katachi-shop/js/product-data.js" asp-append-version="true"></script>
+  <script src="~/katachi-shop/js/checkout.js" asp-append-version="true"></script>
+</body>
+
+</html>
+
+
+
+
