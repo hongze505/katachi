@@ -7,6 +7,18 @@ const form = {
     equipment: ["槓鈴", "啞鈴"],
 };
 
+/* ════════ URL 參數預選目標 ════════ */
+document.addEventListener('DOMContentLoaded', () => {
+    const goalParam = new URLSearchParams(window.location.search).get('goal');
+    if (goalParam && ['hypertrophy', 'strength', 'fatloss'].includes(goalParam)) {
+        form.goal = goalParam;
+        const cards = document.querySelectorAll('#goal-cards .field-card');
+        cards.forEach(c => c.classList.remove('active'));
+        const target = document.querySelector(`#goal-cards [data-val="${goalParam}"]`);
+        if (target) target.classList.add('active');
+    }
+});
+
 function selectCard(type, el) {
     el.closest(".field-cards")
         .querySelectorAll(".field-card")

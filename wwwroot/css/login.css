@@ -546,3 +546,51 @@ body {
     .auth-right .btn-submit:hover {
         background-color: #55524E;
     }
+
+/* ══════════════════════════════
+   RESPONSIVE
+══════════════════════════════ */
+
+@media (max-width: 768px) {
+    body {
+        overflow: auto;
+        height: auto;
+    }
+    .auth-layout {
+        justify-content: center;
+        align-items: center;
+        padding: 24px;
+        padding-top: 80px;
+        padding-bottom: 40px;
+    }
+    .auth-right {
+        width: 100%;
+        max-width: 460px;
+        padding: 40px 28px;
+    }
+    .auth-close {
+        right: 28px;
+    }
+    .auth-left-overlay {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-layout {
+        padding: 16px;
+        padding-top: 72px;
+        padding-bottom: 32px;
+    }
+    .auth-right {
+        max-width: 100%;
+        padding: 32px 20px;
+    }
+    .auth-title {
+        font-size: 2rem;
+    }
+    .auth-close {
+        right: 20px;
+        top: 20px;
+    }
+}

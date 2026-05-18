@@ -417,7 +417,7 @@ html.intro-active {
 ══════════════════ */
 #sec-muscle {
     background: var(--color-bg); /* 與頁面底色不同 */
-    border-radius: 20px 20px 0 0;
+    border-radius: 20px;
     border-bottom: 0.5px solid var(--color-line);
     padding-top: 48px;
 }
@@ -445,11 +445,12 @@ html.intro-active {
 }
 
 .muscle-headline {
-    font-family: var(--font-brand);
-    font-weight: 800;
-    font-size: clamp(2.8rem, 5vw, 4.5rem);
+    writing-mode:vertical-lr;
+    font-family: var(--font-mincho);
+    font-weight: 300;
+    font-size: 4rem;
     letter-spacing: 2px;
-    line-height: 0.95;
+    line-height: 1.5;
     color: var(--color-black);
     margin-bottom: 32px;
 }
@@ -621,13 +622,13 @@ html.intro-active {
 ══════════════════ */
 #sec-exercise {
     border-radius: 0 0 20px 20px;
-    background-color: var(--color-bg);
+    background-color: var(--color-black);
 }
 
 .exercise-body {
     display: flex;
     gap: 8px;
-    padding: 16px var(--page-gutter-lg) 48px;
+    padding: 16px var(--page-gutter-lg) 80px;
     min-height: 400px;
     overflow: visible;
 }
@@ -723,7 +724,7 @@ html.intro-active {
 }
 
 .ex-desc {
-    font-size: 0.75rem;
+    font-size: 1rem;
     line-height: 1.9;
     color: rgba(255,255,255,0.55);
     margin-bottom: 20px;
@@ -737,7 +738,7 @@ html.intro-active {
 }
 
 .ex-pill {
-    font-size: 0.5rem;
+    font-size: 0.8rem;
     letter-spacing: 2px;
     text-transform: uppercase;
     color: rgba(255,255,255,0.5);
@@ -750,7 +751,7 @@ html.intro-active {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    font-size: 0.55rem;
+    font-size: 0.8rem;
     letter-spacing: 3px;
     text-transform: uppercase;
     color: rgba(255,255,255,0.6);
@@ -798,7 +799,7 @@ html.intro-active {
     display: grid;
     grid-template-columns: 1.3fr 1fr 1fr 1fr;
     min-height: 360px;
-    padding-top: 120px;
+    margin-top: 200px;
 }
 
 .program-intro {
@@ -821,7 +822,7 @@ html.intro-active {
 .program-intro-title {
     max-height: 400px;
     font-weight: 400;
-    font-size: 2.8rem;
+    font-size: 3rem;
     letter-spacing: 4px;
     line-height: 1.2;
     color: var(--color-black);
@@ -1248,5 +1249,139 @@ html.intro-active {
     }
 }
 
+/* ══════════════════════════════
+   RESPONSIVE — CONTENT
+══════════════════════════════ */
 
+/* 平板（≤ 1024px） */
+@media (max-width: 1024px) {
+    .hero-title {
+        font-size: 5.5rem;
+    }
 
+    /* Muscle */
+    .muscle-body {
+        grid-template-columns: 1fr;
+    }
+    .muscle-left {
+        padding: 48px var(--page-gutter-md);
+    }
+    .muscle-right {
+        padding: 32px var(--page-gutter-md);
+    }
+
+    /* Exercise */
+    .exercise-body {
+        padding: 16px var(--page-gutter-md) 48px;
+    }
+
+    /* Program */
+    .program-body {
+        grid-template-columns: 1fr 1fr;
+        padding-top: 80px;
+    }
+    .program-intro {
+        grid-column: 1 / -1;
+        padding: 48px;
+    }
+    .program-vertical {
+        writing-mode: horizontal-tb;
+        flex-direction: row;
+        align-items: flex-start;
+    }
+    .program-intro-desc {
+        writing-mode: horizontal-tb;
+        max-height: none;
+        margin-left: 0;
+        margin-right: 0;
+        max-width: 480px;
+    }
+
+    /* Nutrition */
+    .nutrition-body {
+        grid-template-columns: 1fr;
+    }
+    .nutrition-left {
+        padding: 48px var(--page-gutter-md);
+    }
+    .nutrition-headline {
+        writing-mode: horizontal-tb;
+        font-size: 3rem;
+    }
+    .nutrition-right {
+        padding: 40px var(--page-gutter-md);
+    }
+}
+
+/* 手機（≤ 768px） */
+@media (max-width: 768px) {
+    /* Hero */
+    #hero {
+        padding: 0 var(--page-gutter-sm);
+    }
+    .hero-title {
+        font-size: clamp(2.8rem, 10vw, 4rem);
+        letter-spacing: 6px;
+    }
+    .hero-sub {
+        font-size: 0.7rem;
+        letter-spacing: 4px;
+    }
+
+    /* Muscle */
+    .muscle-left {
+        padding: 40px var(--page-gutter-sm);
+    }
+    .muscle-right {
+        padding: 24px var(--page-gutter-sm);
+    }
+
+    /* Exercise — stack vertically, show info always */
+    .exercise-body {
+        flex-direction: column;
+        padding: 16px var(--page-gutter-sm) 40px;
+        min-height: auto;
+    }
+    .exercise-card {
+        flex: none;
+        min-height: 160px;
+    }
+    .ex-card-info {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Program */
+    .program-body {
+        grid-template-columns: 1fr;
+        padding-top: 48px;
+    }
+    .program-intro {
+        grid-column: auto;
+        padding: 40px var(--page-gutter-sm);
+    }
+    .program-intro-title {
+        font-size: 2rem;
+    }
+    .program-card {
+        padding: 32px 24px;
+    }
+
+    /* Nutrition */
+    .nutrition-left {
+        padding: 40px var(--page-gutter-sm);
+    }
+    .nutrition-headline {
+        font-size: 2.8rem;
+    }
+    .nutrition-right {
+        padding: 32px var(--page-gutter-sm);
+    }
+    .nutrition-stat {
+        flex-direction: column;
+        gap: 4px;
+    }
+    .nutrition-stat-desc {
+        text-align: left;
+    }
+}

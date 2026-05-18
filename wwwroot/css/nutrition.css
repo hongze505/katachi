@@ -17,7 +17,7 @@ html {
 body {
   background: var(--color-black);
   color: var(--color-black);
-  font-family: var(--font-sans);
+  font-family: var(--font-mincho);
   font-weight: 300;
   overflow-x: hidden;
 }
@@ -152,23 +152,23 @@ body {
   border-bottom-color: var(--color-black);
 }
 .tab-num {
-  font-family: var(--font-italic);
-  font-size: 0.8rem;
-  letter-spacing: 2px;
-  color: var(--color-grey);
+    font-family: var(--font-mincho);
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    color: var(--color-grey);
 }
 .tab-label {
-  font-family: var(--font-sans);
-  font-size: 1rem;
+  font-family: var(--font-mincho);
+  font-size: 1.2rem;
   font-weight: 300;
   letter-spacing: 2px;
   color: var(--color-black);
 }
 .tab-en {
-  font-family: var(--font-italic);
-  font-size: 0.8rem;
-  letter-spacing: 2px;
-  color: var(--color-grey);
+    font-family: var(--font-mincho);
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    color: var(--color-grey);
 }
 
 /* ══════ TAB PANELS ══════ */
@@ -256,8 +256,8 @@ body {
   z-index: 1;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 0;
-  padding: 48px var(--page-gutter-lg) 100px;
+  gap: 12px;
+  padding: 20px var(--page-gutter-lg) 100px;
   max-width: 1400px;
   margin: 0 auto;
   align-items: start;
@@ -265,7 +265,7 @@ body {
 
 /* ══════ PANEL LABEL（加深） ══════ */
 .panel-label {
-  font-size: 0.8rem;
+  font-size: 1.2rem;
   letter-spacing: 5px;
   text-transform: uppercase;
   color: var(--color-grey); /* 原 grey-mute → grey，更清晰 */
@@ -326,10 +326,18 @@ body {
   color: #c0544a;
 }
 
+/* ══════ 面板 active 狀態 ══════ */
+.food-search-panel,
+.food-log-panel,
+.food-chart-panel {
+  border-radius: 12px;
+  transition: background 0.35s ease, box-shadow 0.35s ease;
+}
+
+
 /* ══════ 搜尋面板 ══════ */
 .food-search-panel {
-  padding-right: 40px;
-  border-right: 0.5px solid var(--color-line);
+  padding: 20px 24px;
 }
 .food-search-wrap {
   position: relative;
@@ -386,7 +394,7 @@ body {
 }
 .food-item-name {
   display: block;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 300;
   color: var(--color-black);
   margin-bottom: 2px;
@@ -405,7 +413,7 @@ body {
 .food-item-cal {
   font-family: var(--font-brand);
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   color: var(--color-black);
   display: block;
 }
@@ -441,8 +449,7 @@ body {
 
 /* ══════ 記錄面板 ══════ */
 .food-log-panel {
-  padding: 0 40px;
-  border-right: 0.5px solid var(--color-line);
+  padding: 20px 24px;
 }
 .food-log-list {
   min-height: 280px;
@@ -469,22 +476,29 @@ body {
   gap: 12px;
   padding: 14px 0;
   border-bottom: 0.5px solid var(--color-line);
+  transition: background 0.45s ease, color 0.45s ease,
+              padding 0.45s ease, border-radius 0.45s ease,
+              border-bottom-color 0.45s ease;
 }
 .log-item-left {
   flex: 1;
   min-width: 0;
 }
 .log-item-name {
-  display: block;
-  font-size: 1rem;
-  color: var(--color-black);
-  margin-bottom: 4px;
+    letter-spacing:1.5px;
+    display: block;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-black);
+    margin-bottom: 4px;
+    transition: color 0.55s ease;
 }
 .log-item-detail {
   display: block;
   font-size: 0.82rem;
   letter-spacing: 1px;
   color: var(--color-grey);
+  transition: color 0.55s ease;
 }
 
 /* ══════ 公克數輸入(新增) ══════ */
@@ -513,9 +527,7 @@ body {
   color: var(--color-black);
   padding: 4px 8px;
   text-align: right;
-  transition:
-    border-color 0.2s,
-    background 0.2s;
+  transition: border-color 0.2s, background 0.55s ease, color 0.55s ease;
 }
 .log-grams-input:hover {
   border-color: var(--color-grey-mid);
@@ -536,6 +548,7 @@ body {
   font-size: 0.82rem;
   letter-spacing: 1px;
   color: var(--color-grey);
+  transition: color 0.55s ease;
 }
 .log-remove-btn {
   background: none;
@@ -550,8 +563,8 @@ body {
   justify-content: center;
   border-radius: 50%;
   transition:
-    background 0.2s,
-    color 0.2s;
+    background 0.55s ease,
+    color 0.55s ease;
   flex-shrink: 0;
 }
 .log-remove-btn:hover {
@@ -604,7 +617,7 @@ body {
 
 /* ══════ 圖表面板 ══════ */
 .food-chart-panel {
-  padding-left: 40px;
+  padding: 20px 24px;
 }
 .donut-wrap {
   position: relative;
@@ -662,8 +675,8 @@ body {
   flex: 1;
 } /* 加深 */
 .legend-val {
-  font-family: var(--font-brand);
-  font-weight: 700;
+  font-family: var(--font-mincho);
+  font-weight: 500;
   font-size: 1rem;
   color: var(--color-black);
 }
@@ -741,7 +754,7 @@ body {
   margin-bottom: 24px;
 }
 .progress-title {
-  font-size: 0.82rem;
+  font-size: 1rem;
   letter-spacing: 4px;
   text-transform: uppercase;
   color: var(--color-grey);
@@ -858,7 +871,7 @@ body {
 .calc-desc {
   font-family: var(--font-serif);
   font-size: 1rem;
-  font-weight: 200;
+  font-weight: 300;
   line-height: 2;
   color: var(--color-grey);
   max-width: 360px;
@@ -930,7 +943,7 @@ body {
   border: none;
   border-bottom: 1px solid var(--color-line);
   outline: none;
-  font-family: var(--font-sans);
+  font-family: var(--font-mincho);
   font-size: 1rem;
   font-weight: 300;
   color: var(--color-black);
@@ -1314,11 +1327,11 @@ body {
 
 /* ══════ 時間戳 ══════ */
 .log-item-time {
-  font-style: italic;
   font-size: 0.72rem;
   letter-spacing: 1px;
   color: var(--color-grey-mute);
   margin-left: 8px;
+  transition: color 0.55s ease;
 }
 
 /* ══════ 近日記錄標題列 ══════ */
@@ -1415,6 +1428,28 @@ body {
   border-radius: 4px;
   animation: slideInLeft 0.4s  cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* ── 最新加入的食物：深色卡片 ── */
+.log-item--latest {
+  background: var(--color-black);
+  border-radius: 12px;
+  padding: 14px 16px;
+  border-bottom-color: transparent;
+  margin-bottom: 4px;
+}
+.log-item--latest .log-item-name  { color: #fff; }
+.log-item--latest .log-item-detail { color: rgba(255,255,255,0.45); }
+.log-item--latest .log-item-time  { color: rgba(255,255,255,0.3); }
+.log-item--latest .log-grams-input {
+  color: #fff;
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.2);
+}
+.log-item--latest .log-grams-input:hover  { border-color: rgba(255,255,255,0.4); }
+.log-item--latest .log-grams-input:focus  { border-color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.12); }
+.log-item--latest .log-grams-unit { color: rgba(255,255,255,0.5); }
+.log-item--latest .log-remove-btn { color: rgba(255,255,255,0.35); }
+.log-item--latest .log-remove-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
 /* ══════ RESPONSIVE ══════ */
 @media (max-width: 1024px) {
   #nav {
@@ -1466,20 +1501,19 @@ body {
     display: none;
   }
   .food-search-panel {
-    padding-right: 0;
-    border-right: none;
+    padding: 20px 16px;
     border-bottom: 0.5px solid var(--color-line);
-    padding-bottom: 40px;
-    margin-bottom: 40px;
+    padding-bottom: 32px;
+    margin-bottom: 8px;
   }
   .food-log-panel {
-    padding: 0 0 40px;
-    border-right: none;
+    padding: 20px 16px;
     border-bottom: 0.5px solid var(--color-line);
-    margin-bottom: 40px;
+    padding-bottom: 32px;
+    margin-bottom: 8px;
   }
   .food-chart-panel {
-    padding-left: 0;
+    padding: 20px 16px;
   }
   .calc-layout {
     grid-template-columns: 1fr;
@@ -1495,7 +1529,19 @@ body {
   footer {
     padding: 48px 24px 32px;
   }
-  .footer-top {
-    grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 480px) {
+  #nutrition-hero {
+    padding-top: 64px;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .tab-btn {
+    margin-right: 16px;
+    font-size: 0.7rem;
+  }
+  .bmi-cards {
+    grid-template-columns: 1fr;
   }
 }

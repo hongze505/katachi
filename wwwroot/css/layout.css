@@ -245,10 +245,10 @@
 .mc-en {
     font-family: 'Cormorant Garamond', serif;
     font-weight: 300;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     letter-spacing: 4px;
     text-transform: uppercase;
-    color: rgba(255,255,255,.2);
+    color: var(--color-grey-mute);
     margin-left: auto;
 }
 
@@ -265,7 +265,7 @@
     font-size: 1.4rem;
     font-weight: 400;
     line-height: 1.6;
-    color: rgba(255,255,255,.4);
+    color: var(--color-grey-mute);
 }
 
 /* ── Close 按鈕 ── */
@@ -406,7 +406,7 @@ footer {
 
 .footer-copy {
     font-family: var(--font-mincho);
-    font-size: 0.6rem;
+    font-size: 0.8rem;
     letter-spacing: 2px;
     color: var(--color-grey-mute);
 }
@@ -433,7 +433,7 @@ footer {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 0.52rem;
+    font-size: 0.7rem;
     letter-spacing: 3px;
     text-transform: uppercase;
     color: var(--color-grey-mute);
@@ -443,8 +443,43 @@ footer {
     transition: color 0.2s;
 }
 
-.footer-scroll-top:hover {
-    color: var(--color-black);
+    .footer-scroll-top:hover {
+        color: var(--color-white);
+    }
+
+.footer-cta-wrap {
+    display: inline-block;
+    position: relative;
+    height: 1.2em;
+    line-height: 1.2em;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.footer-cta-a,
+.footer-cta-b {
+    display: block;
+    white-space: nowrap;
+    transition: transform 0.3s ease-out;
+}
+
+.footer-cta-a {
+    transform: translateY(0);
+}
+
+.footer-cta-b {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    transform: translateY(0);
+}
+
+.footer-scroll-top:hover .footer-cta-a {
+    transform: translateY(-100%);
+}
+
+.footer-scroll-top:hover .footer-cta-b {
+    transform: translateY(-100%);
 }
 
 .footer-scroll-arr {
@@ -500,7 +535,7 @@ footer {
 .footer-mark-kanji {
     font-family: var(--font-mincho);
     font-weight: 300;
-    font-size: clamp(7rem, 14vw, 10rem);
+    font-size: clamp(6rem, 14vw, 9rem);
     line-height: 1;
     color: var(--color-white);
     opacity: 1;
@@ -676,7 +711,7 @@ footer {
     font-weight: 300;
     letter-spacing: 4px;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.3);
+    color: var(--color-grey-mute);
     margin-bottom: 16px;
     animation: mcRiseUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
@@ -700,5 +735,50 @@ footer {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+/* ══════════════════════════════
+   RESPONSIVE — MENU + FOOTER
+══════════════════════════════ */
+
+@media (max-width: 768px) {
+    /* Menu — full-width, hide right panel */
+    .mc-left {
+        width: 100%;
+        padding: 0 var(--page-gutter-sm);
+        border-right: none;
+    }
+    .mc-right {
+        display: none;
+    }
+    .mc-en {
+        display: none;
+    }
+    .mc-text {
+        font-size: 1.7rem;
+        letter-spacing: 4px;
+    }
+    .mc-link {
+        padding: 16px 0;
+        gap: 12px;
+    }
+    .mc-close {
+        right: var(--page-gutter-sm);
+    }
+
+    /* Footer bar */
+    .footer-bar {
+        padding: 24px var(--page-gutter-sm);
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    .footer-brand-mark {
+        margin-top: 60px;
+        padding: 32px var(--page-gutter-sm) 0;
+    }
+    .footer-mark-kanji {
+        font-size: clamp(4rem, 12vw, 7rem);
     }
 }

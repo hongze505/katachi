@@ -6,14 +6,14 @@ muscleAnalysis.js - 肌群分析（Muscle Group Analytics）
 2. getPrimaryData(y, m)  只計主計群（佔比最高）完成組數，用於目標達成率
 3. updateSVG(colorMap)   依 colorMap（群 → 色碼）對 [data-muscle] 元素上色
 4. buildP3()             一次渲染 Page 3 全部 UI（SVG / 圓餅 / 目標 / 建議）
-                         - 依佔比降序排名，非零群分配深橘棕→奶油白，零佔比群用中性灰
+                         - colorMap 依訓練量降序排色（最多 → 深橘棕，零訓練量 → 中性灰）
                          - colorMap 由 buildP3 統一計算，updateSVG / 圓餅 / 圖例 / 目標列共用
-                         - 圓餅圖例依佔比由高到低排列
+                         - 圓餅、圖例、目標列依 GROUPS 固定順序顯示（背→胸→核心→肩→手臂→腿→臀）
                          - async：所有月份資料皆由 /TrainingLog/GetP3Data 取得
 
 資料來源：
 - /TrainingLog/GetP3Data  各月加權量、主計組數、目標、未完成天數（server API）
-- GROUPS                  7 大群 → data-muscle key 陣列（用於初始化空物件）
+- GROUPS                  7 大群 → data-muscle key 陣列（同時定義顯示固定順序）
 - userGoals               群 → 月目標組數（當 API 無目標資料時的 fallback）
 */
 
@@ -37,7 +37,6 @@ function getWeightedData(y, m) {
         });
         return g;
     }
-    // 原本邏輯
     const g = {};
     Object.keys(GROUPS).forEach(grp => { g[grp] = 0; });
     for (const k in td) {
@@ -68,7 +67,6 @@ function getPrimaryData(y, m) {
         });
         return g;
     }
-    // 原本邏輯
     const g = {};
     Object.keys(GROUPS).forEach(grp => { g[grp] = 0; });
     for (const k in td) {
@@ -102,15 +100,15 @@ function updateSVG(colorMap) {
 }
 
 // buildP3: 渲染 Page 3 所有內容
-// 顏色邏輯：依佔比降序排名，非零群分配 orangeScale 深橘棕→奶油白；零佔比群用 #e6e3de 中性灰
-// 同一個 colorMap 同時傳給 SVG、圓餅圖、圖例、目標進度條，保持視覺一致
+// 顏色邏輯：ranked 依訓練量降序排色建立 colorMap（最多 → 深橘棕，零訓練量 → 中性灰）
+// 顯示順序：圓餅 / 圖例 / 目標列統一依 GROUPS 固定順序，colorMap 由群名取色保持一致
 async function buildP3() {
     const { y, m } = p3Sel;
 
     let grpData, goalData, goalTargets, miss;
 
     const monthStr = `${y}-${String(m + 1).padStart(2, '0')}`;
-    const data = await fetch(`/TrainingLog/GetP3Data?month=${monthStr}`).then(r => r.json());
+    const data = await fetch(`/TrainingLog/GetMuscleAnalysis?month=${monthStr}`).then(r => r.json());
     grpData = {}; Object.keys(GROUPS).forEach(grp => { grpData[grp] = 0; });
     data.weighted.forEach(item => { if (grpData[item.groupKey] !== undefined) grpData[item.groupKey] = item.value; });
     goalData = {}; Object.keys(GROUPS).forEach(grp => { goalData[grp] = 0; });
@@ -126,6 +124,8 @@ async function buildP3() {
         updateSVG({});
         if (pieC) { pieC.destroy(); pieC = null; }
     }
+
+    // ranked 僅用於建立 colorMap（訓練量最多 → 最深色），不控制顯示順序
     const blueScale = ['#a86545', '#c17f5a', '#d49472', '#e3ae90', '#edc4aa', '#f4d6c2', '#fae8da'];
     const ranked = Object.entries(grpData)
         .map(([g, v]) => ({ g, v, pct: Math.round(v / safeTotal * 100) }))
@@ -137,38 +137,56 @@ async function buildP3() {
     const lbl = document.getElementById('p3-month-label');
     if (lbl) lbl.textContent = `訓練分布圖 · ${y}年 ${String(m + 1).padStart(2, '0')}月`;
 
+    // 1. SVG 熱力圖（colorMap 與圖表完全同步）
     updateSVG(colorMap);
 
-    const dispGrps = ranked.map(r => r.g);
-    const dispVals = ranked.map(r => r.v);
+    // 2. 圓餅圖（GROUPS 固定順序，顏色由 colorMap 取）
+    const dispGrps = Object.keys(GROUPS);
+    const dispVals = dispGrps.map(g => grpData[g] || 0);
     const dispCols = dispGrps.map(g => colorMap[g]);
     if (pieC) pieC.destroy();
     if (total > 0) {
         pieC = new Chart(document.getElementById('pie-chart').getContext('2d'), {
             type: 'doughnut',
             data: { labels: dispGrps, datasets: [{ data: dispVals, backgroundColor: dispCols, borderWidth: 0, hoverOffset: 6 }] },
-            options: { responsive: true, cutout: '62%', plugins: { legend: { display: false } } },
+            options: {
+                responsive: true,
+                cutout: '62%',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => {
+                                const pct = Math.round(ctx.parsed / safeTotal * 100);
+                                return ` ${ctx.label}  ${pct}%`;
+                            }
+                        }
+                    }
+                }
+            },
         });
     } else {
         pieC = null;
     }
 
+    // 3. 圓餅圖右側圖例列表（GROUPS 固定順序）
     const pl = document.getElementById('pie-leg');
     pl.innerHTML = '';
-    ranked.forEach(({ g, pct }, i) => {
+    Object.keys(GROUPS).forEach(g => {
+        const pct = Math.round((grpData[g] || 0) / safeTotal * 100);
         pl.innerHTML += `<div class="pie-leg-item">
-            <div class="pie-leg-dot" style="background:${dispCols[i]}"></div>
+            <div class="pie-leg-dot" style="background:${colorMap[g]}"></div>
             <div class="pie-leg-name">${g}</div>
-            <div class="pie-leg-bar"><div class="pie-leg-fill" style="width:${pct}%;background:${dispCols[i]}"></div></div>
+            <div class="pie-leg-bar"><div class="pie-leg-fill" style="width:${pct}%;background:${colorMap[g]}"></div></div>
             <div class="pie-leg-pct">${pct}%</div>
         </div>`;
     });
 
+    // 4. 目標達成率（GROUPS 固定順序；以主計群組數計算）
     const gr = document.getElementById('goal-rows');
     gr.innerHTML = '';
-    Object.entries(goalTargets)
-        .map(([grp, goal]) => ({ grp, goal, actual: goalData[grp] || 0 }))
-        .sort((a, b) => (a.actual / a.goal) - (b.actual / b.goal))
+    Object.keys(GROUPS)
+        .map(grp => ({ grp, goal: goalTargets[grp] || 0, actual: goalData[grp] || 0 }))
         .forEach(({ grp, goal, actual }) => {
             const pct = Math.min(100, Math.round(actual / goal * 100));
             const col = colorMap[grp] || '#e6e3de';
@@ -186,6 +204,7 @@ async function buildP3() {
         </div>`;
         });
 
+    // 5. 訓練建議（依完成率升序排列，不足 50% 才顯示）
     const SUGGEST_EX = {
         '背': '槓鈴划船或引體向上', '胸': '槓鈴臥推或伏地挺身',
         '核心': '棒式或滾輪', '肩': '槓鈴肩推或啞鈴側平舉',
@@ -226,21 +245,20 @@ document.querySelectorAll('.body-tog-btn').forEach(b => {
     const sel = document.getElementById('p3-msel');
     if (!sel) return;
 
-    const now   = new Date();
+    const now = new Date();
     const nowYM = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
     const months = typeof SERVER_MONTHS !== 'undefined' ? [...SERVER_MONTHS] : getDataMonths();
     if (!months.includes(nowYM)) months.push(nowYM);
-    months.sort().reverse(); // 最新月在最上方，越下面越久遠
+    months.sort().reverse();
 
     months.forEach(ms => {
         const [y, m] = ms.split('-').map(Number);
-        const opt    = document.createElement('option');
-        opt.value    = ms;
+        const opt = document.createElement('option');
+        opt.value = ms;
         opt.textContent = `${y}年 ${String(m).padStart(2, '0')}月`;
         sel.appendChild(opt);
     });
 
-    // 預設選最新月（或當月）
     sel.value = months.includes(nowYM) ? nowYM : months[0];
 
     sel.addEventListener('change', () => {

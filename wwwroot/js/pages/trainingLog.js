@@ -117,7 +117,8 @@ function renderStats() {
             else if (doneSets > 0) partialCount++;
             else missedCount++;
         });
-        const pct = totalScheduled > 0 ? Math.round(doneCount / totalScheduled * 100) : 0;
+        const pastScheduled = doneCount + partialCount + missedCount;
+        const pct = pastScheduled > 0 ? Math.round(doneCount / pastScheduled * 100) : 0;
         document.getElementById('cmp-num').textContent = pct;
         document.getElementById('cmp-bar').style.width = pct + '%';
         document.getElementById('cmp-frac').textContent = `${doneCount} / ${totalScheduled}`;
@@ -148,7 +149,7 @@ function renderStats() {
         if (doneSets > 0) trainingDayCount++;
         else if (!isCurrentMonth || d < todayD) restDays++;
     }
-    const monthAvg = Math.round(trainingDayCount / (todayD / 7) * 10) / 10;
+    const monthAvg = Math.round(trainingDayCount / Math.max(1, (todayD - 1) / 7) * 10) / 10;
 
     document.getElementById('act-sets').textContent = totalSets;
     document.getElementById('act-rest').textContent = restDays;
@@ -288,8 +289,9 @@ function renderDetail() {
     wrap.innerHTML = '';
     data.forEach((item, idx) => {
         const dc = item.d.filter(Boolean).length, all = item.d.length, fin = dc === all;
+        const wLabel = NO_WEIGHT_EX.has(item.ex) ? '無重量' : BW_EX.has(item.ex) ? '自重' : `${item.w}kg`;
         const row = document.createElement('div');
-        row.innerHTML = `<div class="ex-row"><div class="ex-check ${fin ? 'checked' : ''}">${fin ? 'v' : ''}</div><div class="ex-info"><div class="ex-name">${EX[item.ex]}</div><div class="ex-meta">${item.w}kg x ${item.r}下 x ${item.s}組</div></div><span class="ex-muscle">${exGroups(item.ex)}</span><span class="ex-prog">${dc}/${all}組</span><span class="ex-arr">></span></div>`;
+        row.innerHTML = `<div class="ex-row"><div class="ex-check ${fin ? 'checked' : ''}">${fin ? 'v' : ''}</div><div class="ex-info"><div class="ex-name">${EX[item.ex]}</div><div class="ex-meta">${wLabel} x ${item.r}下 x ${item.s}組</div></div><span class="ex-muscle">${exGroups(item.ex)}</span><span class="ex-prog">${dc}/${all}組</span><span class="ex-arr">></span></div>`;
         row.querySelector('.ex-row').addEventListener('click', () => openSets(selDate, idx));
         wrap.appendChild(row);
     });
@@ -308,7 +310,8 @@ function renderSetsList() {
     const list = document.getElementById('sets-list'); list.innerHTML = '';
     _stagingD.forEach((dn, i) => {
         const row = document.createElement('div'); row.className = 'set-row';
-        row.innerHTML = `<div class="set-num">組 ${i + 1}</div><div class="set-info">${item.w}<span>kg</span> x ${item.r}<span>下</span></div><button class="set-chk ${dn ? 'done' : ''}" data-i="${i}">${dn ? 'v' : ''}</button>`;
+        const wLabel = NO_WEIGHT_EX.has(item.ex) ? '無重量' : BW_EX.has(item.ex) ? '自重' : `${item.w}<span>kg</span>`;
+        row.innerHTML = `<div class="set-num">組 ${i + 1}</div><div class="set-info">${wLabel} x ${item.r}<span>下</span></div><button class="set-chk ${dn ? 'done' : ''}" data-i="${i}">${dn ? 'v' : ''}</button>`;
         list.appendChild(row);
     });
     list.querySelectorAll('.set-chk').forEach(btn => {

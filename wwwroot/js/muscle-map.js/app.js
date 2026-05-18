@@ -437,6 +437,15 @@ function resetAll() {
   detailBackdrop.style.display = 'none'
 }
 
+/* ════════ URL 參數預選肌肉 ════════ */
+window.addEventListener('load', () => {
+  const muscleParam = new URLSearchParams(window.location.search).get('muscle')
+  if (muscleParam) {
+    const el = document.querySelector(`[data-muscle="${muscleParam}"]`)
+    if (el) setTimeout(() => el.click(), 100)
+  }
+})
+
 
 
 

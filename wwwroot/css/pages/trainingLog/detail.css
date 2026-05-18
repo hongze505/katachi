@@ -13,6 +13,14 @@ detail.css - 單日訓練詳情面板
 - Modal 操作按鈕
 */
 
+/* ===== 新增訓練 Modal 日期 ===== */
+#mo-add-date {
+    font-size: 18px;
+    color: var(--text);
+    font-family: var(--font-sans);
+    margin-bottom: 18px;
+}
+
 /* ===== 面板容器 ===== */
 
 .detail-panel {
@@ -46,6 +54,7 @@ detail.css - 單日訓練詳情面板
 .detail-date {
     font-family: var(--font-sans);
     font-size: 18px;
+    font-weight: 700;
     color: var(--accent);
 }
 
@@ -146,14 +155,14 @@ detail.css - 單日訓練詳情面板
 
 /* 動作名稱 */
 .ex-name {
-    font-size: 15px;
-    font-weight: 500;
+    font-size: 17px;
+    font-weight: 700;
 }
 
 /* 次要資訊（組數 / 次數） */
 .ex-meta {
     font-size: 16px;
-    color: var(--text-muted);
+    color: var(--text-dim);
     margin-top: 3px;
     font-family: var(--font-sans);
 }
@@ -164,14 +173,14 @@ detail.css - 單日訓練詳情面板
     padding: 3px 8px;
     border-radius: 4px;
     background: var(--surface2);
-    color: var(--text-muted);
+    color: var(--text-dim);
     border: 1px solid var(--border);
 }
 
 /* 進度（x / y sets） */
 .ex-prog {
     font-size: 16px;
-    color: var(--text-dim);
+    color: var(--text);
     font-family: var(--font-sans);
 }
 
@@ -186,7 +195,7 @@ detail.css - 單日訓練詳情面板
 .detail-empty {
     padding: 36px 20px;
     text-align: center;
-    color: var(--text-muted);
+    color: var(--text-dim);
     font-size: 18px;
 }
 
@@ -204,7 +213,7 @@ detail.css - 單日訓練詳情面板
     color: var(--color-black);
     border: none;
     border-radius: var(--radius);
-    font-size: 15px;
+    font-size: 19px;
     font-weight: 700;
     cursor: pointer;
     margin-top: 14px;
@@ -245,7 +254,7 @@ detail.css - 單日訓練詳情面板
 .eq-col-lbl {
     padding: 12px 20px;
     text-align: center;
-    font-size: 17px;
+    font-size: 19px;
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -309,7 +318,8 @@ detail.css - 單日訓練詳情面板
 }
 
 .add-ctrl-lbl {
-    font-size: 15px;
+    font-size: 17px;
+    font-weight: 700;
     color: var(--text-dim);
     letter-spacing: 1px;
     margin-bottom: 10px;
@@ -352,7 +362,7 @@ detail.css - 單日訓練詳情面板
     color: var(--color-white);
     border: none;
     border-radius: var(--radius);
-    font-size: 15px;
+    font-size: 17px;
     font-weight: 700;
     cursor: pointer;
     font-family: var(--font-sans);
@@ -362,3 +372,80 @@ detail.css - 單日訓練詳情面板
     .msub:hover {
         opacity: .88;
     }
+
+@media (max-width: 600px) {
+    .ex-row {
+        display: grid;
+        grid-template-columns: auto 1fr auto auto;
+        grid-template-rows: auto auto;
+        padding: 10px 10px;
+        gap: 4px 8px;
+    }
+
+    .ex-check {
+        grid-column: 1;
+        grid-row: 1 / 3;
+        align-self: center;
+    }
+
+    .ex-info {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .ex-muscle {
+        grid-column: 2;
+        grid-row: 2;
+        font-size: 12px;
+        padding: 2px 6px;
+        align-self: start;
+    }
+
+    .ex-prog {
+        grid-column: 3;
+        grid-row: 1 / 3;
+        align-self: center;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    .ex-arr {
+        grid-column: 4;
+        grid-row: 1 / 3;
+        align-self: center;
+    }
+
+    .ex-name {
+        font-size: 14px;
+    }
+
+    .ex-meta {
+        font-size: 13px;
+    }
+
+    /* 覆蓋 #mo-add .mb 的桌面版固定寬度 */
+    #mo-add .mb {
+        width: calc(100vw - 6px);
+        max-width: calc(100vw - 6px);
+    }
+
+    /* 新增訓練 grid */
+    .eq-col-lbl {
+        font-size: 12px;
+        padding: 10px 4px;
+        letter-spacing: 0;
+    }
+
+    .ex-row-lbl {
+        font-size: 14px;
+        padding: 12px 4px;
+    }
+
+    .ex-cell {
+        font-size: 12px;
+        padding: 12px 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}

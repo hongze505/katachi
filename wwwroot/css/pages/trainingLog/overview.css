@@ -80,7 +80,7 @@ overview.css - 訓練總覽頁（PAGE 1）
     cursor: pointer;
     border: none;
     background: none;
-    color: var(--text-muted);
+    color: var(--text);
     border-radius: var(--radius-sm);
     transition: all var(--dur-instant) var(--ease-expo);
 }
@@ -227,14 +227,14 @@ overview.css - 訓練總覽頁（PAGE 1）
 /* 說明 */
 .cmp-frac-lbl {
     font-size: 15px;
-    color: var(--text-muted);
+    color: var(--text);
     margin-top: 4px;
     font-family: var(--font-sans);
 }
 
 .cmp-sub {
     font-size: 16px;
-    color: var(--text-muted);
+    color: var(--text);
     margin-bottom: 14px;
 }
 
@@ -277,9 +277,18 @@ overview.css - 訓練總覽頁（PAGE 1）
 
 .trio-lbl {
     font-size: 15px;
-    color: var(--text-muted);
+    color: var(--text-dim);
     margin-top: 3px;
 }
+
+#st-upcoming { color: var(--text-dim); }
+#st-partial  { color: var(--partial); }
+#st-miss     { color: var(--danger); }
+
+.leg-dot-done    { background: var(--done); }
+.leg-dot-partial { background: var(--partial); }
+.leg-dot-planned { background: var(--planned); }
+.leg-dot-missed  { background: var(--missed); border: 1px solid var(--danger); }
 
 
 /* ===== 活躍度視圖 ===== */
@@ -287,6 +296,11 @@ overview.css - 訓練總覽頁（PAGE 1）
 .act-view {
     padding: 11px 0 0 0;
     display: none;
+}
+
+.act-view--shown {
+    display: block;
+    padding-top: 0;
 }
 
 /* 3x2 grid */
@@ -302,13 +316,85 @@ overview.css - 訓練總覽頁（PAGE 1）
     }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
+    .act-quad {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .p1-top {
+        gap: 2px;
+        margin-bottom: 2px;
+    }
+
+    .trio-item {
+        padding: 8px 6px;
+    }
+
+    .trio-lbl {
+        font-size: 12px;
+        white-space: nowrap;
+    }
+}
+
+/* 手機板切換按鈕 */
+.p1-mob-tog {
+    display: none;
+}
+
+@media (max-width: 600px) {
     .p1-top {
         grid-template-columns: 1fr;
     }
 
     .act-quad {
         grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* 手機板隱藏卡片標題文字（toggle 已取代） */
+    .p1-top .sec-label {
+        display: none;
+    }
+
+    /* 顯示切換按鈕 */
+    .p1-mob-tog {
+        display: flex;
+        background: var(--surface2);
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+        margin-bottom: 8px;
+        width: fit-content;
+    }
+
+    .p1-mob-btn {
+        padding: 6px 14px;
+        font-size: 15px;
+        font-family: var(--font-sans);
+        cursor: pointer;
+        border: none;
+        background: none;
+        color: var(--text-muted);
+        border-radius: var(--radius-sm);
+        transition: all var(--dur-instant) var(--ease-expo);
+    }
+
+    .p1-mob-btn.active {
+        background: var(--accent);
+        color: var(--color-white);
+        font-weight: 700;
+    }
+
+    /* 預設只顯示第一張卡（完成率） */
+    .p1-top > *:nth-child(2) {
+        display: none;
+    }
+
+    /* 切換到活躍度：隱藏第一張，顯示第二張 */
+    .p1-top.mob-act > *:nth-child(1) {
+        display: none;
+    }
+
+    .p1-top.mob-act > *:nth-child(2) {
+        display: block;
     }
 }
 
@@ -344,8 +430,83 @@ overview.css - 訓練總覽頁（PAGE 1）
 /* 說明 */
 .act-lbl {
     font-size: 15px;
-    color: var(--text-muted);
+    color: var(--text-dim);
     margin-top: 6px;
     font-family: var(--font-sans);
     white-space: normal;
+}
+
+@media (max-width: 1024px) {
+    .act-quad {
+        margin-top: 10px;
+    }
+
+    .act-item {
+        padding: 20px 6px;
+    }
+
+    .act-item > div {
+        white-space: nowrap;
+    }
+
+    .act-num {
+        font-size: 28px;
+    }
+
+    .act-unit {
+        font-size: 14px;
+    }
+
+    .act-lbl {
+        font-size: 12px;
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 1600px) and (min-width: 1025px) {
+    .trio-lbl {
+        font-size: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .act-item > div {
+        white-space: nowrap;
+    }
+
+    .act-lbl {
+        font-size: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+@media (max-width: 600px) {
+    .trio-item {
+        overflow: hidden;
+    }
+
+    .trio-lbl {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .act-item {
+        overflow: hidden;
+    }
+
+    .act-item > div {
+        overflow: hidden;
+    }
+
+    .act-lbl {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .trio-lbl-sub {
+        display: none;
+    }
 }

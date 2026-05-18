@@ -38,12 +38,13 @@ calendar.css - 日曆元件
 .cal-nb {
     background: var(--surface2);
     border: 1px solid var(--border);
-    color: var(--text-dim);
+    color: var(--text);
+    font-weight: 700;
     width: 32px;
     height: 32px;
     border-radius: var(--radius-sm);
     cursor: pointer;
-    font-size: 16px;
+    font-size: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -59,7 +60,8 @@ calendar.css - 日曆元件
 /* 月份標籤（YYYY 年 M 月） */
 .cal-mlbl {
     font-family: var(--font-sans);
-    font-size: 15px;
+    font-size: 17px;
+    font-weight: 700;
     color: var(--text);
     min-width: 110px;
     text-align: center;
@@ -80,13 +82,13 @@ calendar.css - 日曆元件
     align-items: center;
     gap: 6px;
     font-size: 15px;
-    color: var(--text-muted);
+    color: var(--text-dim);
 }
 
 /* 色點 */
 .leg-dot {
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     border-radius: 3px;
 }
 
@@ -111,9 +113,10 @@ calendar.css - 日曆元件
 .cal-dow-cell {
     text-align: center;
     padding: 10px 0;
-    font-size: 15px;
+    font-size: 17px;
+    font-weight: 700;
     font-family: var(--font-sans);
-    color: var(--text-muted);
+    color: var(--text-dim);
     letter-spacing: 1px;
 }
 
@@ -152,7 +155,7 @@ calendar.css - 日曆元件
 
     /* 日期數字 */
     .cal-cell .cn {
-        font-size: 18px;
+        font-size: 20px;
         font-weight: 500;
     }
 
@@ -180,6 +183,8 @@ calendar.css - 日曆元件
     /* 已安排 */
     .cal-cell.planned {
         background: var(--planned);
+        outline: 1px solid #c8c4be;
+        outline-offset: -1px;
     }
 
         .cal-cell.planned .cn {
@@ -218,3 +223,39 @@ calendar.css - 日曆元件
         outline: 3px solid var(--color-black);
         outline-offset: -3px;
     }
+
+@media (max-width: 1024px) {
+    .cal-section {
+        margin-bottom: 2px;
+    }
+
+    .cal-header {
+        margin-bottom: 4px;
+    }
+}
+
+@media (max-width: 600px) {
+    .cal-section {
+        overflow: hidden;
+    }
+
+    .cal-header {
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .cal-legend {
+        gap: 10px;
+    }
+
+    .leg-item {
+        font-size: 13px;
+    }
+
+    .cal-cell {
+        aspect-ratio: unset;
+        height: 48px;
+        min-height: 0;
+    }
+}

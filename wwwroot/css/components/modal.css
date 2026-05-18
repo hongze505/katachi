@@ -60,29 +60,36 @@ modal.css - 彈窗系統
     }
 }
 
+/* 彈窗頂列右側（刪除按鈕 + 關閉按鈕） */
+.mhead-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
 /* 彈窗頂列（標題 + 關閉按鈕） */
 .mhead {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 22px;
+    margin-bottom: 5px;
 }
 
 /* 彈窗標題文字 */
 .mtitle {
-    font-size: 18px;
+    font-size: 22px;
     font-weight: 700;
 }
 
 /* 彈窗關閉按鈕（× 號） */
 .mclose {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: var(--radius-sm);
     background: var(--surface2);
     border: 1px solid var(--border);
     cursor: pointer;
-    font-size: 16px;
+    font-size: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -110,7 +117,7 @@ modal.css - 彈窗系統
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     background: var(--surface2);
-    color: var(--text-dim);
+    color: var(--text);
     font-size: 17px;
     font-family: var(--font-sans);
     cursor: pointer;
@@ -136,3 +143,23 @@ modal.css - 彈窗系統
         border-color: var(--danger);
         color: var(--danger);
     }
+
+@media (max-width: 600px) {
+    .mb,
+    .mb.sm,
+    .mb.lg {
+        width: calc(100vw - 6px);
+        max-width: calc(100vw - 6px);
+        padding: 18px 10px;
+        max-height: 92vh;
+        border-radius: var(--radius);
+    }
+
+    .mo {
+        justify-content: center;
+    }
+
+    .mhead {
+        margin-bottom: 14px;
+    }
+}

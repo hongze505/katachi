@@ -16,7 +16,14 @@ userSettings.css - 使用者設定與目標設定（User Settings）
 
 /* PAGE 4 標題字體 */
 #page-p4 .mlbl {
-    font-size: 17px;
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+}
+
+#mo-profile-save {
+    margin-top: 32px;
 }
 
 /* 目標設定列表 */
@@ -40,8 +47,9 @@ userSettings.css - 使用者設定與目標設定（User Settings）
 
 /* 目標名稱文字 */
 .gs-name {
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 500;
+    color: var(--text-dim);
 }
 
 /* 目標數值調整橫排（- 數值 +） */
@@ -95,4 +103,32 @@ userSettings.css - 使用者設定與目標設定（User Settings）
     color: var(--text-muted);
     letter-spacing: 2px;
     margin-left: 2px;
+}
+
+@media (max-width: 600px) {
+    #page-p4 .pi {
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-bottom: 50px;
+    }
+
+    .gs-item {
+        padding: 18px 0;
+    }
+
+    .gs-item:last-child {
+        padding-bottom: 5px;
+    }
+
+    .gs-ctrl {
+        gap: 16px;
+    }
+
+    .gs-ctrl > span {
+        min-width: 80px;
+    }
+
+    #mo-profile-save {
+        margin-top: 0;
+    }
 }

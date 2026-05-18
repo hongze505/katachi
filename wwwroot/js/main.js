@@ -23,11 +23,85 @@ document.querySelectorAll('.subnav-tab').forEach(t => {
         setActive('.subnav-tab', t);
         document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
         document.getElementById('page-' + t.dataset.page).classList.add('active');
-        if (t.dataset.page === 'p2') buildCharts();   // Chart.js 需在元素可見後才能正確渲染
+        if (t.dataset.page === 'p2') buildCharts();
         if (t.dataset.page === 'p3') buildP3();
         if (t.dataset.page === 'p4') loadGoalPage();
+        if (window.innerWidth <= 1024) closeDrawer();
     });
 });
+
+// ====== 漢堡 FAB（可拖動）======
+const fab = document.getElementById('fab-menu');
+const drawerOverlay = document.getElementById('drawer-overlay');
+const sidebarL = document.querySelector('.sidebar-l');
+
+// 初始位置：logo 下方左側（從 localStorage 還原或預設）
+(function initFabPos() {
+    const x = localStorage.getItem('fab-x');
+    const y = localStorage.getItem('fab-y');
+    const navH = document.getElementById('nav')?.offsetHeight ?? 52;
+    fab.style.left = (x ?? 16) + 'px';
+    fab.style.top  = (y ?? navH + 16) + 'px';
+})();
+
+function openDrawer() {
+    sidebarL.classList.add('open');
+    drawerOverlay.classList.add('show');
+    fab.classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeDrawer() {
+    sidebarL.classList.remove('open');
+    drawerOverlay.classList.remove('show');
+    fab.classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+drawerOverlay.addEventListener('click', closeDrawer);
+
+// 拖動邏輯
+let isDragging = false, hasMoved = false, ox = 0, oy = 0;
+
+fab.addEventListener('mousedown', startDrag);
+fab.addEventListener('touchstart', startDrag, { passive: false });
+
+function startDrag(e) {
+    isDragging = true; hasMoved = false;
+    const p = e.touches ? e.touches[0] : e;
+    const r = fab.getBoundingClientRect();
+    ox = p.clientX - r.left;
+    oy = p.clientY - r.top;
+    e.preventDefault();
+}
+
+document.addEventListener('mousemove', onDrag);
+document.addEventListener('touchmove', onDrag, { passive: false });
+
+function onDrag(e) {
+    if (!isDragging) return;
+    hasMoved = true;
+    const p = e.touches ? e.touches[0] : e;
+    const x = Math.max(0, Math.min(window.innerWidth  - fab.offsetWidth,  p.clientX - ox));
+    const y = Math.max(0, Math.min(window.innerHeight - fab.offsetHeight, p.clientY - oy));
+    fab.style.left = x + 'px';
+    fab.style.top  = y + 'px';
+    e.preventDefault();
+}
+
+document.addEventListener('mouseup', endDrag);
+document.addEventListener('touchend', endDrag);
+
+function endDrag() {
+    if (!isDragging) return;
+    isDragging = false;
+    if (hasMoved) {
+        localStorage.setItem('fab-x', parseInt(fab.style.left));
+        localStorage.setItem('fab-y', parseInt(fab.style.top));
+    } else {
+        sidebarL.classList.contains('open') ? closeDrawer() : openDrawer();
+    }
+}
 
 // ====== 個人資料 Modal ======
 
@@ -57,9 +131,22 @@ function buildGoalGrid() {
 function adjGoal(mu, delta) {
     const el = document.getElementById('gsv-' + mu);
     if (!el) return;
-    goalSettings[mu] = Math.max(5, goalSettings[mu] + delta);
+    goalSettings[mu] = Math.max(0, goalSettings[mu] + delta);
     el.textContent = goalSettings[mu];
 }
+// ====== 手機板 P1 切換 ======
+
+document.querySelectorAll('.p1-mob-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const idx = btn.dataset.idx;
+        // 同步兩張卡裡所有的切換按鈕狀態
+        document.querySelectorAll('.p1-mob-btn').forEach(b => {
+            b.classList.toggle('active', b.dataset.idx === idx);
+        });
+        document.querySelector('.p1-top').classList.toggle('mob-act', idx === '1');
+    });
+});
+
 // ====== 初始化 ======
 
 // 頁面載入後依序執行：填充月份選單 → 填充年份選單 → 統計 → 月曆 → 詳情

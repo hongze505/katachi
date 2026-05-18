@@ -131,19 +131,35 @@ function getYrData(yr, ex, metric) {
     return { labels, vals };
 }
 
+// 手機版合圖：把稀疏資料對齊完整月/年陣列
+function p2AlignMon(ms, data) {
+    const [y, m] = ms.split('-').map(Number);
+    const days = new Date(y, m, 0).getDate();
+    const vals = Array(days).fill(null);
+    data.labels.forEach((lbl, i) => { vals[parseInt(lbl.split('/')[1]) - 1] = data.vals[i]; });
+    return vals;
+}
+function p2AlignYr(data) {
+    const vals = Array(12).fill(null);
+    data.labels.forEach((lbl, i) => { vals[parseInt(lbl) - 1] = data.vals[i]; });
+    return vals;
+}
+
 const EQ_GROUPS = {
     '槓鈴': ['row-bar', 'bench-bar', 'rollout', 'ohp-bar', 'curl-bar', 'squat-bar', 'hipthrust-bar'],
     '啞鈴': ['row-db', 'bench-db', 'sidebend', 'lateral-db', 'curl-db', 'squat-db', 'hipthrust-db'],
-    '徒手': ['pullup', 'pushup', 'plank', 'hspu', 'dip', 'squat-bw', 'glutebridge'],
     '機械': ['lat', 'chestpress', 'crunch', 'shoulderpress', 'curl-mach', 'legpress', 'abduction'],
+    '徒手': ['pullup', 'pushup', 'plank', 'hspu', 'dip', 'squat-bw', 'glutebridge'],
 };
 
 // buildP2Summary: 依器材分組（槓鈴/啞鈴/徒手/機械）渲染摘要對比表
 async function buildP2Summary() {
+    const mob = window.innerWidth <= 600;
+    const sep = mob ? ' ／ ' : '　／　';
     const formulaMap = {
         weight: '當期最高重量　歷史最高即為個人 PR',
-        rm:     '估算 1RM ＝ 重量 × ( 1 ＋ 次數 ÷ 30 )　／　徒手動作取最大次數',
-        volume: '有重量：重量 × 次數 × 組數　／　徒手動作：次數 × 組數',
+        rm:     `估算 1RM ＝ 重量 × ( 1 ＋ 次數 ÷ 30 )${sep}徒手動作取最大次數`,
+        volume: `有重量：重量 × 次數 × 組數${sep}徒手動作：次數 × 組數`,
     };
     const formulaEl = document.getElementById('p2-sum-formula');
     if (formulaEl) formulaEl.textContent = formulaMap[p2metric] || '';
@@ -166,6 +182,27 @@ async function buildP2Summary() {
     }
     function fmt(n, unit) {
         return n > 0 ? `${n}${unit ? `<span class="p2-eq-unit"> ${unit}</span>` : ''}` : '-';
+    }
+
+    // 手機版：只顯示選中動作那一列
+    if (window.innerWidth <= 600) {
+        const ex = p2ex, item = dataMap[ex];
+        if (!item || (!item.curMax && !item.prevMax)) {
+            grid.innerHTML = `<div class="p2-eq-group"><div style="padding:16px 0;color:var(--text-muted);font-size:14px">無資料</div></div>`;
+            return;
+        }
+        const cur = item.curMax ?? 0, prev = item.prevMax ?? 0, pr = item.prMax ?? 0;
+        const diff = cur - prev, pct = prev > 0 ? ((diff / prev) * 100).toFixed(1) : null;
+        const unit = getUnit(ex);
+        const trend = pct === null ? '<span class="p2-eq-neutral">-</span>'
+            : diff > 0 ? `<span class="arrow-up">▲${pct}%</span>`
+            : diff < 0 ? `<span class="arrow-dn">▼${Math.abs(pct)}%</span>`
+            : `<span class="p2-eq-neutral">-</span>`;
+        grid.innerHTML = `<div class="p2-eq-group">
+            <div class="p2-eq-col-hdr"><span>${lbl.l}</span><span></span><span>${lbl.r}</span><span>歷史最高</span></div>
+            <div class="p2-eq-row" style="border-bottom:none"><span class="p2-eq-prev">${fmt(prev,unit)}</span><span class="p2-eq-trend">${trend}</span><span class="p2-eq-cur">${fmt(cur,unit)}</span><span class="p2-eq-pr">${fmt(pr,unit)}</span></div>
+        </div>`;
+        return;
     }
 
     Object.entries(EQ_GROUPS).forEach(([eqName, exKeys]) => {
@@ -201,8 +238,8 @@ async function buildCharts() {
             fetch(`/TrainingLog/GetMonData?month=${p2lm}&exKey=${p2ex}&metric=${p2metric}`).then(r => r.json()),
             fetch(`/TrainingLog/GetMonData?month=${p2rm}&exKey=${p2ex}&metric=${p2metric}`).then(r => r.json())
         ]);
-        document.getElementById('p2-lt').textContent = `對比月 · ${exN} ${mL}`;
-        document.getElementById('p2-rt').textContent = `主月 · ${exN} ${mL}`;
+        document.getElementById('p2-lt').innerHTML = `對比月<span class="chart-sub"> · ${exN} ${mL}</span>`;
+        document.getElementById('p2-rt').innerHTML = `主月<span class="chart-sub"> · ${exN} ${mL}</span>`;
         document.getElementById('p2-lm').style.display = ''; document.getElementById('p2-rm').style.display = '';
         document.getElementById('p2-ly').style.display = 'none'; document.getElementById('p2-ry').style.display = 'none';
     } else {
@@ -210,21 +247,53 @@ async function buildCharts() {
             fetch(`/TrainingLog/GetYrData?year=${p2ly}&exKey=${p2ex}&metric=${p2metric}`).then(r => r.json()),
             fetch(`/TrainingLog/GetYrData?year=${p2ry}&exKey=${p2ex}&metric=${p2metric}`).then(r => r.json())
         ]);
-        document.getElementById('p2-lt').textContent = `對比年 · ${exN} ${mL}`;
-        document.getElementById('p2-rt').textContent = `主年 · ${exN} ${mL}`;
+        document.getElementById('p2-lt').innerHTML = `對比年<span class="chart-sub"> · ${exN} ${mL}</span>`;
+        document.getElementById('p2-rt').innerHTML = `主年<span class="chart-sub"> · ${exN} ${mL}</span>`;
         document.getElementById('p2-lm').style.display = 'none'; document.getElementById('p2-rm').style.display = 'none';
         document.getElementById('p2-ly').style.display = ''; document.getElementById('p2-ry').style.display = '';
     }
-    const all = [...dL.vals, ...dR.vals];
+    const all = [...dL.vals, ...dR.vals].filter(v => v !== null);
     const minY = all.length ? Math.floor(Math.min(...all) * .88) : 0;
     const maxY = all.length ? Math.ceil(Math.max(...all) * 1.06) : 100;
-    const mkC = (labels, vals, col) => ({
-        type: 'line', data: { labels, datasets: [{ data: vals, borderColor: col, backgroundColor: col + '18', borderWidth: 2.5, pointBackgroundColor: col, pointRadius: 5, tension: .35, fill: true }] },
-        options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#aaaaaa', font: { family: 'Noto Sans JP', size: 11 } }, grid: { color: '#e6e3de' } }, y: { min: minY, max: maxY, ticks: { color: '#aaaaaa', font: { family: 'Noto Sans JP', size: 11 } }, grid: { color: '#e6e3de' } } } }
-    });
     if (cL) cL.destroy(); if (cR) cR.destroy();
-    cL = new Chart(document.getElementById('chart-l').getContext('2d'), mkC(dL.labels, dL.vals, '#888888'));
-    cR = new Chart(document.getElementById('chart-r').getContext('2d'), mkC(dR.labels, dR.vals, '#181818'));
+
+    if (window.innerWidth <= 600) {
+        // 手機版：單圖雙線
+        cR = null;
+        let labels, vL, vR;
+        if (p2period === 'month') {
+            const [ly, lm] = p2lm.split('-').map(Number);
+            const [ry, rm] = p2rm.split('-').map(Number);
+            const days = Math.max(new Date(ly, lm, 0).getDate(), new Date(ry, rm, 0).getDate());
+            labels = Array.from({ length: days }, (_, i) => String(i + 1));
+            vL = p2AlignMon(p2lm, dL);
+            vR = p2AlignMon(p2rm, dR);
+        } else {
+            labels = ['1','2','3','4','5','6','7','8','9','10','11','12'];
+            vL = p2AlignYr(dL);
+            vR = p2AlignYr(dR);
+        }
+        const lblL = p2period === 'month' ? p2lm : p2ly + '年';
+        const lblR = p2period === 'month' ? p2rm : p2ry + '年';
+        const mkDs = (vals, col, label) => ({ label, data: vals, borderColor: col, borderWidth: 2, pointBackgroundColor: col, pointRadius: 3, tension: .35, fill: false, spanGaps: true });
+        cL = new Chart(document.getElementById('chart-l').getContext('2d'), {
+            type: 'line',
+            data: { labels, datasets: [mkDs(vL, '#888888', lblL), mkDs(vR, '#3d5247', lblR)] },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: true, labels: { color: '#666', font: { family: 'Noto Sans JP', size: 11 }, boxWidth: 10, boxHeight: 10, useBorderRadius: true, borderRadius: 3, padding: 10 } } },
+                scales: { x: { ticks: { color: '#aaaaaa', font: { family: 'Noto Sans JP', size: 10 }, maxTicksLimit: 10, maxRotation: 0 } , grid: { color: '#e6e3de' } }, y: { min: minY, max: maxY, ticks: { color: '#aaaaaa', font: { family: 'Noto Sans JP', size: 10 } }, grid: { color: '#e6e3de' } } }
+            }
+        });
+    } else {
+        // 桌面 / 平板：原有雙圖
+        const mkC = (labels, vals, col) => ({
+            type: 'line', data: { labels, datasets: [{ data: vals, borderColor: col, backgroundColor: col + '18', borderWidth: 2.5, pointBackgroundColor: col, pointRadius: 5, tension: .35, fill: true, spanGaps: false }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#aaaaaa', font: { family: 'Noto Sans JP', size: 11 } }, grid: { color: '#e6e3de' } }, y: { min: minY, max: maxY, ticks: { color: '#aaaaaa', font: { family: 'Noto Sans JP', size: 11 } }, grid: { color: '#e6e3de' } } } }
+        });
+        cL = new Chart(document.getElementById('chart-l').getContext('2d'), mkC(dL.labels, dL.vals, '#888888'));
+        cR = new Chart(document.getElementById('chart-r').getContext('2d'), mkC(dR.labels, dR.vals, '#181818'));
+    }
     await buildP2Summary();
 }
 // 月/年切換、指標切換、動作切換 → 重建圖表

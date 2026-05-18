@@ -3,7 +3,7 @@
 }
 
 @section styles {
-    <link rel="stylesheet" href="~/css/kt-index.css" />
+    <link rel="stylesheet" href="~/css/kt-index.css" asp-append-version="true" />
 	
 }
 
@@ -93,7 +93,7 @@
                 <p class="muscle-eyebrow">Muscle Wiki</p>
                 <h2 class="muscle-headline">
                     <span>了解你的身體</span>
-                    MUSCLE<br>ATLAS
+                    身體圖鑑
                 </h2>
                 <p class="muscle-desc">
                     從胸到腿，每個肌群的解剖位置、訓練功能、常見弱點，都有完整的圖解說明。訓練之前，先認識自己的身體。
@@ -111,32 +111,32 @@
             </a>
         </div>
         <div class="muscle-right">
-            <a href="#" class="muscle-part">
+            <a asp-controller="MuscleMap" asp-action="Index" asp-route-muscle="chest" class="muscle-part">
                 <span class="muscle-part-name">胸大肌</span>
                 <span class="muscle-part-en">Pectoralis Major</span>
                 <span class="muscle-part-num">04 個動作</span>
             </a>
-            <a href="#" class="muscle-part">
+            <a asp-controller="MuscleMap" asp-action="Index" asp-route-muscle="lats" class="muscle-part">
                 <span class="muscle-part-name">背闊肌</span>
                 <span class="muscle-part-en">Latissimus Dorsi</span>
                 <span class="muscle-part-num">03 個動作</span>
             </a>
-            <a href="#" class="muscle-part">
+            <a asp-controller="MuscleMap" asp-action="Index" asp-route-muscle="quads" class="muscle-part">
                 <span class="muscle-part-name">股四頭肌</span>
                 <span class="muscle-part-en">Quadriceps</span>
                 <span class="muscle-part-num">03 個動作</span>
             </a>
-            <a href="#" class="muscle-part">
+            <a asp-controller="MuscleMap" asp-action="Index" asp-route-muscle="frontDeltoidRight" class="muscle-part">
                 <span class="muscle-part-name">三角肌</span>
                 <span class="muscle-part-en">Deltoid</span>
                 <span class="muscle-part-num">03 個動作</span>
             </a>
-            <a href="#" class="muscle-part">
+            <a asp-controller="MuscleMap" asp-action="Index" asp-route-muscle="glute" class="muscle-part">
                 <span class="muscle-part-name">臀大肌</span>
                 <span class="muscle-part-en">Gluteus Maximus</span>
                 <span class="muscle-part-num">02 個動作</span>
             </a>
-            <a href="#" class="muscle-part">
+            <a asp-controller="MuscleMap" asp-action="Index" asp-route-muscle="abs" class="muscle-part">
                 <span class="muscle-part-name">腹直肌</span>
                 <span class="muscle-part-en">Rectus Abdominis</span>
                 <span class="muscle-part-num">03 個動作</span>
@@ -149,7 +149,7 @@
      02 — 動作教學
 ══════════════════ -->
 <section id="sec-exercise">
-    <div class="sec-header">
+    @* <div class="sec-header">
         <span class="sec-num"></span>
         <span class="sec-title"></span>
     </div>
@@ -222,7 +222,7 @@
                 <div class="ex-card-bottom-line"></div>
             </div>
         </a>
-    </div>
+    </div> *@
 </section>
 
 <!-- ══════════════════
@@ -236,7 +236,7 @@
                 <p class="program-intro-desc">
                     輸入你的訓練目標、程度、每週天數與器材條件，系統自動根據科學化的週期化訓練原則，產生一份專屬週課表。
                 </p>
-                <h2 class="program-intro-title">為目標而生<br>己を、超える</h2>
+                    <h2 class="program-intro-title">己を、超える<br>為目標而生</h2>
                </div>
             </div>
             <a asp-controller="Plan" asp-action="Index" class="muscle-cta">
@@ -250,7 +250,7 @@
                 </span>
             </a>
         </div>
-        <a href="#" class="program-card dark">
+        <a asp-controller="Plan" asp-action="Index" asp-route-goal="hypertrophy" class="program-card dark">
             <div>
                 <span class="program-type">目標 01</span>
                 <h3 class="program-name">增肌</h3>
@@ -262,7 +262,7 @@
                 查看計畫
             </div>
         </a>
-        <a href="#" class="program-card dark">
+        <a asp-controller="Plan" asp-action="Index" asp-route-goal="strength" class="program-card dark">
             <div>
                 <span class="program-type">目標 02</span>
                 <h3 class="program-name">增力</h3>
@@ -274,7 +274,7 @@
                 查看計畫
             </div>
         </a>
-        <a href="#" class="program-card dark">
+        <a asp-controller="Plan" asp-action="Index" asp-route-goal="fatloss" class="program-card dark">
             <div>
                 <span class="program-type">目標 03</span>
                 <h3 class="program-name">減脂</h3>

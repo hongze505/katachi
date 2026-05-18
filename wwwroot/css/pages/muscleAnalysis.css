@@ -44,6 +44,20 @@ muscleAnalysis.css - 肌群分析（PAGE 3）
     padding: 24px 100px;
 }
 
+/* P3 區塊標題（訓練分布圖 / 訓練佔比 / 目標達成率 / 本月建議） */
+#page-p3 .sec-label,
+#page-p3 .sug-title {
+    font-size: 19px;
+}
+
+/* 正背面切換 + 月份選單 橫排容器 */
+.muscle-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
 /* 人體 SVG 正面 / 背面切換 */
 .body-tog {
     display: flex;
@@ -250,8 +264,8 @@ muscleAnalysis.css - 肌群分析（PAGE 3）
 
 /* 建議清單標題文字 */
 .sug-title {
-    font-size: 14px;
     font-weight: 700;
+    color: var(--text-dim);
 }
 
 /* 單筆建議項目列 */
@@ -277,4 +291,73 @@ muscleAnalysis.css - 肌群分析（PAGE 3）
     font-size: 16px;
     flex-shrink: 0;
     margin-top: 1px;
+}
+
+@media (max-width: 600px) {
+    .p3-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .right-col {
+        grid-column: 1;
+        grid-row: auto;
+    }
+
+    .sug-card {
+        margin-top: 2px;
+        padding: 16px 12px;
+    }
+
+    .sug-item {
+        font-size: 15px;
+        letter-spacing: 0;
+        line-height: 1.5;
+    }
+}
+
+@media (max-width: 1024px) {
+    /* 正背面按鈕禁止換行 */
+    .body-tog-btn {
+        white-space: nowrap;
+    }
+
+    /* 圓餅圖縮小 */
+    .pie-cw {
+        width: 130px;
+    }
+
+    /* 圓餅圖例名稱禁止換行 */
+    .pie-leg-name {
+        font-size: 14px;
+        white-space: nowrap;
+    }
+
+    .pie-leg-pct {
+        font-size: 14px;
+    }
+
+    /* 建議區塊減少水平 padding */
+    .sug-card {
+        padding: 20px 24px;
+        margin-top: 2px;
+    }
+
+    /* 4 區塊間距縮到 2px */
+    .p3-grid {
+        gap: 2px;
+    }
+
+    .right-col {
+        gap: 2px;
+    }
+
+    /* 目標達成率列間距縮小 */
+    .goal-row {
+        padding: 4px 0;
+    }
+
+    /* 頁面內距縮小 */
+    #page-p3 .pi {
+        padding: 8px;
+    }
 }

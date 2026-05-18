@@ -358,9 +358,12 @@ function _insertNewLogItem(e) {
   const empty = container.querySelector(".food-log-empty");
   if (empty) empty.remove();
 
+  // 移除前一個 latest 樣式
+  document.querySelectorAll('.log-item--latest').forEach(el => el.classList.remove('log-item--latest'));
+
   // 建立新的 DOM 元素
   const div = document.createElement("div");
-  div.className = "log-item log-item-new";
+  div.className = "log-item log-item-new log-item--latest";
   div.dataset.logid = e.logId;
   div.innerHTML = `
     <div class="log-item-left">
@@ -421,8 +424,8 @@ function renderLog() {
   }
   el.innerHTML = foodLog
     .map(
-      (e) => `
-   <div class="log-item ${e.isNew ? 'log-item-new' : ''}">
+      (e, i) => `
+   <div class="log-item ${e.isNew ? 'log-item-new' : ''} ${i === 0 ? 'log-item--latest' : ''}">
       <div class="log-item-left">
         <div class="log-item-header">
           <span class="log-item-name">${e.name}<span class="log-item-time">${_fmtTime(e.addedAt)}</span></span>

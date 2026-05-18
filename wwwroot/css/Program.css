@@ -20,7 +20,7 @@ html {
 body {
     background: var(--color-black);
     color: var(--color-black);
-    font-family: var(--font-sans);
+    font-family: var(--font-mincho);
     font-weight: 300;
     overflow-x: hidden;
 }
@@ -58,7 +58,7 @@ body {
 }
 
 .ph-sub {
-    font-family: var(--font-serif);
+    font-family: var(--font-mincho);
     font-weight: 200;
     font-size: 1rem;
     letter-spacing: 6px;
@@ -123,7 +123,7 @@ body {
 
 /* ══════ MAIN CONTENT ══════ */
 #main-content {
-    background: #f0ede8;
+    background: #f7f5f0;
     border-radius: 20px;
     /* 覆蓋 token 顏色讓內部元素繼承冷調色系 */
     --color-bg: #e8ecf0;
@@ -173,7 +173,7 @@ body {
 }
 
     .form-title span {
-        font-family: var(--font-serif);
+        font-family: var(--font-mincho);
         font-weight: 200;
         font-size: 0.3em;
         letter-spacing: 4px;
@@ -183,7 +183,7 @@ body {
     }
 
 .form-desc {
-    font-family: var(--font-serif);
+    font-family: var(--font-mincho);
     font-size: 1rem;
     line-height: 1.5;
     color: var(--color-grey);
@@ -264,7 +264,7 @@ body {
     }
 
 .card-en {
-    font-family: var(--font-italic);
+    font-family: var(--font-mincho);
     font-size: 0.78rem;
     letter-spacing: 2px;
     color: var(--color-grey-mute);
@@ -272,7 +272,7 @@ body {
 }
 
 .card-zh {
-    font-family: var(--font-brand);
+    font-family: var(--font-mincho);
     font-weight: 800;
     font-size: 1.4rem;
     letter-spacing: 2px;
@@ -362,7 +362,7 @@ body {
     border: 0.5px solid var(--color-line);
     border-radius: 20px;
     padding: 8px 18px;
-    font-family: var(--font-sans);
+    font-family: var(--font-mincho);
     font-size: 0.85rem;
     letter-spacing: 1px;
     color: var(--color-grey);
@@ -439,12 +439,13 @@ body {
 .equip-name {
     font-size: 0.9rem;
     font-weight: 300;
+    font-family: var(--font-mincho);
     color: var(--color-black);
     transition: color 0.2s;
 }
 
 .equip-en {
-    font-family: var(--font-italic);
+    font-family: var(--font-mincho);
     font-size: 0.72rem;
     letter-spacing: 1px;
     color: var(--color-grey-mute);
@@ -471,7 +472,7 @@ body {
     color: #fff;
     border: none;
     cursor: pointer;
-    font-family: var(--font-sans);
+    font-family: var(--font-mincho);
     font-size: 0.9rem;
     letter-spacing: 4px;
     text-transform: uppercase;
@@ -531,7 +532,7 @@ body {
 }
 
 .result-title {
-    font-family: var(--font-brand);
+    font-family: var(--font-mincho);
     font-weight: 800;
     font-size: clamp(2.4rem, 4vw, 4rem);
     letter-spacing: 2px;
@@ -700,7 +701,7 @@ body {
 }
 
 .week-card-count {
-    font-family: var(--font-sans);
+    font-family: var(--font-mincho);
     font-size: 0.75rem;
     letter-spacing: 1px;
     color: var(--color-grey);
@@ -743,7 +744,7 @@ body {
 }
 
 .day-detail-split {
-    font-family: var(--font-brand);
+    font-family: var(--font-mincho);
     font-weight: 800;
     font-size: clamp(1.6rem, 3vw, 2.4rem);
     letter-spacing: 2px;
@@ -751,7 +752,7 @@ body {
 }
 
 .day-detail-count {
-    font-family: var(--font-serif);
+    font-family: var(--font-mincho);
     font-size: 0.9rem;
     color: var(--color-grey);
     letter-spacing: 2px;
@@ -798,7 +799,7 @@ body {
     }
 
 .ex-num {
-    font-family: var(--font-italic);
+    font-family: var(--font-mincho);
     font-size: 0.9rem;
     letter-spacing: 2px;
     color: var(--color-grey-mute);
@@ -814,13 +815,14 @@ body {
     display: block;
     font-size: 1rem;
     font-weight: 300;
+    letter-spacing:1.8px;
     color: var(--color-black);
     margin-bottom: 3px;
 }
 
 .ex-muscle {
     display: block;
-    font-family: var(--font-italic);
+    font-family: var(--font-mincho);
     font-size: 0.78rem;
     letter-spacing: 2px;
     color: var(--color-grey-mute);
@@ -838,7 +840,7 @@ body {
     content: "查看說明";
     margin-right: 16px;
     color: var(--color-grey-mute);
-    font-family: var(--font-sans);
+    font-family: var(--font-mincho);
     font-size: 0.72rem;
     font-weight: 500;
     letter-spacing: 2px;
@@ -880,7 +882,7 @@ body {
     transform: translateX(-50%) translateY(20px);
     background: var(--color-black);
     color: #fff;
-    font-family: var(--font-sans);
+    font-family: var(--font-mincho);
     font-size: 0.85rem;
     letter-spacing: 2px;
     padding: 12px 28px;
@@ -1022,9 +1024,16 @@ body {
         padding: 48px 24px 32px;
     }
 
-    .footer-top {
-        grid-template-columns: 1fr 1fr;
-    }
 }
 
-
+@media (max-width: 600px) {
+    .week-schedule {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .field-cards {
+        grid-template-columns: 1fr;
+    }
+    #sec-form {
+        padding: 40px 20px;
+    }
+}
