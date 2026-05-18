@@ -56,7 +56,7 @@ body {
 .auth-brand-sub {
     font-family: var(--font-mincho);
     font-weight: 200;
-    font-size: 0.65rem;
+    font-size: 0.9rem;
     letter-spacing: 4px;
     color: var(--color-bg);
 }
@@ -287,6 +287,15 @@ body {
         border-bottom-color: #c17f5a;
     }
 
+    .form-input:-webkit-autofill,
+    .form-input:-webkit-autofill:hover,
+    .form-input:-webkit-autofill:focus {
+        -webkit-box-shadow: 0 0 0px 1000px rgba(30, 28, 26, 0.95) inset;
+        -webkit-text-fill-color: #ffffff;
+        transition: background-color 5000s ease-in-out 0s;
+        border-bottom-color: rgba(255,255,255,0.12);
+    }
+
 /* 輔助文字行 */
 .form-row-extra {
     display: flex;
@@ -515,7 +524,15 @@ body {
     color: #333;
     background: transparent;
     border: none;
-    border-bottom: 1px solid #C0BAB1; /* 調整底線顏色 */
+    border-bottom: 1px solid #C0BAB1;
+}
+
+.auth-right input:-webkit-autofill,
+.auth-right input:-webkit-autofill:hover,
+.auth-right input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px rgba(30, 28, 26, 0.95) inset;
+    -webkit-text-fill-color: #ffffff;
+    transition: background-color 5000s ease-in-out 0s;
 }
 
 /* 底部按鈕 (登入) */

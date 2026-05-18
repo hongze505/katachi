@@ -1,19 +1,20 @@
 ﻿@model katachi.Models.Training.TrainingLogViewModel
 @using System.Text.Json
+
 @section Styles {
-    <link rel="stylesheet" href="~/css/base/main.css" />
-    <link rel="stylesheet" href="~/css/pages/trainingLog/overview.css" />
-    <link rel="stylesheet" href="~/css/pages/trainingLog/calendar.css" />
-    <link rel="stylesheet" href="~/css/pages/trainingLog/detail.css" />
-    <link rel="stylesheet" href="~/css/pages/trainingStats.css" />
-    <link rel="stylesheet" href="~/css/pages/muscleAnalysis.css" />
-    <link rel="stylesheet" href="~/css/pages/userSettings.css" />
-    <link rel="stylesheet" href="~/css/components/form.css" />
-    <link rel="stylesheet" href="~/css/components/modal.css" />
-    <link rel="stylesheet" href="~/css/components/stepper.css" />
-    <link rel="stylesheet" href="~/css/components/workoutSets.css" />
-    
+    <link rel="stylesheet" href="~/css/base/main.css">
+    <link rel="stylesheet" href="~/css/pages/trainingLog/overview.css">
+    <link rel="stylesheet" href="~/css/pages/trainingLog/calendar.css">
+    <link rel="stylesheet" href="~/css/pages/trainingLog/detail.css">
+    <link rel="stylesheet" href="~/css/pages/trainingStats.css">
+    <link rel="stylesheet" href="~/css/pages/muscleAnalysis.css">
+    <link rel="stylesheet" href="~/css/pages/userSettings.css">
+    <link rel="stylesheet" href="~/css/components/form.css">
+    <link rel="stylesheet" href="~/css/components/modal.css">
+    <link rel="stylesheet" href="~/css/components/stepper.css">
+    <link rel="stylesheet" href="~/css/components/workoutSets.css">
 }
+
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" defer></script>
     <script src="~/js/data.js" defer></script>
@@ -26,7 +27,7 @@
 
 <!-- ===============================================================
        版面骨架：sidebar-l | main | sidebar-r
-       =============================================================== -->
+   =============================================================== -->
 <div class="layout">
     <div class="sidebar-l">
         <div class="sidebar-hero">
@@ -81,46 +82,16 @@
         <div class="page active" id="page-p1">
             <div class="pi">
 
-                <!-- P1 上方雙欄：左＝PR/RM，右＝完成率/活躍度 -->
+                <!-- P1 上方雙欄：左＝完成率，右＝活躍度 -->
                 <div class="p1-top">
 
-                    <!-- 左卡：訓練活躍度 -->
+                    <!-- 左卡：完成率 -->
                     <div class="card">
-                        <div class="sec-label" style="margin-bottom:14px">訓練活躍度</div>
-                        <div class="act-view" style="display:block;padding-top:0">
-                            <div class="act-quad">
-                                <div class="act-item">
-                                    <div><span class="act-num" id="act-next">—</span><span class="act-unit" id="act-next-unit"></span></div>
-                                    <div class="act-lbl">下次安排距今</div>
-                                </div>
-                                <div class="act-item">
-                                    <div><span class="act-num" id="act-last">—</span><span class="act-unit" id="act-last-unit"></span></div>
-                                    <div class="act-lbl">上次訓練距今</div>
-                                </div>
-                                <div class="act-item">
-                                    <div><span class="act-num" id="act-streak">—</span><span class="act-unit"> 週</span></div>
-                                    <div class="act-lbl">連續訓練週數</div>
-                                </div>
-                                <div class="act-item">
-                                    <div><span class="act-num" id="act-sets">—</span><span class="act-unit"> 組</span></div>
-                                    <div class="act-lbl">本月完成組數</div>
-                                </div>
-                                <div class="act-item">
-                                    <div><span class="act-num" id="act-rest">—</span><span class="act-unit"> 天</span></div>
-                                    <div class="act-lbl">本月休息天數</div>
-                                </div>
-                                <div class="act-item">
-                                    <div><span class="act-num" id="act-avg">—</span><span class="act-unit"> 天</span></div>
-                                    <div class="act-lbl">本月週均訓練天數</div>
-                                </div>
-                            </div>
+                        <div class="p1-mob-tog">
+                            <button class="p1-mob-btn active" data-idx="0">完成率</button>
+                            <button class="p1-mob-btn" data-idx="1">活躍度</button>
                         </div>
-                    </div>
-
-                    <!-- 右卡：完成率 / 訓練活躍度（兩個 view，JS 切換顯示） -->
-                    <div class="card">
-                        
-                        <div class="sec-label" style="margin-bottom:14px">完成率</div>
+                        <div class="sec-label">完成率</div>
                         <!-- 完成率視圖（預設顯示） -->
                         <div class="cmp-view" id="cmp-view">
                             <!-- 頂列：大百分比（左）＋ 完成/計畫比（右） -->
@@ -144,16 +115,53 @@
                             <!-- 三格統計：待完成 / 部分完成 / 未完成 -->
                             <div class="trio">
                                 <div class="trio-item">
-                                    <div class="trio-num" style="color:var(--text-dim)" id="st-upcoming">-</div>
-                                    <div class="trio-lbl">待完成 (未來已安排)</div>
+                                    <div class="trio-num" id="st-upcoming">-</div>
+                                    <div class="trio-lbl">待完成<span class="trio-lbl-sub"> (未來已安排)</span></div>
                                 </div>
                                 <div class="trio-item">
-                                    <div class="trio-num" style="color:var(--partial)" id="st-partial">-</div>
+                                    <div class="trio-num" id="st-partial">-</div>
                                     <div class="trio-lbl">部分完成</div>
                                 </div>
                                 <div class="trio-item">
-                                    <div class="trio-num" style="color:var(--danger)" id="st-miss">-</div>
-                                    <div class="trio-lbl">未完成 (過去未訓練)</div>
+                                    <div class="trio-num" id="st-miss">-</div>
+                                    <div class="trio-lbl">未完成<span class="trio-lbl-sub"> (過去未訓練)</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右卡：訓練活躍度 -->
+                    <div class="card">
+                        <div class="p1-mob-tog">
+                            <button class="p1-mob-btn" data-idx="0">完成率</button>
+                            <button class="p1-mob-btn active" data-idx="1">活躍度</button>
+                        </div>
+                        <div class="sec-label">訓練活躍度</div>
+                        <div class="act-view act-view--shown">
+                            <div class="act-quad">
+                                <div class="act-item">
+                                    <div><span class="act-num" id="act-last">—</span><span class="act-unit" id="act-last-unit"></span></div>
+                                    <div class="act-lbl">上次訓練距今</div>
+                                </div>
+                                <div class="act-item">
+                                    <div><span class="act-num" id="act-next">—</span><span class="act-unit" id="act-next-unit"></span></div>
+                                    <div class="act-lbl">下次安排距今</div>
+                                </div>
+                                <div class="act-item">
+                                    <div><span class="act-num" id="act-rest">—</span><span class="act-unit"> 天</span></div>
+                                    <div class="act-lbl">本月休息天數</div>
+                                </div>
+                                <div class="act-item">
+                                    <div><span class="act-num" id="act-sets">—</span><span class="act-unit"> 組</span></div>
+                                    <div class="act-lbl">本月完成組數</div>
+                                </div>
+                                <div class="act-item">
+                                    <div><span class="act-num" id="act-avg">—</span><span class="act-unit"> 天</span></div>
+                                    <div class="act-lbl">本月週均訓練天數</div>
+                                </div>
+                                <div class="act-item">
+                                    <div><span class="act-num" id="act-streak">—</span><span class="act-unit"> 週</span></div>
+                                    <div class="act-lbl">連續訓練週數</div>
                                 </div>
                             </div>
                         </div>
@@ -172,16 +180,16 @@
                         <!-- 色塊圖例：完成 / 部分 / 計畫 / 未完成 -->
                         <div class="cal-legend">
                             <div class="leg-item">
-                                <div class="leg-dot" style="background:var(--done)"></div>已完成
+                                <div class="leg-dot leg-dot-done"></div>已完成
                             </div>
                             <div class="leg-item">
-                                <div class="leg-dot" style="background:var(--partial)"></div>部分完成
+                                <div class="leg-dot leg-dot-partial"></div>部分完成
                             </div>
                             <div class="leg-item">
-                                <div class="leg-dot" style="background:var(--planned)"></div>已安排
+                                <div class="leg-dot leg-dot-planned"></div>已安排
                             </div>
                             <div class="leg-item">
-                                <div class="leg-dot" style="background:var(--missed);border:1px solid var(--danger)"></div>未完成
+                                <div class="leg-dot leg-dot-missed"></div>未完成
                             </div>
                         </div>
                     </div>
@@ -299,7 +307,7 @@
                             <select class="msel" id="p2-lm"></select>
                             <select class="msel" id="p2-ly" style="display:none"></select>
                         </div>
-                        <canvas id="chart-l" height="260"></canvas>
+                        <div class="chart-wrap"><canvas id="chart-l"></canvas></div>
                     </div>
                     <!-- 右圖：月份選單（月檢視）/ 年份選單（年檢視） -->
                     <div class="chart-card">
@@ -308,7 +316,7 @@
                             <select class="msel" id="p2-rm"></select>
                             <select class="msel" id="p2-ry" style="display:none"></select>
                         </div>
-                        <canvas id="chart-r" height="260"></canvas>
+                        <div class="chart-wrap"><canvas id="chart-r"></canvas></div>
                     </div>
                 </div>
 
@@ -336,7 +344,7 @@
                     <div class="muscle-card">
                         <div class="sec-label" id="p3-month-label">肌群分布圖 · 2026年 04月</div>
                         <!-- 正面 / 背面切換 + 月份滾輪選單 -->
-                        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px">
+                        <div class="muscle-card-top">
                             <div class="body-tog">
                                 <button class="body-tog-btn active" data-side="front">正面</button>
                                 <button class="body-tog-btn" data-side="back">背面</button>
@@ -348,7 +356,7 @@
                             <div class="bsvg-wrap">
                                 <!-- 正面圖 -->
                                 <div class="body-map__figure">
-                                    <img class="body-map__image" src="~/training-svg/front.svg" alt="front body map" />
+                                    <img class="body-map__image" src="./svg/front.svg" alt="front body map" />
                                     <!-- 互動 SVG 覆蓋層 -->
                                     <svg class="body-map__overlay" viewBox="0 0 340 649" xmlns="http://www.w3.org/2000/svg">
 
@@ -508,7 +516,7 @@
                             <div class="bsvg-wrap">
                                 <!-- 背面圖 -->
                                 <div class="body-map__figure">
-                                    <img class="body-map__image" src="~/training-svg/back.svg" alt="back body map" />
+                                    <img class="body-map__image" src="./svg/back.svg" alt="back body map" />
                                     <svg class="body-map__overlay" viewBox="0 0 340 649" xmlns="http://www.w3.org/2000/svg">
 
                                         <!-- 背部斜方肌 -->
@@ -643,14 +651,14 @@
                             <div class="pie-inner">
                                 <!-- 圓餅 canvas -->
                                 <div class="pie-cw"><canvas id="pie-chart" width="180" height="180"></canvas></div>
-                                <!-- 右側圖例列表（由 JS renderPieLeg() 動態注入） -->
+                                <!-- 右側圖例列表（由 buildP3() 動態注入） -->
                                 <div class="pie-leg" id="pie-leg"></div>
                             </div>
                         </div>
 
-                        <!-- 目標達成率（由 JS renderGoals() 動態注入進度條列表） -->
+                        <!-- 目標達成率（由 buildP3() 動態注入進度條列表） -->
                         <div class="goal-card">
-                            <div class="sec-label" style="margin-bottom:14px">目標達成率</div>
+                            <div class="sec-label">目標達成率</div>
                             <div id="goal-rows"></div>
                         </div>
                     </div>
@@ -670,22 +678,30 @@
         <div class="page" id="page-p4">
             <div class="pi">
                 <div class="msec">
-                    <div class="mlbl" style="margin-bottom:12px">每月肌群目標組數</div>
+                    <div class="mlbl">每月肌群目標組數</div>
                     <div class="goal-setting-grid" id="goal-setting-grid"></div>
                 </div>
-                <button class="msub" id="mo-profile-save" style="margin-top:32px">儲存設定</button>
+                <button class="msub" id="mo-profile-save">儲存設定</button>
             </div>
         </div>
     </div>
     <div class="sidebar-r"></div>
+    <div class="drawer-overlay" id="drawer-overlay"></div>
 </div>
+
+<!-- 可拖動圓形漢堡按鈕（手機/平板才顯示）-->
+<button class="fab-menu" id="fab-menu" aria-label="選單">
+    <span></span>
+    <span></span>
+    <span></span>
+</button>
 
 <!-- ─────────────────────────────────────────
        MODAL ADD：新增訓練項目
        ─ 動作 chip 選擇
        ─ 重量輸入
        ─ 組數 / 次數步進控制
-       ───────────────────────────────────────── -->
+   ───────────────────────────────────────── -->
 <div class="mo" id="mo-add">
     <div class="mb lg">
         <div class="mhead">
@@ -693,8 +709,7 @@
             <button class="mclose" id="mo-add-close">X</button>
         </div>
         <!-- 選取日期顯示（由 JS 注入） -->
-        <div style="font-size:18px;color:var(--text-dim);font-family:var(--font-sans);margin-bottom:18px"
-             id="mo-add-date"></div>
+        <div id="mo-add-date"></div>
 
         <!-- 動作選擇 grid（部位 × 器材） -->
         <div class="msec">
@@ -703,57 +718,57 @@
                     <div class="ex-grid-corner"></div>
                     <div class="eq-col-lbl">槓鈴</div>
                     <div class="eq-col-lbl">啞鈴</div>
-                    <div class="eq-col-lbl">徒手</div>
                     <div class="eq-col-lbl">機械</div>
+                    <div class="eq-col-lbl">徒手</div>
                 </div>
                 <div class="ex-grid-row">
                     <div class="ex-row-lbl">背</div>
                     <div class="ex-cell" data-ex="row-bar">槓鈴划船</div>
                     <div class="ex-cell" data-ex="row-db">單手啞鈴划船</div>
-                    <div class="ex-cell" data-ex="pullup">引體向上</div>
                     <div class="ex-cell" data-ex="lat">滑輪下拉</div>
+                    <div class="ex-cell" data-ex="pullup">引體向上</div>
                 </div>
                 <div class="ex-grid-row">
                     <div class="ex-row-lbl">胸</div>
                     <div class="ex-cell" data-ex="bench-bar">槓鈴臥推</div>
                     <div class="ex-cell" data-ex="bench-db">啞鈴臥推</div>
-                    <div class="ex-cell" data-ex="pushup">伏地挺身</div>
                     <div class="ex-cell" data-ex="chestpress">胸推機</div>
+                    <div class="ex-cell" data-ex="pushup">伏地挺身</div>
                 </div>
                 <div class="ex-grid-row">
                     <div class="ex-row-lbl">核心</div>
                     <div class="ex-cell" data-ex="rollout">槓鈴滾輪</div>
                     <div class="ex-cell" data-ex="sidebend">啞鈴側彎</div>
-                    <div class="ex-cell" data-ex="plank">棒式</div>
                     <div class="ex-cell" data-ex="crunch">捲腹機</div>
+                    <div class="ex-cell" data-ex="plank">棒式</div>
                 </div>
                 <div class="ex-grid-row">
                     <div class="ex-row-lbl">肩</div>
                     <div class="ex-cell" data-ex="ohp-bar">槓鈴肩推</div>
                     <div class="ex-cell" data-ex="lateral-db">啞鈴側平舉</div>
-                    <div class="ex-cell" data-ex="hspu">倒立撐</div>
                     <div class="ex-cell" data-ex="shoulderpress">肩推機</div>
+                    <div class="ex-cell" data-ex="hspu">倒立撐</div>
                 </div>
                 <div class="ex-grid-row">
-                    <div class="ex-row-lbl">臂</div>
+                    <div class="ex-row-lbl">手臂</div>
                     <div class="ex-cell" data-ex="curl-bar">槓鈴彎舉</div>
                     <div class="ex-cell" data-ex="curl-db">啞鈴彎舉</div>
-                    <div class="ex-cell" data-ex="dip">雙槓撐體</div>
                     <div class="ex-cell" data-ex="curl-mach">二頭彎舉機</div>
+                    <div class="ex-cell" data-ex="dip">雙槓撐體</div>
                 </div>
                 <div class="ex-grid-row">
                     <div class="ex-row-lbl">腿</div>
                     <div class="ex-cell" data-ex="squat-bar">槓鈴深蹲</div>
                     <div class="ex-cell" data-ex="squat-db">啞鈴深蹲</div>
-                    <div class="ex-cell" data-ex="squat-bw">自重深蹲</div>
                     <div class="ex-cell" data-ex="legpress">腿推機</div>
+                    <div class="ex-cell" data-ex="squat-bw">自重深蹲</div>
                 </div>
                 <div class="ex-grid-row">
                     <div class="ex-row-lbl">臀</div>
                     <div class="ex-cell" data-ex="hipthrust-bar">槓鈴臀推</div>
                     <div class="ex-cell" data-ex="hipthrust-db">啞鈴臀推</div>
-                    <div class="ex-cell" data-ex="glutebridge">臀橋</div>
                     <div class="ex-cell" data-ex="abduction">臀外展機</div>
+                    <div class="ex-cell" data-ex="glutebridge">臀橋</div>
                 </div>
             </div>
         </div>
@@ -794,12 +809,12 @@
        MODAL SETS：組數詳情
        ─ 點擊訓練項目列後開啟
        ─ 顯示各組重量 × 次數 + 完成勾選
-       ───────────────────────────────────────── -->
+   ───────────────────────────────────────── -->
 <div class="mo" id="mo-sets">
     <div class="mb sm">
         <div class="mhead">
             <div class="mtitle" id="sets-title">訓練組</div>
-            <div style="display:flex;align-items:center;gap:16px">
+            <div class="mhead-right">
                 <button class="mbtn mbtn-sm mbtn-danger" id="sets-delete">刪除項目</button>
                 <button class="mclose" id="mo-sets-close">X</button>
             </div>

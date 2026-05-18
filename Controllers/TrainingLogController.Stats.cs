@@ -8,47 +8,53 @@ namespace katachi.Controllers
         [HttpGet]
         public IActionResult GetMonData(string month, string exKey, string metric)
         {
+            if (string.IsNullOrEmpty(month) || string.IsNullOrEmpty(exKey))
+                return Json(new { labels = new List<string>(), vals = new List<decimal?>() });
+
             using var conn = _db.CreateConnection();
             conn.Open();
             var sql = @"
+                WITH item_stats AS (
+                    SELECT ti.session_id,
+                           MAX(ti.weight_kg) AS weight,
+                           MAX(CASE WHEN ti.weight_kg > 0
+                               THEN ROUND(ti.weight_kg * (1.0 + CAST(ti.reps AS FLOAT) / 30.0), 1)
+                               ELSE CAST(ti.reps AS FLOAT) END) AS rm,
+                           SUM(CASE WHEN ti.weight_kg > 0
+                               THEN ti.weight_kg * ti.reps * s.done_sets
+                               ELSE ti.reps * s.done_sets END) AS volume,
+                           MAX(s.done_sets) AS max_done
+                    FROM training_items ti
+                    JOIN (
+                        SELECT item_id, SUM(CAST(is_done AS INT)) AS done_sets
+                        FROM training_sets GROUP BY item_id
+                    ) s ON s.item_id = ti.item_id
+                    WHERE ti.ex_key = @ex AND ti.is_deleted = 0
+                    GROUP BY ti.session_id
+                )
                 SELECT ts.session_date,
-                    MAX(ti.weight_kg) AS weight,
-                    MAX(CASE WHEN ti.weight_kg > 0
-                        THEN ROUND(ti.weight_kg * (1.0 + CAST(ti.reps AS FLOAT) / 30.0), 1)
-                        ELSE CAST(ti.reps AS FLOAT) END) AS rm,
-                    SUM(CASE WHEN ti.weight_kg > 0
-                        THEN ti.weight_kg * ti.reps * s.done_sets
-                        ELSE ti.reps * s.done_sets END) AS volume
+                       CASE WHEN ist.max_done > 0 THEN ist.weight ELSE NULL END AS weight,
+                       CASE WHEN ist.max_done > 0 THEN ist.rm     ELSE NULL END AS rm,
+                       CASE WHEN ist.max_done > 0 THEN ist.volume ELSE NULL END AS volume
                 FROM training_sessions ts
-                JOIN training_items ti ON ti.session_id = ts.session_id
-                JOIN (
-                    SELECT item_id, SUM(CAST(is_done AS INT)) AS done_sets
-                    FROM training_sets GROUP BY item_id
-                ) s ON s.item_id = ti.item_id
-                WHERE ts.user_id = 1
-                  AND ti.ex_key = @ex
-                  AND ti.is_deleted = 0
-                  AND s.done_sets > 0
+                JOIN item_stats ist ON ist.session_id = ts.session_id
+                WHERE ts.user_id = @uid
                   AND FORMAT(ts.session_date, 'yyyy-MM') = @month
-                GROUP BY ts.session_date
                 ORDER BY ts.session_date";
 
             using var cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@uid", CurrentUserId);
             cmd.Parameters.AddWithValue("@ex", exKey);
             cmd.Parameters.AddWithValue("@month", month);
             var labels = new List<string>();
-            var vals = new List<decimal>();
+            var vals = new List<decimal?>();
             using var r = cmd.ExecuteReader();
             while (r.Read())
             {
                 var d = (DateTime)r["session_date"];
                 labels.Add($"{d.Month}/{d.Day}");
-                vals.Add(metric switch
-                {
-                    "rm" => Convert.ToDecimal(r["rm"]),
-                    "volume" => Convert.ToDecimal(r["volume"]),
-                    _ => (decimal)r["weight"]
-                });
+                var col = metric switch { "rm" => "rm", "volume" => "volume", _ => "weight" };
+                vals.Add(r[col] == DBNull.Value ? null : Convert.ToDecimal(r[col]));
             }
             return Json(new { labels, vals });
         }
@@ -73,7 +79,7 @@ namespace katachi.Controllers
                     SELECT item_id, SUM(CAST(is_done AS INT)) AS done_sets
                     FROM training_sets GROUP BY item_id
                 ) s ON s.item_id = ti.item_id
-                WHERE ts.user_id = 1
+                WHERE ts.user_id = @uid
                     AND ti.ex_key = @ex
                     AND ti.is_deleted = 0
                     AND s.done_sets > 0
@@ -82,6 +88,7 @@ namespace katachi.Controllers
                 ORDER BY MONTH(ts.session_date)";
 
             using var cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@uid", CurrentUserId);
             cmd.Parameters.AddWithValue("@ex", exKey);
             cmd.Parameters.AddWithValue("@year", year);
             var labels = new List<string>();
@@ -103,6 +110,9 @@ namespace katachi.Controllers
         [HttpGet]
         public IActionResult GetSummary(string left, string right, string metric, string mode)
         {
+            if (string.IsNullOrEmpty(left) || string.IsNullOrEmpty(right))
+                return Json(new List<object>());
+
             using var conn = _db.CreateConnection();
             conn.Open();
 
@@ -130,7 +140,7 @@ namespace katachi.Controllers
                     FROM training_sessions ts
                     JOIN training_items ti ON ti.session_id = ts.session_id
                     JOIN sa s ON s.item_id = ti.item_id
-                    WHERE ts.user_id = 1 AND ti.is_deleted = 0 AND s.done_sets > 0
+                    WHERE ts.user_id = @uid AND ti.is_deleted = 0 AND s.done_sets > 0
                 ),
                 dm AS (
                     SELECT ex_key, session_date, period,
@@ -146,6 +156,7 @@ namespace katachi.Controllers
                 GROUP BY ex_key";
 
             using var cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@uid", CurrentUserId);
             cmd.Parameters.AddWithValue("@left", left);
             cmd.Parameters.AddWithValue("@right", right);
 

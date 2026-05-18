@@ -300,17 +300,22 @@
         <div class="nutrition-left">
             <div>
                 <p class="nutrition-eyebrow">Nutrition Tracking</p>
-                <h2 class="nutrition-headline">
-                    <em>精準飲食</em>
-                    NUTRITION<br>SCIENCE
+                <h2 class="nutrition-headline">                   
+                    以食塑形
                 </h2>
                 <p class="nutrition-desc">
                     搜尋食物資料庫、記錄今日攝取、追蹤三大巨量營養素與微量元素。搭配 TDEE 計算器，讓每一口都符合你的目標。
                 </p>
             </div>
             <a asp-controller="Nutrition" asp-action="Index" class="nutrition-cta">
-                <span>記錄今日飲食</span>
-                <span class="nutrition-cta-arrow"></span>
+                <span class="cta-slide-wrap">
+                    <span class="cta-slide-a">記錄今日飲食</span>
+                    <span class="cta-slide-b">記錄今日飲食</span>
+                </span>
+                <span class="cta-arrow-wrap">
+                    <span class="cta-arrow-a">→</span>
+                    <span class="cta-arrow-b">→</span>
+                </span>
             </a>
         </div>
         <div class="nutrition-right">
@@ -344,36 +349,4 @@
         </div>
     </div>
 </section>
-<!-- 跑馬燈 -->
-<div class="marquee-wrap">
-    <div class="marquee-track">
 
-        <span class="marquee-item">Muscle Wiki <span class="marquee-dot"></span></span>
-        <span class="marquee-item">Exercises <span class="marquee-dot"></span></span>
-        <span class="marquee-item">Programs <span class="marquee-dot"></span></span>
-        <span class="marquee-item">Nutrition <span class="marquee-dot"></span></span>
-
-        <span class="marquee-item">Muscle Wiki <span class="marquee-dot"></span></span>
-        <span class="marquee-item">Exercises <span class="marquee-dot"></span></span>
-        <span class="marquee-item">Programs <span class="marquee-dot"></span></span>
-        <span class="marquee-item">Nutrition <span class="marquee-dot"></span></span>
-    </div>
-</div>
-</div>
-<!-- 墨水擴散濾鏡 -->
-<svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
-    <defs>
-        <filter id="ink-filter" x="-100%" y="-100%" width="300%" height="300%" color-interpolation-filters="sRGB">
-            <feTurbulence type="fractalNoise" baseFrequency="0.018 0.022" numOctaves="6" seed="8" result="noise" />
-            <feColorMatrix type="saturate" values="0" in="noise" result="gnoise" />
-            <feDisplacementMap in="SourceGraphic" in2="gnoise" scale="18" xChannelSelector="R" yChannelSelector="G" result="warped" />
-            <feGaussianBlur in="warped" stdDeviation="3.5" result="blurred" />
-            <feColorMatrix in="blurred" type="matrix"
-                           values="1 0 0 0 0
-            0 1 0 0 0
-            0 0 1 0 0
-            0 0 0 6 -1.8" result="sharp" />
-            <feGaussianBlur in="sharp" stdDeviation="1.2" />
-        </filter>
-    </defs>
-</svg>

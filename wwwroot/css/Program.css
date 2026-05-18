@@ -18,7 +18,7 @@ html {
 }
 
 body {
-    
+    background: var(--color-black);
     color: var(--color-black);
     font-family: var(--font-sans);
     font-weight: 300;
@@ -141,6 +141,7 @@ body {
 /* ══════ STEP 1 — 表單 ══════ */
 #sec-form {
     padding: 80px var(--page-gutter-lg);
+    border-radius:20px;
     max-width: 1400px;
     margin: 0 auto;
 }

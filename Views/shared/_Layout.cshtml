@@ -140,53 +140,34 @@
     </main>
 	<!-- ══════ FOOTER ══════ -->
     <footer>
-    <div class="footer-top">
-        <div class="footer-brand">
-            <div class="footer-logo">KATACHI</div>
-            <p class="footer-tagline">精準的訓練，始於對身體的理解。每一組動作都應有其意義。</p>
-            <div class="footer-social">
-                <a href="#" class="footer-social-link">IG</a>
-                <a href="#" class="footer-social-link">YT</a>
-                <a href="#" class="footer-social-link">FB</a>
+        <div class="footer-bar">
+            <span class="footer-copy">© 2026 KATACHI. All rights reserved.</span>
+            @* <nav class="footer-mini-nav">
+                <a asp-controller="MuscleMap" asp-action="Index">肌肉百科</a>
+                <a asp-controller="TrainingLog" asp-action="Index">訓練日誌</a>
+                <a asp-controller="Plan" asp-action="Index">訓練計畫</a>
+                <a asp-controller="Nutrition" asp-action="Index">飲食計算</a>
+            </nav> *@
+            <button class="footer-scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+                <span class="footer-scroll-arr"></span>
+                Back to top
+            </button>
+        </div>
+        <div class="footer-brand-mark">
+            <div class="footer-mark">
+                <span class="footer-mark-label">KATA</span>
+                <span class="footer-mark-kanji">形</span>
+            </div>
+            <div class="footer-mark footer-mark--center">
+                <span class="footer-mark-label">TO</span>
+                <span class="footer-mark-kanji">と</span>
+            </div>
+            <div class="footer-mark footer-mark--right">
+                <span class="footer-mark-label">CHI</span>
+                <span class="footer-mark-kanji">知</span>
             </div>
         </div>
-        <div>
-            <p class="footer-col-title">功能</p>
-            <ul class="footer-links">
-                <li><a href="#">肌肉百科</a></li>
-                <li><a href="#">動作教學</a></li>
-                <li><a href="#">訓練計畫</a></li>
-                <li><a href="#">飲食計算</a></li>
-            </ul>
-        </div>
-        <div>
-            <p class="footer-col-title">計算工具</p>
-            <ul class="footer-links">
-                <li><a href="#">1RM 計算器</a></li>
-                <li><a href="#">BMI 計算器</a></li>
-                <li><a href="#">TDEE 計算器</a></li>
-                <li><a href="#">強度百分比表</a></li>
-            </ul>
-        </div>
-        <div>
-            <p class="footer-col-title">會員</p>
-            <ul class="footer-links">
-                <li><a href="#">登入 / 註冊</a></li>
-                <li><a href="#">訓練日誌</a></li>
-                <li><a href="#">進度追蹤</a></li>
-                <li><a href="#">個人儀表板</a></li>
-            </ul>
-        </div>
-    </div>
-    <div class="footer-bottom">
-        <span class="footer-copy">© 2026 KATACHI. All rights reserved.</span>
-        <span class="footer-jp">形 · 重訓訓練百科</span>
-        <button class="footer-scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-            <span class="footer-scroll-arr"></span>
-            Back to top
-        </button>
-    </div>  
-</footer>
+    </footer>
 
 @await RenderSectionAsync("scripts", required: false)
 </body>

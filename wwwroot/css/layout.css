@@ -389,108 +389,44 @@
    FOOTER
 ══════════════════════════════ */
 footer {
+    margin-top:150px;
     background: var(--color-black);
-    color: rgba(255,255,255,0.6);
-    padding: 72px 80px 48px;
+    color: var(--color-bg);
+    border-top: 0.5px solid var(--color-line);
 }
 
-.footer-top {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 48px;
-    padding-bottom: 56px;
-    border-bottom: 0.5px solid rgba(255,255,255,0.08);
-    margin-bottom: 40px;
-}
-
-.footer-logo {
-    font-family: var(--font-brand);
-    font-weight: 800;
-    font-size: 1.8rem;
-    letter-spacing: 6px;
-    color: #fff;
-    margin-bottom: 16px;
-}
-
-.footer-tagline {
-    font-family: var(--font-mincho);
-    font-size: 0.82rem;
-    line-height: 1.8;
-    color: rgba(255,255,255,0.3);
-    max-width: 240px;
-    margin-bottom: 32px;
-}
-
-.footer-social {
-    display: flex;
-    gap: 16px;
-}
-
-.footer-social-link {
-    width: 32px;
-    height: 32px;
-    border: 0.5px solid rgba(255,255,255,0.15);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    color: rgba(255,255,255,0.4);
-    font-size: 0.6rem;
-    letter-spacing: 1px;
-    transition: border-color 0.2s, color 0.2s;
-}
-
-    .footer-social-link:hover {
-        border-color: rgba(255,255,255,0.6);
-        color: #fff;
-    }
-
-.footer-col-title {
-    font-size: 0.5rem;
-    letter-spacing: 5px;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.25);
-    margin-bottom: 24px;
-}
-
-.footer-links {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-    .footer-links a {
-        font-size: 0.8rem;
-        font-weight: 300;
-        letter-spacing: 1px;
-        color: rgba(255,255,255,0.5);
-        text-decoration: none;
-        transition: color 0.15s;
-    }
-
-        .footer-links a:hover {
-            color: #fff;
-        }
-
-.footer-bottom {
+/* ── 上方細欄：copyright / 導覽 / back to top ── */
+.footer-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 28px 80px;
+    
 }
 
 .footer-copy {
+    font-family: var(--font-mincho);
     font-size: 0.6rem;
     letter-spacing: 2px;
-    color: rgba(255,255,255,0.2);
+    color: var(--color-grey-mute);
 }
 
-.footer-jp {
+.footer-mini-nav {
+    display: flex;
+    gap: 40px;
+}
+
+.footer-mini-nav a {
     font-family: var(--font-mincho);
-    font-weight: 400;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     letter-spacing: 3px;
-    color: rgba(255,255,255,0.15);
+    color: var(--color-white);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer-mini-nav a:hover {
+    color: var(--color-black);
 }
 
 .footer-scroll-top {
@@ -500,16 +436,16 @@ footer {
     font-size: 0.52rem;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.3);
+    color: var(--color-grey-mute);
     cursor: pointer;
     background: none;
     border: none;
     transition: color 0.2s;
 }
 
-    .footer-scroll-top:hover {
-        color: #fff;
-    }
+.footer-scroll-top:hover {
+    color: var(--color-black);
+}
 
 .footer-scroll-arr {
     width: 1px;
@@ -518,17 +454,58 @@ footer {
     position: relative;
 }
 
-    .footer-scroll-arr::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -3px;
-        width: 6px;
-        height: 6px;
-        border-left: 1px solid currentColor;
-        border-top: 1px solid currentColor;
-        transform: rotate(45deg);
-    }
+.footer-scroll-arr::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -3px;
+    width: 6px;
+    height: 6px;
+    border-left: 1px solid currentColor;
+    border-top: 1px solid currentColor;
+    transform: rotate(45deg);
+}
+
+/* ── 下方大字品牌區 ── */
+.footer-brand-mark {
+    margin-top:180px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 60px 80px 0;
+    overflow: hidden;
+}
+
+.footer-mark {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.footer-mark--center {
+    align-items: center;
+}
+
+.footer-mark--right {
+    align-items: flex-end;
+}
+
+.footer-mark-label {
+    font-family: var(--font-mincho);
+    font-size: 0.6rem;
+    letter-spacing: 6px;
+    color: var(--color-grey-mute);
+}
+
+.footer-mark-kanji {
+    font-family: var(--font-mincho);
+    font-weight: 300;
+    font-size: clamp(7rem, 14vw, 10rem);
+    line-height: 1;
+    color: var(--color-white);
+    opacity: 1;
+    user-select: none;
+}
 
 /* ══════════════════════════════
    KEYFRAMES — 共用

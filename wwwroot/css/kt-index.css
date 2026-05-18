@@ -22,7 +22,7 @@ body {
     -webkit-text-size-adjust: 100%;
     text-rendering: optimizeLegibility;
     background: var(--color-black);
-    font-family: var(--font-brand);
+    font-family: var(--font-mincho);
     font-weight: var(--weight-medium);
     font-feature-settings: "palt";
 }
@@ -153,7 +153,6 @@ html.intro-active {
 
 /* ── 副標題 ── */
 .brand-sub {
-    font-family: var(--font-mincho);
     font-weight: var(--weight-medium);
     font-size: var(--text-sub);
     letter-spacing: var(--tracking-wide);
@@ -164,7 +163,6 @@ html.intro-active {
 }
 
 .brand-jp {
-    font-family: var(--font-mincho);
     font-weight: var(--weight-light);
     font-size: var(--text-sub-jp);
     letter-spacing: var(--tracking-mid);
@@ -289,7 +287,6 @@ html.intro-active {
 }
 
 .hero-desc {
-    font-family: var(--font-mincho);
     font-size: var(--text-h3);
     color: var(--color-grey-mid);
     line-height: 2;
@@ -468,34 +465,16 @@ html.intro-active {
     }
 
 .muscle-desc {
-    font-family: var(--font-mincho);
     font-size: 1.1rem;
     font-weight: 300;
     line-height: 2;
-    color: var(--color-grey);
+    color: var(--color-black);
     max-width: 340px;
     margin-bottom: 40px;
 }
 
-/*.muscle-cta {
-    font-family: var(--font-mincho);
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    font-weight: var(--weight-medium);
-    font-size: 1.3rem;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--color-black);
-    text-decoration: none;
-    padding: 14px 0;
-    border-bottom: 1px solid var(--color-black);
-    transition: gap 0.3s var(--ease-expo);
-}
-*/
 
 .muscle-cta {
-    font-family: var(--font-mincho);
     font-weight: var(--weight-medium);
     display: inline-flex;
     gap: 12px;
@@ -622,8 +601,6 @@ html.intro-active {
 }
 
 .muscle-part-en {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
     font-weight: 300;
     font-size: 0.85rem;
     letter-spacing: 3px;
@@ -738,7 +715,6 @@ html.intro-active {
 }
 
 .ex-title {
-    font-family: var(--font-mincho);
     font-size: clamp(1.6rem, 2.2vw, 2.4rem);
     font-weight: 300;
     letter-spacing: 3px;
@@ -810,7 +786,6 @@ html.intro-active {
 #sec-program {
 }
 .program-intro-desc {
-    font-family: var(--font-mincho);
     font-size: 1.1rem;
     font-weight: 300;
     line-height: 2;
@@ -845,7 +820,6 @@ html.intro-active {
 
 .program-intro-title {
     max-height: 400px;
-    font-family: var(--font-mincho);
     font-weight: 400;
     font-size: 2.8rem;
     letter-spacing: 4px;
@@ -863,7 +837,6 @@ html.intro-active {
 }
 
 .program-intro-desc {
-    font-family: var(--font-mincho);
     writing-mode: vertical-rl;
     /* 核心設定：限制高度，文字才會往左邊排 */
     max-height: 320px;
@@ -932,7 +905,6 @@ html.intro-active {
 }
 
 .program-name {
-    font-family: var(--font-mincho);
     font-weight: 800;
     color: white;
     font-size: 1.8rem;
@@ -942,7 +914,6 @@ html.intro-active {
 }
 
 .program-jp {
-    font-family: var(--font-mincho);
     font-weight: 200;
     font-size: 0.78rem;
     color: var(--color-grey-mid);
@@ -951,7 +922,6 @@ html.intro-active {
 }
 
 .program-detail {
-    font-family:var(--font-mincho);
     font-size: 0.9rem;
     line-height: 1.9;
     color: rgba(255,255,255,0.3);
@@ -1001,6 +971,7 @@ html.intro-active {
     display: grid;
     grid-template-columns: 1fr 1fr;
     min-height: 400px;
+    margin-top: 80px;
 }
 
 .nutrition-left {
@@ -1016,14 +987,14 @@ html.intro-active {
     font-size: 0.52rem;
     letter-spacing: 5px;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.25);
+    color: var(--color-grey-mute);
     margin-bottom: 24px;
 }
 
 .nutrition-headline {
-    font-family: var(--font-brand);
-    font-weight: 800;
-    font-size: clamp(2.4rem, 4vw, 3.8rem);
+    font-weight: 400;
+    writing-mode: vertical-rl;
+    font-size:4rem;
     letter-spacing: 2px;
     line-height: 0.95;
     flex: 1;
@@ -1031,62 +1002,61 @@ html.intro-active {
 }
 
     .nutrition-headline em {
-        font-family: var(--font-mincho);
         font-style: normal;
         font-weight: 200;
         font-size: 0.4em;
         letter-spacing: 4px;
-        color: rgba(255,255,255,0.3);
+        color: var(--color-grey-mute);
         display: block;
         margin-bottom: 4px;
     }
 
 .nutrition-desc {
-    font-family: var(--font-mincho);
     font-size: 1rem;
     line-height: 2;
-    color: rgba(255,255,255,0.45);
+    color: var(--color-grey-hint);
     max-width: 360px;
     margin-bottom: 40px;
 }
 
 .nutrition-cta {
+    font-weight: var(--weight-medium);
     display: inline-flex;
-    align-items: center;
     gap: 12px;
-    font-size: 0.8rem;
-    letter-spacing: 4px;
-    text-transform: uppercase;
+    align-items: center;
+    overflow: hidden;
+    cursor: pointer;
+    font-size: 1.3rem;
+    letter-spacing: 0.06em;
     color: #fff;
     text-decoration: none;
-    padding: 14px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.25);
-    transition: gap 0.3s var(--ease-expo), border-color 0.2s;
+    padding-bottom: 5px;
+    border-bottom: 0.7px solid rgba(255,255,255,0.25);
 }
 
-    .nutrition-cta:hover {
-        gap: 20px;
-        border-color: #fff;
-    }
-
-.nutrition-cta-arrow {
-    width: 24px;
-    height: 1px;
-    background: currentColor;
-    position: relative;
+.nutrition-cta .cta-slide-b {
+    color: rgba(255,255,255,0.5);
 }
 
-    .nutrition-cta-arrow::after {
-        content: '';
-        position: absolute;
-        right: 0;
-        top: -3px;
-        width: 6px;
-        height: 6px;
-        border-right: 1px solid currentColor;
-        border-top: 1px solid currentColor;
-        transform: rotate(45deg);
-    }
+.nutrition-cta .cta-arrow-b {
+    color: rgba(255,255,255,0.5);
+}
+
+.nutrition-cta:hover .cta-slide-a {
+    transform: translateY(-100%);
+}
+
+.nutrition-cta:hover .cta-slide-b {
+    transform: translateY(-100%);
+}
+
+.nutrition-cta:hover .cta-arrow-a {
+    transform: translateY(-100%);
+}
+
+.nutrition-cta:hover .cta-arrow-b {
+    transform: translateY(-100%);
+}
 
 .nutrition-right {
     background-color: var(--color-bg);

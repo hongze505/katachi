@@ -44,7 +44,7 @@ namespace katachi.Controllers
             using (var cmd = new SqlCommand(
                 "SELECT session_id FROM training_sessions WHERE user_id = @uid AND session_date = @date", conn))
             {
-                cmd.Parameters.AddWithValue("@uid", 1);
+                cmd.Parameters.AddWithValue("@uid", CurrentUserId);
                 cmd.Parameters.AddWithValue("@date", req.SessionDate);
                 var result = cmd.ExecuteScalar();
                 if (result != null)
@@ -55,7 +55,7 @@ namespace katachi.Controllers
                 {
                     using var ins = new SqlCommand(
                         "INSERT INTO training_sessions (user_id, session_date) OUTPUT INSERTED.session_id VALUES (@uid, @date)", conn);
-                    ins.Parameters.AddWithValue("@uid", 1);
+                    ins.Parameters.AddWithValue("@uid", CurrentUserId);
                     ins.Parameters.AddWithValue("@date", req.SessionDate);
                     sessionId = Convert.ToInt32(ins.ExecuteScalar());
                 }
@@ -106,9 +106,10 @@ namespace katachi.Controllers
                 SELECT TOP 1 ti.weight_kg
                 FROM training_sessions ts
                 JOIN training_items ti ON ti.session_id = ts.session_id
-                WHERE ts.user_id = 1 AND ti.ex_key = @ex AND ti.is_deleted = 0
+                WHERE ts.user_id = @uid AND ti.ex_key = @ex AND ti.is_deleted = 0
                 ORDER BY ts.session_date DESC";
             using var cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@uid", CurrentUserId);
             cmd.Parameters.AddWithValue("@ex", exKey);
             var result = cmd.ExecuteScalar();
             return Json(new { weight = result != null ? (double?)(decimal)result : (double?)null });
@@ -129,12 +130,13 @@ namespace katachi.Controllers
                 FROM training_sessions ts
                 JOIN training_items ti ON ti.session_id = ts.session_id
                 JOIN training_sets s ON s.item_id = ti.item_id
-                WHERE ts.user_id = 1
+                WHERE ts.user_id = @uid
                     AND ti.is_deleted = 0
                     AND ts.session_date BETWEEN @f AND @l
                 ORDER BY ts.session_date, ti.sort_order, s.set_index";
 
             using var cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@uid", CurrentUserId);
             cmd.Parameters.AddWithValue("@f", firstDay);
             cmd.Parameters.AddWithValue("@l", lastDay);
 
