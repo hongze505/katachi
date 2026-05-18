@@ -236,7 +236,7 @@
                 <p class="program-intro-desc">
                     輸入你的訓練目標、程度、每週天數與器材條件，系統自動根據科學化的週期化訓練原則，產生一份專屬週課表。
                 </p>
-                    <h2 class="program-intro-title">己を、超える<br>為目標而生</h2>
+                        <h2 class="program-intro-title">超える<br>限界は、<br>為目標而生</h2>
                </div>
             </div>
             <a asp-controller="Plan" asp-action="Index" class="muscle-cta">
@@ -286,6 +286,70 @@
                 查看計畫
             </div>
         </a>
+    </div>
+</section>
+
+<!-- ══════════════════
+     05 — 訓練日誌
+══════════════════ -->
+<section id="sec-log">
+    <div class="log-body">
+        <div class="log-left">
+            <a asp-controller="TrainingLog" asp-action="Index" class="log-item">
+                <div class="log-item-left">
+                    <span class="log-item-num">01</span>
+                    <span class="log-item-name">日曆視圖</span>
+                </div>
+                <span class="log-item-en">Calendar View</span>
+            </a>
+            <a asp-controller="TrainingLog" asp-action="Index" class="log-item">
+                <div class="log-item-left">
+                    <span class="log-item-num">02</span>
+                    <span class="log-item-name">動作記錄</span>
+                </div>
+                <span class="log-item-en">Exercise Log</span>
+            </a>
+            <a asp-controller="TrainingLog" asp-action="Index" class="log-item">
+                <div class="log-item-left">
+                    <span class="log-item-num">03</span>
+                    <span class="log-item-name">進度追蹤</span>
+                </div>
+                <span class="log-item-en">Progress Track</span>
+            </a>
+            <a asp-controller="TrainingLog" asp-action="Index" class="log-item">
+                <div class="log-item-left">
+                    <span class="log-item-num">04</span>
+                    <span class="log-item-name">訓練統計</span>
+                </div>
+                <span class="log-item-en">Training Stats</span>
+            </a>
+            <a asp-controller="TrainingLog" asp-action="Index" class="log-item">
+                <div class="log-item-left">
+                    <span class="log-item-num">05</span>
+                    <span class="log-item-name">肌群分析</span>
+                </div>
+                <span class="log-item-en">Muscle Analysis</span>
+            </a>
+        </div>
+        <div class="log-right">
+            <div>
+                <p class="log-eyebrow">Training Log</p>
+                <h2 class="log-headline">記錄<br>每一次<br>突破</h2>
+                <p class="log-desc">
+                    完整記錄每次訓練的動作、重量與組數。搭配日曆視圖，讓你清楚掌握訓練節奏，追蹤每一個進步。
+                </p>
+            </div>
+            <a asp-controller="TrainingLog" asp-action="Index" class="nutrition-cta">
+                <span class="cta-slide-wrap">
+                    <span class="cta-slide-a">開始記錄訓練</span>
+                    <span class="cta-slide-b">開始記錄訓練</span>
+                </span>
+                <span class="cta-arrow-wrap">
+                    <span class="cta-arrow-a">→</span>
+                    <span class="cta-arrow-b">→</span>
+                </span>
+            </a>
+        </div>
     </div>
 </section>
 

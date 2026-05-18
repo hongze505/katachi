@@ -377,6 +377,7 @@ html.intro-active {
    SECTION HEADER — 每個大區塊共用
 ══════════════════ */
 .sec-header {
+/*    border-bottom: 0.5px solid var(--color-line);*/
     display: flex;
     align-items: baseline;
     justify-content: space-between;
@@ -417,7 +418,7 @@ html.intro-active {
 ══════════════════ */
 #sec-muscle {
     background: var(--color-bg); /* 與頁面底色不同 */
-    border-radius: 20px;
+    border-radius: 15px;
     border-bottom: 0.5px solid var(--color-line);
     padding-top: 48px;
 }
@@ -445,7 +446,7 @@ html.intro-active {
 }
 
 .muscle-headline {
-    writing-mode:vertical-lr;
+    writing-mode:vertical-rl;
     font-family: var(--font-mincho);
     font-weight: 300;
     font-size: 4rem;
@@ -804,11 +805,21 @@ html.intro-active {
 
 .program-intro {
     padding: 56px 64px 56px 80px;
-    border-radius: 20px;
+    border-radius: 0px;
     background-color: var(--color-bg);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    position: relative;
+}
+
+.program-intro::before {
+    content: '';
+    position: absolute;
+    inset: 16px;
+    border: 0.5px solid var(--color-black);
+    border-radius: 3px;
+    pointer-events: none;
 }
 
 .program-intro-label {
@@ -822,7 +833,7 @@ html.intro-active {
 .program-intro-title {
     max-height: 400px;
     font-weight: 400;
-    font-size: 3rem;
+    font-size: 3.5rem;
     letter-spacing: 4px;
     line-height: 1.2;
     color: var(--color-black);
@@ -838,12 +849,12 @@ html.intro-active {
 }
 
 .program-intro-desc {
-    writing-mode: vertical-rl;
+    writing-mode: vertical-lr;
     /* 核心設定：限制高度，文字才會往左邊排 */
     max-height: 320px;
     font-size: 1rem;
     line-height: 2; /* 讓行與行之間有呼吸感 */
-    color: var(--color-black);
+    color: var(--color-grey);
     text-align: justify; /* 讓文字上下對齊，更有書卷感 */
     margin-right: 20px; /* 與右側邊界保持距離 */
     margin-left: 40px; /* 與左側大標題保持距離 */
@@ -872,6 +883,10 @@ html.intro-active {
         height: 85%; /* ← 調這個：線的長度 */
         background: var(--color-line);
         transition: opacity 0.4s ease;
+    }
+
+    .program-card:nth-child(2)::before {
+        content: none;
     }
 
     .program-card:hover {
@@ -964,15 +979,123 @@ html.intro-active {
 
 
 /* ══════════════════
+   05 — 訓練日誌
+   左功能列表 + 右介紹文字
+══════════════════ */
+#sec-log {
+    background: var(--color-black);
+    border-radius: 20px;
+}
+
+.log-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 480px;
+    margin-top: 200px;
+}
+
+.log-left {
+    padding: 64px 80px;
+    border-right: 0.5px solid rgba(255,255,255,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.log-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 26px 0;
+    border-bottom: 0.5px solid rgba(255,255,255,0.07);
+    text-decoration: none;
+    color: inherit;
+    transition: padding 0.25s var(--ease-expo), border-bottom-color 0.25s;
+}
+
+    .log-item:last-child {
+        border-bottom: none;
+    }
+
+    .log-item:hover {
+        padding-left: 12px;
+        border-bottom-color: rgba(255,255,255,0.2);
+    }
+
+.log-item-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.log-item-num {
+    font-family: var(--font-mincho);
+    font-weight: 800;
+    font-size: 0.6rem;
+    letter-spacing: 3px;
+    color: var(--color-grey-mute);
+}
+
+.log-item-name {
+    font-family: 'Zen Old Mincho', serif;
+    font-weight: 400;
+    font-size: 1.2rem;
+    letter-spacing: 4px;
+    color: rgba(255,255,255,0.85);
+}
+
+.log-item-en {
+    font-weight: 300;
+    font-size: 0.82rem;
+    letter-spacing: 3px;
+    color: var(--color-grey-mute);
+}
+
+.log-right {
+    padding: 64px 80px 64px 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.log-eyebrow {
+    font-size: 0.52rem;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 24px;
+}
+
+.log-headline {
+    writing-mode: vertical-rl;
+    font-family: var(--font-mincho);
+    font-weight: 300;
+    font-size: 4rem;
+    letter-spacing: 2px;
+    line-height: 1.5;
+    color: #fff;
+    flex: 1;
+    margin-bottom: 32px;
+}
+
+.log-desc {
+    font-size: 1rem;
+    line-height: 2;
+    color: rgba(255,255,255,0.4);
+    max-width: 360px;
+    margin-bottom: 40px;
+}
+
+/* ══════════════════
    04 — 飲食計算
    左右分欄
 ══════════════════ */
 
 .nutrition-body {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 42%;
     min-height: 400px;
-    margin-top: 80px;
+    margin-top: 150px;
 }
 
 .nutrition-left {
@@ -1061,12 +1184,13 @@ html.intro-active {
 
 .nutrition-right {
     background-color: var(--color-bg);
-    border-radius: 20px;
+    border-radius: 15px;
     padding: 40px 80px 40px 64px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 0;
+    margin-right: 40px;
 }
 
 .nutrition-stat {
@@ -1297,6 +1421,23 @@ html.intro-active {
         max-width: 480px;
     }
 
+    /* Log */
+    .log-body {
+        grid-template-columns: 1fr;
+    }
+    .log-left {
+        padding: 48px var(--page-gutter-md);
+        border-right: none;
+        border-bottom: 0.5px solid rgba(255,255,255,0.1);
+    }
+    .log-right {
+        padding: 48px var(--page-gutter-md);
+    }
+    .log-headline {
+        writing-mode: horizontal-tb;
+        font-size: 3rem;
+    }
+
     /* Nutrition */
     .nutrition-body {
         grid-template-columns: 1fr;
@@ -1365,6 +1506,17 @@ html.intro-active {
     }
     .program-card {
         padding: 32px 24px;
+    }
+
+    /* Log */
+    .log-left {
+        padding: 40px var(--page-gutter-sm);
+    }
+    .log-right {
+        padding: 32px var(--page-gutter-sm);
+    }
+    .log-headline {
+        font-size: 2.8rem;
     }
 
     /* Nutrition */
