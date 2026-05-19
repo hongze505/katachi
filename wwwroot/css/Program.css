@@ -125,6 +125,7 @@ body {
 #main-content {
     background: #f7f5f0;
     border-radius: 20px;
+   
     /* 覆蓋 token 顏色讓內部元素繼承冷調色系 */
     --color-bg: #e8ecf0;
     --color-bg-off: #dde2e8;
@@ -154,12 +155,23 @@ body {
 }
 
 /* 左側介紹 */
+.form-intro {
+    padding: 56px 48px;
+    min-height: 420px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-self: stretch;
+    border: 0.5px solid var(--color-black);
+    border-radius: 3px;
+}
+
 .form-eyebrow {
-    font-size: 0.8rem;
+    font-size: 0.52rem;
     letter-spacing: 5px;
     text-transform: uppercase;
     color: var(--color-grey-mute);
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 }
 
 .form-title {
@@ -241,9 +253,10 @@ body {
 }
 
 .field-card {
+    position: relative;
     background: none;
     border: 0.5px solid var(--color-line);
-    border-radius: 10px;
+    border-radius: 2px;
     padding: 18px 16px;
     cursor: pointer;
     text-align: left;
@@ -251,6 +264,20 @@ body {
     flex-direction: column;
     gap: 4px;
     transition: border-color 0.25s, background 0.25s, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/*.field-card::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border: 0.5px solid var(--color-line);
+    border-radius: 2px;
+    pointer-events: none;
+    transition: border-color 0.25s;
+}*/
+
+.field-card.active::before {
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
     .field-card:hover {
@@ -388,9 +415,10 @@ body {
 }
 
 .equip-btn {
+    position: relative;
     background: none;
     border: 0.5px solid var(--color-line);
-    border-radius: 10px;
+    border-radius: 4px;
     padding: 16px 10px;
     cursor: pointer;
     text-align: center;
@@ -399,6 +427,12 @@ body {
     align-items: center;
     gap: 6px;
     transition: border-color 0.25s, background 0.25s, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+
+
+.equip-btn.active::before {
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
     .equip-btn:hover {
@@ -949,6 +983,10 @@ body {
 
 /* ══════ RESPONSIVE ══════ */
 @media (max-width: 1024px) {
+    #main-content {
+        margin: 0 24px;
+    }
+
     #nav {
         padding: 0 48px;
     }
@@ -996,7 +1034,7 @@ body {
     }
 
     #sec-result {
-        padding: 0 24px 60px;
+        padding: 0 0 60px;
     }
 
     .form-layout {
@@ -1029,6 +1067,7 @@ body {
 @media (max-width: 600px) {
     .week-schedule {
         grid-template-columns: repeat(2, 1fr);
+        gap: 0;
     }
     .field-cards {
         grid-template-columns: 1fr;

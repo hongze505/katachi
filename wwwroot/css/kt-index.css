@@ -940,7 +940,7 @@ html.intro-active {
 .program-detail {
     font-size: 0.9rem;
     line-height: 1.9;
-    color: rgba(255,255,255,0.3);
+    color: var(--color-grey-mute);
 }
 
 .program-arrow {
@@ -950,12 +950,12 @@ html.intro-active {
     font-size: 0.9rem;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: var(--color-grey-mid);
+    color: var(--color-grey-mute);
     margin-top: 24px;
 }
 
 .program-card.dark .program-arrow {
-    color: rgba(255,255,255,0.4);
+    color: var(--color-grey-mute);
 }
 
 .program-card:hover .program-type,
@@ -1000,6 +1000,15 @@ html.intro-active {
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+.log-toggle {
+    display: none;
+}
+
+.log-items {
+    display: flex;
+    flex-direction: column;
 }
 
 .log-item {
@@ -1062,7 +1071,7 @@ html.intro-active {
     font-size: 0.52rem;
     letter-spacing: 5px;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.3);
+    color: var(--color-grey-mute);
     margin-bottom: 24px;
 }
 
@@ -1081,7 +1090,7 @@ html.intro-active {
 .log-desc {
     font-size: 1rem;
     line-height: 2;
-    color: rgba(255,255,255,0.4);
+    color: var(--color-grey-mute);
     max-width: 360px;
     margin-bottom: 40px;
 }
@@ -1425,13 +1434,50 @@ html.intro-active {
     .log-body {
         grid-template-columns: 1fr;
     }
-    .log-left {
+    .log-right {
+        order: -1;
         padding: 48px var(--page-gutter-md);
-        border-right: none;
         border-bottom: 0.5px solid rgba(255,255,255,0.1);
     }
-    .log-right {
-        padding: 48px var(--page-gutter-md);
+    .log-left {
+        padding: 0 var(--page-gutter-md);
+        border-right: none;
+    }
+    .log-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 28px 0;
+        background: none;
+        border: none;
+        border-bottom: 0.5px solid rgba(255,255,255,0.1);
+        color: rgba(255,255,255,0.85);
+        cursor: pointer;
+        font-family: 'Zen Old Mincho', serif;
+        font-size: 1.2rem;
+        font-weight: 400;
+        letter-spacing: 4px;
+    }
+    .log-toggle-icon {
+        color: rgba(255,255,255,0.5);
+        display: flex;
+        align-items: center;
+        transition: transform 0.35s var(--ease-expo);
+    }
+    .log-left.open .log-toggle-icon {
+        transform: rotate(45deg);
+    }
+    .log-items {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.45s var(--ease-expo);
+    }
+    .log-left.open .log-items {
+        max-height: 500px;
+    }
+    .log-left.open {
+        padding-bottom: 32px;
     }
     .log-headline {
         writing-mode: horizontal-tb;
@@ -1444,13 +1490,19 @@ html.intro-active {
     }
     .nutrition-left {
         padding: 48px var(--page-gutter-md);
+        text-align: center;
+    }
+    .nutrition-left .nutrition-cta {
+        align-self: center;
     }
     .nutrition-headline {
         writing-mode: horizontal-tb;
         font-size: 3rem;
     }
     .nutrition-right {
-        padding: 40px var(--page-gutter-md);
+        margin: 0 var(--page-gutter-md);
+        padding: 40px 32px;
+        text-align: center;
     }
 }
 
@@ -1510,7 +1562,7 @@ html.intro-active {
 
     /* Log */
     .log-left {
-        padding: 40px var(--page-gutter-sm);
+        padding: 0 var(--page-gutter-sm);
     }
     .log-right {
         padding: 32px var(--page-gutter-sm);
@@ -1522,18 +1574,25 @@ html.intro-active {
     /* Nutrition */
     .nutrition-left {
         padding: 40px var(--page-gutter-sm);
+        text-align: center;
+    }
+    .nutrition-left .nutrition-cta {
+        align-self: center;
     }
     .nutrition-headline {
         font-size: 2.8rem;
     }
     .nutrition-right {
-        padding: 32px var(--page-gutter-sm);
+        margin: 0 var(--page-gutter-sm);
+        padding: 32px 24px;
+        text-align: center;
     }
     .nutrition-stat {
         flex-direction: column;
+        align-items: center;
         gap: 4px;
     }
     .nutrition-stat-desc {
-        text-align: left;
+        text-align: center;
     }
 }

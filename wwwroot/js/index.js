@@ -42,6 +42,16 @@ function startTransition() {
   }, 1400);
 }
 
+/* 訓練日誌功能選單 accordion（手機） */
+const logToggle = document.querySelector('.log-toggle');
+if (logToggle) {
+    logToggle.addEventListener('click', () => {
+        const logLeft = logToggle.closest('.log-left');
+        const isOpen = logLeft.classList.toggle('open');
+        logToggle.setAttribute('aria-expanded', isOpen);
+    });
+}
+
 /* 動畫跑完（2s）後自動觸發 */
 if (sessionStorage.getItem('katachi_intro_played')) {
   // 已播過 → 直接跳過
