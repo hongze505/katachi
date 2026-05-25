@@ -89,7 +89,7 @@
                         <input asp-for="Login.Password" class="form-input" type="password"  />
                         <span asp-validation-for="Login.Password" style="color:#c17f5a;font-size:0.7rem;"></span>
                         <div class="form-row-extra">
-                            <a class="form-link" href="#">忘記密碼？</a>
+                        <a class="form-link" asp-action="ForgotPassword">忘記密碼？</a>
                         </div>
                     </div>
 

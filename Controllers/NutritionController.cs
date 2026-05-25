@@ -97,6 +97,9 @@ namespace katachi.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveRecords([FromBody] SaveRecordsRequest req)
         {
+            if (User.Identity?.IsAuthenticated != true || req.UserId == 0)
+                return Unauthorized(new { message = "請先登入" });
+
             // 先刪除當天舊的紀錄
             var existing = _db.NutritionRecords
                 .Where(r => r.UserId == req.UserId && r.RecordDate == req.Date);
@@ -122,6 +125,9 @@ namespace katachi.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveProfile([FromBody] SaveProfileRequest req)
         {
+            if (User.Identity?.IsAuthenticated != true)
+                return Unauthorized(new { message = "請先登入" });
+
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
             var user = await _db.Users.FirstOrDefaultAsync(u => u.UserId == userId);
             if (user == null) return NotFound();

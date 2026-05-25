@@ -37,6 +37,9 @@ namespace katachi.Models.Entities
 
         public int? Tdee { get; set; }
 
+        public string? PasswordResetToken { get; set; }
+        public DateTime? PasswordResetExpiry { get; set; }
+
         // 導航屬性
         public ICollection<NutritionRecord> NutritionRecords { get; set; }
     }

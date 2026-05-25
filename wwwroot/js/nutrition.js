@@ -157,6 +157,10 @@ async function saveLog() {
             })
         });
 
+        if (res.status === 401) {
+            window.location.href = '/Account';
+            return;
+        }
         if (!res.ok) {
             showToast("雲端儲存失敗，改存本機");
             const history = getHistory();
@@ -635,6 +639,10 @@ async function saveTDEEToProfile() {
                 activity
             })
         });
+        if (res.status === 401) {
+            window.location.href = '/Account';
+            return;
+        }
         if (res.ok) {
             showToast("已儲存至會員資料 ✓");
         } else {
@@ -690,5 +698,109 @@ _initTdeeFromProfile();
     await loadFoods();
     renderHistory();
     const _picker = document.getElementById("history-date-picker");
-    if (_picker) _picker.value = _fmtDate(new Date());
+    if (_picker) {
+        _picker.value = _fmtDate(new Date());
+        _kcUpdateDisplay(_picker.value);
+    }
+})();
+
+/* ══════════════════════════════
+   Katachi Custom Calendar
+══════════════════════════════ */
+(function () {
+    let _kcY, _kcM;
+
+    function _kcParse(val) {
+        if (!val) return new Date();
+        const [y, m, d] = val.split('-').map(Number);
+        return new Date(y, m - 1, d);
+    }
+
+    window._kcUpdateDisplay = function (val) {
+        const el = document.getElementById('history-date-display');
+        if (!el || !val) return;
+        const [y, m, d] = val.split('-');
+        el.textContent = `${y}/${m}/${d}`;
+    };
+
+    window.kcToggle = function (e) {
+        e.stopPropagation();
+        const cal = document.getElementById('katachi-cal');
+        if (!cal) return;
+        if (cal.classList.contains('open')) {
+            cal.classList.remove('open');
+        } else {
+            const v = document.getElementById('history-date-picker')?.value;
+            const d = _kcParse(v);
+            _kcY = d.getFullYear();
+            _kcM = d.getMonth();
+            _kcRender();
+            cal.classList.add('open');
+        }
+    };
+
+    window.kcNav = function (delta) {
+        _kcM += delta;
+        if (_kcM < 0) { _kcM = 11; _kcY--; }
+        if (_kcM > 11) { _kcM = 0; _kcY++; }
+        _kcRender();
+    };
+
+    window.kcSel = function (dateStr) {
+        const picker = document.getElementById('history-date-picker');
+        if (picker) picker.value = dateStr;
+        _kcUpdateDisplay(dateStr);
+        document.getElementById('katachi-cal')?.classList.remove('open');
+        historyPickDate(dateStr);
+    };
+
+    function _kcRender() {
+        const cal = document.getElementById('katachi-cal');
+        if (!cal) return;
+        const sel = document.getElementById('history-date-picker')?.value || '';
+        const today = _fmtDate(new Date());
+        const firstDow = new Date(_kcY, _kcM, 1).getDay();
+        const daysInMonth = new Date(_kcY, _kcM + 1, 0).getDate();
+        const mNames = ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
+        const wds = ['日','一','二','三','四','五','六'];
+
+        let g = wds.map(w => `<div class="kc-wd">${w}</div>`).join('');
+        for (let i = 0; i < firstDow; i++) g += `<div class="kc-d empty"></div>`;
+        for (let d = 1; d <= daysInMonth; d++) {
+            const mm = String(_kcM + 1).padStart(2, '0');
+            const dd = String(d).padStart(2, '0');
+            const key = `${_kcY}-${mm}-${dd}`;
+            let cls = 'kc-d';
+            if (key === today) cls += ' kc-today';
+            if (key === sel) cls += ' kc-sel';
+            g += `<div class="${cls}" onclick="kcSel('${key}')">${d}</div>`;
+        }
+
+        cal.innerHTML = `
+            <div class="kc-head">
+                <button onclick="kcNav(-1)">‹</button>
+                <span class="kc-month">${_kcY} · ${mNames[_kcM]}</span>
+                <button onclick="kcNav(1)">›</button>
+            </div>
+            <div class="kc-grid">${g}</div>
+            <div class="kc-foot"><button onclick="kcSel('${today}')">今天</button></div>
+        `;
+    }
+
+    // 點外部關閉
+    document.addEventListener('click', function (e) {
+        const cal = document.getElementById('katachi-cal');
+        const btn = document.getElementById('kc-trigger');
+        if (cal && btn && !cal.contains(e.target) && !btn.contains(e.target)) {
+            cal.classList.remove('open');
+        }
+    });
+
+    // 修補 historyChangeDate 以同步更新顯示文字
+    const _origHCD = window.historyChangeDate;
+    window.historyChangeDate = function (delta) {
+        _origHCD(delta);
+        const v = document.getElementById('history-date-picker')?.value;
+        if (v) _kcUpdateDisplay(v);
+    };
 })();

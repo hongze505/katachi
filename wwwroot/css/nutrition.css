@@ -1380,17 +1380,119 @@ body {
   background: var(--color-black);
   color: #fff;
 }
-.history-date-picker input[type="date"] {
+.history-date-picker {
+  position: relative;
+}
+
+/* 自製日曆觸發按鈕 */
+.kc-trigger {
   background: none;
   border: none;
-  outline: none;
   font-family: var(--font-sans);
   font-size: 11px;
   color: var(--color-black);
-  padding: 2px 3px;
+  padding: 2px 6px;
   cursor: pointer;
-  width: 100px;
+  letter-spacing: 1px;
+  width: auto !important;
+  height: auto !important;
 }
+.kc-trigger:hover {
+  background: none !important;
+  color: var(--color-black) !important;
+}
+
+/* ══════ Katachi Calendar Dropdown ══════ */
+.katachi-cal {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 252px;
+  background: var(--color-black);
+  border: 0.5px solid rgba(255,255,255,0.12);
+  border-radius: 4px;
+  padding: 16px;
+  z-index: 200;
+  font-family: var(--font-mincho);
+}
+.katachi-cal.open { display: block; }
+
+.kc-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.kc-head button {
+  background: none !important;
+  border: none;
+  color: rgba(255,255,255,0.4) !important;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px 6px;
+  width: auto !important;
+  height: auto !important;
+  transition: color 0.15s !important;
+}
+.kc-head button:hover { color: #fff !important; background: none !important; }
+.kc-month {
+  font-size: 0.7rem;
+  letter-spacing: 4px;
+  color: rgba(255,255,255,0.65);
+}
+
+.kc-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+}
+.kc-wd {
+  text-align: center;
+  font-size: 0.55rem;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.25);
+  padding-bottom: 8px;
+}
+.kc-d {
+  text-align: center;
+  font-size: 0.72rem;
+  padding: 5px 0;
+  cursor: pointer;
+  border-radius: 2px;
+  color: rgba(255,255,255,0.55);
+  transition: background 0.12s, color 0.12s;
+}
+.kc-d:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.kc-d.empty { cursor: default; pointer-events: none; }
+.kc-d.kc-today {
+  border: 0.5px solid rgba(255,255,255,0.35);
+  color: #fff;
+}
+.kc-d.kc-sel {
+  background: #fff;
+  color: #111 !important;
+}
+.kc-foot {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 0.5px solid rgba(255,255,255,0.08);
+  display: flex;
+  justify-content: flex-end;
+}
+.kc-foot button {
+  background: none !important;
+  border: none;
+  color: rgba(255,255,255,0.35) !important;
+  font-family: var(--font-mincho);
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  cursor: pointer;
+  width: auto !important;
+  height: auto !important;
+  transition: color 0.15s !important;
+}
+.kc-foot button:hover { color: #fff !important; background: none !important; }
 
 /* ══════ 近日記錄 hover + active ══════ */
 .history-item {

@@ -120,5 +120,76 @@ namespace katachi.Controllers
             var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(password));
             return Convert.ToHexString(bytes).ToLower();
         }
+
+        // GET：忘記密碼頁
+        public IActionResult ForgotPassword() => View();
+
+        // POST：送出 Email
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel vm)
+        {
+            if (!ModelState.IsValid) return View(vm);
+
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == vm.Email);
+            if (user != null)
+            {
+                // 產生 token
+                var token = Guid.NewGuid().ToString("N");
+                user.PasswordResetToken = token;
+                user.PasswordResetExpiry = DateTime.UtcNow.AddHours(1);
+                await _db.SaveChangesAsync();
+
+                // 寄信（先用 Console 模擬，之後換真實 SMTP）
+                var resetLink = Url.Action("ResetPassword", "Account",
+                    new { token }, Request.Scheme);
+                Console.WriteLine($"[重設連結] {resetLink}"); // Debug 用，之後換寄信
+            }
+
+            // 不管有沒有找到 Email，都顯示同樣訊息（防止帳號枚舉）
+            TempData["Info"] = "如果此 Email 存在，重設連結已寄出。";
+            return RedirectToAction("ForgotPassword");
+        }
+
+        // GET：重設密碼頁
+        public async Task<IActionResult> ResetPassword(string token)
+        {
+            var user = await _db.Users.FirstOrDefaultAsync(u =>
+                u.PasswordResetToken == token &&
+                u.PasswordResetExpiry > DateTime.UtcNow);
+
+            if (user == null)
+            {
+                TempData["Error"] = "連結無效或已過期。";
+                return RedirectToAction("Index");
+            }
+
+            return View(new ResetPasswordViewModel { Token = token });
+        }
+
+        // POST：儲存新密碼
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel vm)
+        {
+            if (!ModelState.IsValid) return View(vm);
+
+            var user = await _db.Users.FirstOrDefaultAsync(u =>
+                u.PasswordResetToken == vm.Token &&
+                u.PasswordResetExpiry > DateTime.UtcNow);
+
+            if (user == null)
+            {
+                TempData["Error"] = "連結無效或已過期。";
+                return RedirectToAction("Index");
+            }
+
+            // 更新密碼（用你現有的 SHA256 雜湊方式）
+            user.PasswordHash = HashPassword(vm.NewPassword);
+            user.PasswordResetToken = null;
+            user.PasswordResetExpiry = null;
+            await _db.SaveChangesAsync();
+
+            TempData["Success"] = "密碼已重設，請重新登入。";
+            return RedirectToAction("Index");
+        }
     }
 }
